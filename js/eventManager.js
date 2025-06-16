@@ -16,6 +16,7 @@ const eventManager = {
     // 添加新属性
     triggered_events: new Set(), // 追踪已触发的事件
     eventIndex: new Map(), // 事件索引
+    continueEventsList: new Set(), // 追踪所有后续事件
 
     // 错误处理
     errorHandlers: {
@@ -37,6 +38,7 @@ const eventManager = {
         try {
             // 清空索引
             this.eventIndex.clear();
+            this.continueEventsList.clear();
             
             // 添加标签事件 - 确保使用正确的变量名
             if (window.TAG_EVENTS) {
@@ -74,8 +76,12 @@ const eventManager = {
                 });
             }
 
+            // 收集所有后续事件ID
+            this.collectContinueEvents();
+
             console.log('Event index initialized successfully');
             console.log(`Total events in index: ${this.eventIndex.size}`);
+            console.log(`Total continue events: ${this.continueEventsList.size}`);
             
             // 调试：检查小学生相关事件是否被加载
             const elementaryEvents = Array.from(this.eventIndex.keys()).filter(key => 
@@ -96,6 +102,89 @@ const eventManager = {
             this.errorHandlers.logError(error, 'initializeEventIndex');
             throw error;
         }
+    },
+
+    // 收集所有作为后续事件的事件ID
+    collectContinueEvents() {
+        // 检查所有事件
+        this.eventIndex.forEach((event, id) => {
+            // 检查事件本身是否有continue_event属性
+            if (event.continue_event) {
+                this.continueEventsList.add(event.continue_event);
+                console.log(`Added continue event: ${event.continue_event}`);
+            }
+            
+            // 检查事件的选项是否有continue_event属性
+            if (event.options && Array.isArray(event.options)) {
+                event.options.forEach(option => {
+                    if (option.continue_event) {
+                        this.continueEventsList.add(option.continue_event);
+                        console.log(`Added continue event from option: ${option.continue_event}`);
+                    }
+                    
+                    // 检查条件结果中的continue_event
+                    if (option.conditional_results && Array.isArray(option.conditional_results)) {
+                        option.conditional_results.forEach(result => {
+                            if (result.continue_event) {
+                                this.continueEventsList.add(result.continue_event);
+                                console.log(`Added continue event from conditional result: ${result.continue_event}`);
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    },
+
+    // 检查事件是否为后续事件
+    isContinueEvent(eventId) {
+        return this.continueEventsList.has(eventId);
+    },
+
+    // 获取可用事件（跳过后续事件的随机触发）
+    getAvailableEvents(player, ageGroup) {
+        const availableEvents = [];
+        
+        // 检查年龄段事件
+        if (this.ageEvents && this.ageEvents[ageGroup]) {
+            Object.entries(this.ageEvents[ageGroup]).forEach(([eventId, event]) => {
+                // 跳过已触发的事件
+                if (this.isEventTriggered(eventId)) return;
+                
+                // 跳过后续事件（它们应该只通过前置事件触发）
+                if (this.isContinueEvent(eventId)) {
+                    console.log(`Skipping continue event: ${eventId} from random pool`);
+                    return;
+                }
+                
+                // 检查触发条件
+                if (this.checkEventConditions(event, eventId, player)) {
+                    availableEvents.push([eventId, event]);
+                }
+            });
+        }
+        
+        // 检查标签事件
+        for (const tag of player.tags) {
+            const tagEventsObj = this.getTagEvents(tag);
+            Object.entries(tagEventsObj).forEach(([eventId, event]) => {
+                // 跳过已触发的事件
+                if (this.isEventTriggered(eventId)) return;
+                
+                // 跳过后续事件（它们应该只通过前置事件触发）
+                if (this.isContinueEvent(eventId)) {
+                    console.log(`Skipping continue event: ${eventId} from random pool`);
+                    return;
+                }
+                
+                // 检查触发条件
+                if (this.checkEventConditions(event, eventId, player)) {
+                    availableEvents.push([eventId, event]);
+                }
+            });
+        }
+        
+        return availableEvents;
     },
 
     // 获取事件
@@ -238,7 +327,7 @@ const eventManager = {
     /**
      * 更新动态标签
      * @param {Object} player - 玩家对象
-     * @param {string} tagPrefix - 标签前缀，如 "学习成绩:"
+     * @param {string} tagPrefix - 标签前缀，如 "音乐天赋:"
      * @param {number} change - 变化值，正数为增加，负数为减少
      * @param {string} resultText - 返回给玩家的文本，可包含 {user} 占位符
      * @param {number[]} [range] - 可选的标签值范围限制 [min, max]
@@ -251,8 +340,31 @@ const eventManager = {
         }
         
         // 否则使用内置实现
+        // 根据前缀查找标签定义和实际标签名
+        let tagName = null;
+        const tagDefs = this.tag_definitions || {};
+        
+        // 确保标签前缀格式一致（以冒号结尾）
+        const formattedTagPrefix = tagPrefix.endsWith(':') ? tagPrefix : `${tagPrefix}:`;
+        
+        // 去掉前缀的冒号获取基本标签名
+        const baseTagName = formattedTagPrefix.replace(/\s*:\s*$/, '');
+        
+        // 查找前缀对应的标签名
+        for (const [name, def] of Object.entries(tagDefs)) {
+            if (def && def.prefix === formattedTagPrefix) {
+                tagName = name;
+                break;
+            }
+        }
+        
+        // 如果未找到标签定义，则使用前缀作为标签名
+        if (!tagName) {
+            tagName = baseTagName;
+        }
+        
         // 查找现有标签
-        const existingTag = player.tags.find(tag => tag.startsWith(tagPrefix));
+        const existingTag = player.tags.find(tag => tag.startsWith(`${tagName}:`) || tag === tagName);
         
         // 获取当前值
         let currentValue = 0;
@@ -267,8 +379,8 @@ const eventManager = {
         const newValue = Math.max(range[0], Math.min(range[1], currentValue + change));
         
         // 过滤掉现有标签并创建新标签列表
-        const newTags = player.tags.filter(tag => !tag.startsWith(tagPrefix));
-        newTags.push(`${tagPrefix}${newValue}`);
+        const newTags = player.tags.filter(tag => !(tag === tagName || tag.startsWith(`${tagName}:`)));
+        newTags.push(`${tagName}:${newValue}`);
         
         // 返回标准事件结果对象
         return {

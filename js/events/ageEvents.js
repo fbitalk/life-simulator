@@ -44,7 +44,7 @@ const ageEvents = {
                     text: "走路还用学？",
                     result: "{user}天生就会走路，把大人们都惊呆了。",
                     effects: { health: 10, luck: 10 },
-                    add_tags: ["天赋异禀"]
+                    add_tags: ["身体协调"]
                 }
             ]
         },
@@ -172,7 +172,7 @@ const ageEvents = {
                         social: 10,
                         health: 10
                     },
-                    add_tags: ["飞行能力"],
+                    add_tags: ["竹蜻蜓"],
                     remove_tags: ["神奇道具"]
                 },
                 {
@@ -188,14 +188,14 @@ const ageEvents = {
                 },
                 {
                     text: "什么都不要，保持平凡",
-                    result: "{user}礼貌地拒绝了礼物，表示平凡的生活就很好。狸猫很赞赏{user}的品格，祝福{user}一生平安。",
+                    result: "{user}礼貌地拒绝了礼物，表示平凡的生活就很好。狸猫朝{user}神秘一笑，祝福{user}一生平安。",
                     effects: { 
                         health: 15,
                         social: 15,
                         luck: 10
                     },
                     add_tags: [],
-                    remove_tags: ["神奇道具"]
+                    remove_tags: []
                 }
             ]
         },
@@ -226,7 +226,8 @@ const ageEvents = {
                     text: "和小动物说话",
                     result: "{user}发现自己似乎有和小动物沟通的潜能。",
                     effects: {},
-                    add_tags: ["动物朋友"]
+                    add_tags: ["动物朋友"],
+                    continue_event: "toddler_animal_talk_choice"
                 },
                 {
                     text: "身体折起来",
@@ -242,7 +243,7 @@ const ageEvents = {
                 },
                 {
                     text: "粗口",
-                    result: "{user}小小年纪就学会了各种粗口，并运用自如，展现出一种独特的'高情商'。",
+                    result: "{user}小小年纪就学会了各种粗口，并运用自如。",
                     effects: {},
                     add_tags: ["高情商"]
                 },
@@ -282,7 +283,7 @@ const ageEvents = {
                     text: "狗",
                     result: "{user}能和狗狗无障碍交流，成为了远近闻名的'狗之友'。",
                     effects: { social: 5 },
-                    add_tags: ["动物朋友", "狗之友"]
+                    add_tags: ["动物朋友", "狗友"]
                 },
                 {
                     text: "蛇",
@@ -326,7 +327,33 @@ const ageEvents = {
                     text: "喜欢画画",
                     result: "{user}很喜欢涂涂画画，展现了艺术天赋。",
                     effects: { intelligence: 5 },
-                    add_tags: ["艺术细胞"]
+                    dynamic_result: function(player) {
+                        // 使用标准函数处理动态标签
+                        if (window.eventManager && window.eventManager.updateDynamicTag) {
+                            return window.eventManager.updateDynamicTag(
+                                player,
+                                "美术天赋",
+                                1,
+                                "{user}很喜欢涂涂画画，美术天赋提升了。"
+                            );
+                        }
+                        
+                        // 如果没有标准函数，使用内部实现
+                        let currentLevel = 0;
+                        const levelTagPrefix = "美术天赋:";
+                        const existingLevelTag = player.tags.find(tag => tag.startsWith(levelTagPrefix));
+                        let newTags = player.tags.filter(tag => !tag.startsWith(levelTagPrefix));
+                        if (existingLevelTag) {
+                            currentLevel = parseInt(existingLevelTag.split(":")[1]);
+                        }
+                        newTags.push(`${levelTagPrefix}${currentLevel + 1}`);
+                        return {
+                            result: "{user}很喜欢涂涂画画，美术天赋提升了。",
+                            effects: { intelligence: 5 },
+                            add_tags: newTags,
+                            remove_tags: existingLevelTag ? [existingLevelTag] : []
+                        };
+                    }
                 },
                 {
                     text: "喜欢听故事",
@@ -377,6 +404,17 @@ const ageEvents = {
                     result: "{user}喜欢在电子琴上敲敲打打，展现出音乐天赋。",
                     effects: {},
                     dynamic_result: function (player) {
+                        // 使用标准函数处理动态标签
+                        if (window.eventManager && window.eventManager.updateDynamicTag) {
+                            return window.eventManager.updateDynamicTag(
+                                player,
+                                "音乐天赋",
+                                1,
+                                "{user}喜欢在电子琴上敲敲打打，音乐天赋提升了。"
+                            );
+                        }
+                        
+                        // 如果没有标准函数，使用内部实现
                         let currentLevel = 0;
                         const levelTagPrefix = "音乐天赋:";
                         const existingLevelTag = player.tags.find(tag => tag.startsWith(levelTagPrefix));
@@ -427,7 +465,7 @@ const ageEvents = {
                 },
                 {
                     text: "跟自己赛跑",
-                    result: "{user}喜欢和自己赛跑，不断挑战自己的极限，培养了好胜心。",
+                    result: "{user}喜欢和自己赛跑，不断挑战自己的极限。",
                     effects: { health: 2 },
                     add_tags: ["好胜"]
                 },
@@ -439,7 +477,7 @@ const ageEvents = {
                 },
                 {
                     text: "扔积木",
-                    result: "{user}喜欢把积木扔得到处都是，并在混乱中寻找规律，锻炼了洞察力。",
+                    result: "{user}喜欢把积木扔得到处都是，并在混乱中寻找规律。",
                     effects: { intelligence: 1 },
                     add_tags: ["洞察力"]
                 },
@@ -447,7 +485,33 @@ const ageEvents = {
                     text: "开演唱会",
                     result: "{user}经常在家举办个人演唱会，歌声虽然稚嫩但充满热情。",
                     effects: {},
-                    add_tags: ["音乐天赋"]
+                    dynamic_result: function (player) {
+                        // 使用标准函数处理动态标签
+                        if (window.eventManager && window.eventManager.updateDynamicTag) {
+                            return window.eventManager.updateDynamicTag(
+                                player,
+                                "音乐天赋",
+                                1,
+                                "{user}经常在家举办个人演唱会，音乐天赋提升了。"
+                            );
+                        }
+                        
+                        // 如果没有标准函数，使用内部实现
+                        let currentLevel = 0;
+                        const levelTagPrefix = "音乐天赋:";
+                        const existingLevelTag = player.tags.find(tag => tag.startsWith(levelTagPrefix));
+                        let newTags = player.tags.filter(tag => !tag.startsWith(levelTagPrefix));
+                        if (existingLevelTag) {
+                            currentLevel = parseInt(existingLevelTag.split(":")[1]);
+                        }
+                        newTags.push(`${levelTagPrefix}${currentLevel + 1}`);
+                        return {
+                            result: "{user}经常在家举办个人演唱会，音乐天赋提升了。",
+                            effects: {},
+                            add_tags: newTags,
+                            remove_tags: existingLevelTag ? [existingLevelTag] : []
+                        };
+                    }
                 },
                 {
                     text: "玩昆特牌",
@@ -509,7 +573,33 @@ const ageEvents = {
                     text: "会自己哼摇篮曲",
                     result: "{user}会自己哼着不成调的摇篮曲哄自己睡觉，展现了音乐天赋。",
                     effects: {},
-                    add_tags: ["音乐天赋"]
+                    dynamic_result: function (player) {
+                        // 使用标准函数处理动态标签
+                        if (window.eventManager && window.eventManager.updateDynamicTag) {
+                            return window.eventManager.updateDynamicTag(
+                                player,
+                                "音乐天赋",
+                                1,
+                                "{user}会自己哼着摇篮曲哄自己睡觉，音乐天赋提升了。"
+                            );
+                        }
+                        
+                        // 如果没有标准函数，使用内部实现
+                        let currentLevel = 0;
+                        const levelTagPrefix = "音乐天赋:";
+                        const existingLevelTag = player.tags.find(tag => tag.startsWith(levelTagPrefix));
+                        let newTags = player.tags.filter(tag => !tag.startsWith(levelTagPrefix));
+                        if (existingLevelTag) {
+                            currentLevel = parseInt(existingLevelTag.split(":")[1]);
+                        }
+                        newTags.push(`${levelTagPrefix}${currentLevel + 1}`);
+                        return {
+                            result: "{user}会自己哼着摇篮曲哄自己睡觉，音乐天赋提升了。",
+                            effects: {},
+                            add_tags: newTags,
+                            remove_tags: existingLevelTag ? [existingLevelTag] : []
+                        };
+                    }
                 },
                 {
                     text: "喜欢数羊入睡",
@@ -527,7 +617,7 @@ const ageEvents = {
                     text: "睡觉时喜欢咬手指",
                     result: "{user}睡觉时总是不自觉地咬手指。",
                     effects: {},
-                    add_tags: ["焦虑"]
+                    add_tags: []
                 }
             ]
         },
@@ -539,7 +629,7 @@ const ageEvents = {
             options: [
                 {
                     text: "泰迪熊",
-                    result: "{user}抱着泰迪熊睡觉，内心充满了温柔。",
+                    result: "{user}抱着泰迪熊睡觉。",
                     effects: {},
                     add_tags: ["泰迪熊"]
                 },
@@ -553,13 +643,13 @@ const ageEvents = {
                     text: "妈妈的衣服",
                     result: "{user}抱着带有妈妈气味的衣服睡觉，有点恋母情结。",
                     effects: {},
-                    add_tags: ["恋母情结"]
+                    add_tags: []
                 },
                 {
                     text: "自制的布娃娃",
-                    result: "{user}抱着自己缝制的布娃娃睡觉，从小就是手工达人。",
+                    result: "{user}抱着自己缝制的布娃娃睡觉。",
                     effects: {},
-                    add_tags: ["手工"]
+                    add_tags: ["婴儿娃娃"]
                 },
                 {
                     text: "一本书",
@@ -571,13 +661,13 @@ const ageEvents = {
                     text: "遥控器",
                     result: "{user}抱着遥控器睡觉，是个不折不扣的科技宅。",
                     effects: {},
-                    add_tags: ["科技宅"]
+                    add_tags: []
                 },
                 {
                     text: "鱼缸",
                     result: "{user}抱着鱼缸睡觉。",
                     effects: {},
-                    add_tags: ["海洋学者"]
+                    add_tags: ["水属性"]
                 }
             ]
         },
@@ -591,7 +681,7 @@ const ageEvents = {
                     text: "只吃甜食",
                     result: "{user}酷爱甜食，但也因此长了蛀牙。",
                     effects: { health: -5 },
-                    add_tags: ["甜"]
+                    add_tags: ["甜党"]
                 },
                 {
                     text: "讨厌蔬菜",
@@ -603,7 +693,7 @@ const ageEvents = {
                     text: "喜欢模仿大人喝茶",
                     result: "{user}喜欢学大人一样喝茶，显得有些老成。",
                     effects: {},
-                    add_tags: ["老成"]
+                    add_tags: []
                 },
                 {
                     text: "总是狼吞虎咽",
@@ -615,7 +705,7 @@ const ageEvents = {
                     text: "喜欢用手抓饭",
                     result: "{user}喜欢用手直接抓饭吃，对触觉特别敏感。",
                     effects: {},
-                    add_tags: ["触觉敏感"]
+                    add_tags: []
                 },
                 {
                     text: "经常剩饭",
@@ -665,7 +755,7 @@ const ageEvents = {
                     text: "青椒",
                     result: "{user}受不了青椒的味道，味觉特别敏感。",
                     effects: {},
-                    add_tags: ["味觉敏感"]
+                    add_tags: []
                 },
                 {
                     text: "洋葱",
@@ -683,7 +773,7 @@ const ageEvents = {
                     text: "茄子",
                     result: "{user}不喜欢茄子软烂的口感和颜色，是个颜值控。",
                     effects: {},
-                    add_tags: ["颜值控"]
+                    add_tags: []
                 },
                 {
                     text: "西兰花",
@@ -721,7 +811,7 @@ const ageEvents = {
                     text: "总是抢着回答问题",
                     result: "{user}在幼儿园总是积极抢答问题，表现欲很强。",
                     effects: { social: 2 },
-                    add_tags: ["表现欲"]
+                    add_tags: []
                 },
                 {
                     text: "喜欢分享自己的零食",
@@ -733,7 +823,7 @@ const ageEvents = {
                     text: "经常帮助小朋友",
                     result: "{user}看到别的小朋友有困难，总会主动上前帮助。",
                     effects: { social: 3 },
-                    add_tags: ["助人为乐"]
+                    add_tags: ["单纯"]
                 },
                 {
                     text: "喜欢一个人玩",
@@ -782,23 +872,81 @@ const ageEvents = {
                 {
                     text: "唱歌",
                     dynamic_result: function (player) {
-                        return updateDynamicTag(
-                            player,
-                            "音乐天赋:",  // 注意有冒号
-                            1,           // 增加值
-                            "{user}的音乐天赋提升了。" // 结果文本
-                        );
+                        // 使用标准函数处理动态标签
+                        if (window.eventManager && window.eventManager.updateDynamicTag) {
+                            return window.eventManager.updateDynamicTag(
+                                player,
+                                "音乐天赋",
+                                1,
+                                "{user}的音乐天赋提升了。"
+                            );
+                        }
+                        
+                        // 兼容旧代码
+                        if (typeof updateDynamicTag === 'function') {
+                            return updateDynamicTag(
+                                player,
+                                "音乐天赋:",
+                                1,
+                                "{user}的音乐天赋提升了。"
+                            );
+                        }
+                        
+                        // 手动实现
+                        let currentLevel = 0;
+                        const levelTagPrefix = "音乐天赋:";
+                        const existingLevelTag = player.tags.find(tag => tag.startsWith(levelTagPrefix));
+                        let newTags = player.tags.filter(tag => !tag.startsWith(levelTagPrefix));
+                        if (existingLevelTag) {
+                            currentLevel = parseInt(existingLevelTag.split(":")[1]);
+                        }
+                        newTags.push(`${levelTagPrefix}${currentLevel + 1}`);
+                        return {
+                            result: "{user}的音乐天赋提升了。",
+                            effects: {},
+                            add_tags: newTags,
+                            remove_tags: existingLevelTag ? [existingLevelTag] : []
+                        };
                     }
                 },
                 {
                     text: "画画",
                     dynamic_result: function (player) {
-                        return updateDynamicTag(
-                            player,
-                            "美术天赋:",  // 注意有冒号
-                            1,           // 增加值
-                            "{user}的美术天赋提升了。" // 结果文本
-                        );
+                        // 使用标准函数处理动态标签
+                        if (window.eventManager && window.eventManager.updateDynamicTag) {
+                            return window.eventManager.updateDynamicTag(
+                                player,
+                                "美术天赋",
+                                1,
+                                "{user}的美术天赋提升了。"
+                            );
+                        }
+                        
+                        // 兼容旧代码
+                        if (typeof updateDynamicTag === 'function') {
+                            return updateDynamicTag(
+                                player,
+                                "美术天赋:",
+                                1,
+                                "{user}的美术天赋提升了。"
+                            );
+                        }
+                        
+                        // 手动实现
+                        let currentLevel = 0;
+                        const levelTagPrefix = "美术天赋:";
+                        const existingLevelTag = player.tags.find(tag => tag.startsWith(levelTagPrefix));
+                        let newTags = player.tags.filter(tag => !tag.startsWith(levelTagPrefix));
+                        if (existingLevelTag) {
+                            currentLevel = parseInt(existingLevelTag.split(":")[1]);
+                        }
+                        newTags.push(`${levelTagPrefix}${currentLevel + 1}`);
+                        return {
+                            result: "{user}的美术天赋提升了。",
+                            effects: {},
+                            add_tags: newTags,
+                            remove_tags: existingLevelTag ? [existingLevelTag] : []
+                        };
                     }
                 },
                 {
@@ -811,7 +959,7 @@ const ageEvents = {
                     text: "折纸",
                     result: "{user}喜欢教大家折各种小玩意，手工技能不错。",
                     effects: {},
-                    add_tags: ["手工"]
+                    add_tags: []
                 },
                 {
                     text: "跳舞",
@@ -823,7 +971,7 @@ const ageEvents = {
                     text: "魔术",
                     result: "{user}喜欢表演一些简单的小魔术逗大家开心，表演天赋初显。",
                     effects: { social: 1 },
-                    add_tags: ["表演天赋"]
+                    add_tags: []
                 },
                 {
                     text: "做游戏",

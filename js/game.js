@@ -54,9 +54,25 @@ class LifeSimulatorGame {
             const tagElement = document.createElement('div');
             tagElement.className = 'tag';
             
-            // 检查 eventManager 是否存在
+            // 检查标签类型
+            let displayText = `#${tag}`;
+            
+            // 检查是否是动态标签
             if (typeof eventManager !== 'undefined' && eventManager.tag_definitions) {
-                const tagDef = eventManager.tag_definitions[tag];
+                // 提取标签基本名称（不含数值）
+                const tagNameOnly = tag.split(':')[0];
+                // 尝试从多种格式的标签定义中获取
+                const tagDef = this.getTagDefinition(tagNameOnly);
+                
+                // 如果是动态标签，格式化显示
+                if (tagDef?.is_dynamic) {
+                    const parts = tag.split(':');
+                    if (parts.length > 1) {
+                        displayText = `#${parts[0]}:${parts[1]}`;
+                    }
+                }
+                
+                // 应用特殊样式
                 if (tagDef?.is_red) {
                     tagElement.classList.add('red');
                 }
@@ -68,12 +84,45 @@ class LifeSimulatorGame {
                 if (achievement?.golden) tagElement.classList.add('golden');
             }
             
-            tagElement.textContent = `#${tag}`;
+            tagElement.textContent = displayText;
             fragment.appendChild(tagElement);
         });
         
         container.innerHTML = '';
         container.appendChild(fragment);
+    }
+    
+    // 辅助函数：从各种可能的来源获取标签定义
+    getTagDefinition(tagName) {
+        if (!tagName) return null;
+        
+        // 从 eventManager 获取
+        if (typeof eventManager !== 'undefined') {
+            // 尝试从对象属性获取
+            if (eventManager.tag_definitions && eventManager.tag_definitions[tagName]) {
+                return eventManager.tag_definitions[tagName];
+            }
+            
+            // 尝试从 Map 对象获取
+            if (eventManager.tag_definitions && eventManager.tag_definitions.get) {
+                return eventManager.tag_definitions.get(tagName);
+            }
+        }
+        
+        // 从全局TAG_DEFINITIONS获取（如果存在）
+        if (typeof TAG_DEFINITIONS !== 'undefined') {
+            // 尝试从 Map 对象获取
+            if (TAG_DEFINITIONS.get) {
+                return TAG_DEFINITIONS.get(tagName);
+            }
+            
+            // 尝试从对象属性获取
+            if (TAG_DEFINITIONS[tagName]) {
+                return TAG_DEFINITIONS[tagName];
+            }
+        }
+        
+        return null;
     }
 
     // 加载保存的人生记录

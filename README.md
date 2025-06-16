@@ -59,3 +59,4 @@ life-simulator/
 本项目使用纯HTML、CSS和JavaScript开发，无需任何外部依赖。
 事件系统基于标签触发机制，可以通过编辑 `events` 目录下的文件扩展游戏内容。 
 
+

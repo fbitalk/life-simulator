@@ -331,21 +331,21 @@ const TAG_DEFINITIONS = new Map([
     ["音乐天赋", {
         description: "音乐方面的天赋水平",
         is_dynamic: true,
-        prefix: "音乐天赋:",
+        prefix: "音乐天赋",
         exclusive_events: [],
         priority_events: ["music_competition", "music_scholarship"]
     }],
     ["学习成绩", {
         description: "学习成绩水平",
         is_dynamic: true,
-        prefix: "学习成绩:",
+        prefix: "学习成绩",
         exclusive_events: [],
         priority_events: ["academic_competition", "scholarship_opportunity"]
     }],
     ["美术天赋", {
         description: "美术成绩水平",
         is_dynamic: true,
-        prefix: "美术天赋:",
+        prefix: "美术天赋",
         exclusive_events: [],
         priority_events: ["art_competition"]
     }],

@@ -57,6 +57,20 @@ TAG_DEFINITIONS: new Map([
 }]
 ```
 
+### 2.4 标签分类
+
+系统中的标签按功能分为以下几类：
+
+- **基础标签** - 基本人口学特征（如"富二代"、"男性"、"女性"、"小学生"）
+- **性格标签** - 人物性格特点（如"高情商"、"诚实"、"勇敢"、"胆小"）
+- **兴趣标签** - 人物爱好和兴趣（如"编程"、"科幻"、"哲学"、"二次元"）
+- **背景标签** - 人物成长经历和背景（如"网吧养大"、"医学奇迹"、"失忆"）
+- **能力标签** - 人物特殊能力和技能（如"记忆超群"、"洞察力"、"逻辑思维"）
+- **动态标签** - 可随游戏进程变化的数值（如"音乐天赋"、"学习成绩"）
+- **红色标签** - 特殊负面状态（如"诅咒之子"、"绝症"、"通缉犯"）
+- **物品标签** - 角色拥有的特殊物品（如"神奇道具"、"如意门"）
+- **状态标签** - 角色当前状态（如"学霸"、"运动健将"、"为人父母"）
+
 ## 三、添加各类事件的方法
 
 ### 3.1 添加普通开局事件
@@ -321,7 +335,8 @@ TAG_EVENTS: {
     }
 }
 ```
-### 3.6 添加动态标签的选项
+
+### 3.7 添加动态标签的选项
 
 ```javascript
 options: [
@@ -338,8 +353,37 @@ options: [
         }
     }
 ]
+```
 
-## 四、事件触发优先级
+### 3.8 添加风险事件
+
+风险事件有一定概率导致角色死亡或其他严重后果：
+
+```javascript
+"dangerous_adventure": {
+    title: "危险冒险",
+    description: "{user}面临一个危险的冒险机会...",
+    trigger_conditions: { age_range: [18, 40] },
+    options: [
+        {
+            text: "冒险一试",
+            result: "{user}勇敢地接受了挑战，成功征服了危险！",
+            effects: { health: -10, luck: 10, social: 20 },
+            risk: 0.3,  // 30%概率直接死亡
+            risk_text: "{user}在冒险中遭遇了意外，不幸离世..."  // 可选的风险事件文本
+        },
+        {
+            text: "保持谨慎",
+            result: "{user}选择了更安全的方式。",
+            effects: { health: 5 }
+        }
+    ]
+}
+```
+
+## 四、事件触发优先级与机制
+
+### 4.1 触发优先级
 
 1. **红色标签独占事件**（最高优先级）
    - 拥有红色标签时，只触发其独占事件
@@ -354,9 +398,69 @@ options: [
 4. **普通事件**（正常优先级）
    - 满足条件的所有其他事件
 
+### 4.2 事件索引机制
+
+系统在初始化时会建立事件索引，用于快速查找和触发事件：
+
+```javascript
+initializeEventIndex() {
+    // 清空索引
+    this.eventIndex.clear();
+    
+    // 添加标签事件
+    Object.entries(window.TAG_EVENTS).forEach(([id, event]) => {
+        this.eventIndex.set(id, event);
+    });
+
+    // 添加年龄段事件
+    Object.entries(this.ageEvents).forEach(([ageGroup, events]) => {
+        Object.entries(events).forEach(([id, event]) => {
+            this.eventIndex.set(id, event);
+        });
+    });
+
+    // 添加开局事件
+    Object.entries(window.STARTING_EVENTS).forEach(([id, event]) => {
+        this.eventIndex.set(id, event);
+    });
+
+    // 添加开局标签事件
+    Object.entries(window.STARTING_TAG_EVENTS).forEach(([id, event]) => {
+        this.eventIndex.set(id, event);
+    });
+}
+```
+
+### 4.3 后续事件机制
+
+系统会追踪所有后续事件，确保它们只通过前置事件触发：
+
+```javascript
+// 收集所有作为后续事件的事件ID
+collectContinueEvents() {
+    this.eventIndex.forEach((event, id) => {
+        // 检查事件本身是否有continue_event属性
+        if (event.continue_event) {
+            this.continueEventsList.add(event.continue_event);
+        }
+        
+        // 检查事件的选项是否有continue_event属性
+        if (event.options && Array.isArray(event.options)) {
+            event.options.forEach(option => {
+                if (option.continue_event) {
+                    this.continueEventsList.add(option.continue_event);
+                }
+            });
+        }
+    });
+}
+```
+
 ## 五、特殊机制说明
 
 ### 5.1 风险机制
+
+风险机制用于创建有一定死亡概率的选项：
 
 ```javascript
 options: [
@@ -364,10 +468,16 @@ options: [
         text: "危险选择",
         result: "这是一个有风险的选择...",
         effects: { health: -20 },
-        risk: 0.3  // 30%概率直接死亡
+        risk: 0.3,  // 30%概率直接死亡
+        risk_text: "不幸的是，{user}没能活下来..."  // 自定义风险文本
     }
 ]
 ```
+
+风险机制在内部实现中会进行以下处理：
+1. 生成一个0-1之间的随机数
+2. 如果随机数小于risk值，则角色死亡
+3. 显示自定义风险文本，或使用默认文本
 
 ### 5.2 属性限制
 
@@ -407,13 +517,45 @@ achievements: [
 
 ## 六、调试技巧
 
+### 6.1 基本调试
+
 1. 使用 `console.log` 在事件中输出调试信息
 2. 检查 `eventManager.getAvailableEvents()` 查看当前可用事件
 3. 确保所有 `continue_event` 引用的事件ID存在
 4. 测试条件判断逻辑是否正确
 5. 使用浏览器开发者工具查看标签状态
 
+### 6.2 高级调试
+
+1. **事件索引检查**：使用 `console.log(Array.from(eventManager.eventIndex.keys()))` 检查所有已加载的事件
+2. **标签事件检查**：使用 `console.log(eventManager.getTagEvents('标签名'))` 检查特定标签的事件
+3. **触发条件测试**：
+```javascript
+const player = {age: 15, tags: ['小学生'], health: 80, intelligence: 70, social: 60, luck: 50};
+const event = eventManager.getEvent('event_id');
+console.log(eventManager.checkEventConditions(event, 'event_id', player));
+```
+4. **动态标签测试**：
+```javascript
+const result = eventManager.updateDynamicTag(
+    player,
+    "学习成绩:",
+    2,
+    "测试结果"
+);
+console.log(result);
+```
+5. **事件权重分析**：
+```javascript
+const availableEvents = eventManager.getAvailableEvents(player, 'teenager');
+availableEvents.forEach(([id, event]) => {
+    console.log(`${id}: weight=${event.weight || 1}`);
+});
+```
+
 ## 七、最佳实践
+
+### 7.1 事件设计
 
 1. **平衡性**：注意属性效果的平衡，避免过强或过弱
 2. **连贯性**：事件链要有逻辑连贯性
@@ -422,6 +564,13 @@ achievements: [
 5. **真实性**：事件要符合年龄特征和生活逻辑
 6. **标签管理**：合理使用 `add_tags` 和 `remove_tags`
 7. **动态内容**：善用 `dynamic_result` 创建个性化体验
+
+### 7.2 性能优化
+
+1. **避免过多标签**：标签数量过多会影响性能
+2. **简化条件判断**：过于复杂的条件判断会导致性能下降
+3. **合理使用动态结果**：`dynamic_result` 函数应该尽量简洁
+4. **避免无限循环**：确保事件链不会形成循环依赖
 
 ## 八、文件结构
 
@@ -433,3 +582,46 @@ achievements: [
 - `achievements.js` - 成就系统
 
 通过以上方法，你可以创建丰富多样的游戏内容，让每次游戏体验都独一无二！
+
+## 九、示例与模板
+
+### 9.1 基础事件模板
+
+```javascript
+"event_id": {
+    title: "事件标题",
+    description: "事件描述，可以包含{user}占位符",
+    weight: 10,  // 可选，默认为1
+    trigger_conditions: {
+        age_range: [min_age, max_age],
+        required_tags: ["标签1", "标签2"],
+        excluded_tags: ["排除标签"],
+        min_attributes: { health: 50, intelligence: 60 }
+    },
+    options: [
+        {
+            text: "选项1文本",
+            result: "选项1结果",
+            effects: { health: 10, intelligence: -5, money: 20 },
+            add_tags: ["新标签1"],
+            remove_tags: ["移除标签1"]
+        },
+        {
+            text: "选项2文本",
+            result: "选项2结果",
+            effects: { social: 5, luck: 10 },
+            continue_event: "后续事件id"
+        }
+    ]
+}
+```
+
+### 9.2 标签事件最佳实践
+
+1. **合理设置触发条件**：确保事件与标签相关
+2. **设置恰当的年龄范围**：根据事件内容设置合适的年龄范围
+3. **注意标签互斥**：某些标签可能应该互斥（如"学霸"和"学渣"）
+4. **注意红色标签使用**：红色标签会屏蔽其他所有事件，请谨慎使用
+5. **优先级设置**：为重要事件设置优先级
+
+通过这些最佳实践，你可以创建出逻辑连贯、体验丰富的生活模拟游戏！

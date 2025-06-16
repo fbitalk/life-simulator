@@ -1005,7 +1005,12 @@ const TAG_EVENTS = {
                 dynamic_result: function (player) {
                     return window.tagUtils?.updateDynamicTag(
                         player, 
-                        "音乐成绩:", 
+                        "音乐成绩", 
+                        1, 
+                        "{user}唱了一首《孤勇者》，音乐成绩有所提升。"
+                    ) || window.eventManager?.updateDynamicTag(
+                        player, 
+                        "音乐成绩", 
                         1, 
                         "{user}唱了一首《孤勇者》，音乐成绩有所提升。"
                     ) || {
