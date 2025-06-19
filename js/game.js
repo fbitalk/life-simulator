@@ -29,16 +29,189 @@ class LifeSimulatorGame {
             showError: (message) => {
                 console.error(message);
                 alert(message);
+                
+                // 播放错误音效
+                if (typeof audioManager !== 'undefined') {
+                    audioManager.playError();
+                }
             },
             logError: (error, context) => {
                 console.error(`Error in ${context}:`, error);
             }
         };
         
-        // 保存的人生记录
-        this.savedLives = this.loadSavedLives();
+        // 初始化UI相关功能
+        this.initializeUI();
+        
+        // 加载已保存的角色
+        this.loadSavedLives();
+        
+        // 初始化事件监听器
+        this.initEventListeners();
     }
-
+    
+    // 初始化UI相关功能
+    initializeUI() {
+        // 创建背景动画
+        this.createBackgroundAnimation();
+        
+        // 创建主题选择器
+        this.createThemeSelector();
+        
+        // 创建音效控制
+        this.createSoundControl();
+    }
+    
+    // 创建背景动画元素
+    createBackgroundAnimation() {
+        const bgAnimation = document.createElement('div');
+        bgAnimation.classList.add('bg-animation');
+        document.body.appendChild(bgAnimation);
+        
+        // 添加浮动形状
+        for (let i = 0; i < 10; i++) {
+            const shape = document.createElement('div');
+            shape.classList.add('floating-shape');
+            
+            // 随机大小和位置
+            const size = Math.random() * 200 + 50;
+            shape.style.width = `${size}px`;
+            shape.style.height = `${size}px`;
+            shape.style.left = `${Math.random() * 100}%`;
+            shape.style.top = `${Math.random() * 100}%`;
+            
+            // 随机动画延迟
+            shape.style.animationDelay = `${Math.random() * 10}s`;
+            
+            bgAnimation.appendChild(shape);
+        }
+    }
+    
+    // 创建主题选择器
+    createThemeSelector() {
+        // 检查是否已经存在主题选择器
+        if (document.querySelector('.theme-selector')) {
+            return;
+        }
+        
+        // 创建主题选择器容器
+        const themeSelector = document.createElement('div');
+        themeSelector.classList.add('theme-selector');
+        
+        // 创建主题切换按钮
+        const themeToggle = document.createElement('div');
+        themeToggle.classList.add('theme-toggle');
+        themeToggle.innerHTML = '<i class="fas fa-palette"></i>';
+        themeSelector.appendChild(themeToggle);
+        
+        // 创建主题选项容器
+        const themeOptions = document.createElement('div');
+        themeOptions.classList.add('theme-options');
+        
+        // 添加主题选项
+        const themes = [
+            { name: '默认', value: 'default' },
+            { name: '暗黑', value: 'dark' },
+            { name: '明亮', value: 'light' },
+            { name: '复古', value: 'retro' },
+            { name: '未来', value: 'future' }
+        ];
+        
+        themes.forEach(theme => {
+            const option = document.createElement('div');
+            option.classList.add('theme-option');
+            option.textContent = theme.name;
+            option.setAttribute('data-theme', theme.value);
+            
+            option.addEventListener('click', () => {
+                this.applyTheme(theme.value);
+                themeOptions.classList.remove('show');
+                
+                // 播放点击音效
+                if (typeof audioManager !== 'undefined') {
+                    audioManager.playClick();
+                }
+            });
+            
+            themeOptions.appendChild(option);
+        });
+        
+        themeSelector.appendChild(themeOptions);
+        
+        // 添加切换事件
+        themeToggle.addEventListener('click', () => {
+            themeOptions.classList.toggle('show');
+            
+            // 播放点击音效
+            if (typeof audioManager !== 'undefined') {
+                audioManager.playClick();
+            }
+        });
+        
+        // 添加到页面
+        document.body.appendChild(themeSelector);
+        
+        // 应用存储的主题
+        const savedTheme = localStorage.getItem('theme') || 'default';
+        this.applyTheme(savedTheme);
+    }
+    
+    // 应用主题
+    applyTheme(theme) {
+        // 移除所有主题类
+        document.body.classList.remove('theme-default', 'theme-dark', 'theme-light', 'theme-retro', 'theme-future');
+        
+        // 添加选择的主题类
+        document.body.classList.add(`theme-${theme}`);
+        
+        // 保存主题设置
+        localStorage.setItem('theme', theme);
+    }
+    
+    // 创建音效控制
+    createSoundControl() {
+        // 检查是否已经存在音效控制
+        if (document.querySelector('.sound-control')) {
+            return;
+        }
+        
+        // 创建音效控制容器
+        const soundControl = document.createElement('div');
+        soundControl.classList.add('sound-control');
+        
+        // 获取当前音效状态
+        const soundEnabled = typeof audioManager !== 'undefined' ? audioManager.enabled : true;
+        
+        // 创建音效切换按钮
+        const soundToggle = document.createElement('div');
+        soundToggle.classList.add('sound-toggle');
+        soundToggle.innerHTML = soundEnabled ? 
+            '<i class="fas fa-volume-up"></i>' : 
+            '<i class="fas fa-volume-mute"></i>';
+        
+        // 添加切换事件
+        soundToggle.addEventListener('click', () => {
+            if (typeof audioManager !== 'undefined') {
+                const newState = !audioManager.enabled;
+                audioManager.setEnabled(newState);
+                
+                soundToggle.innerHTML = newState ? 
+                    '<i class="fas fa-volume-up"></i>' : 
+                    '<i class="fas fa-volume-mute"></i>';
+                
+                // 如果开启了音效，播放点击音效
+                if (newState) {
+                    audioManager.playClick();
+                }
+            }
+        });
+        
+        soundControl.appendChild(soundToggle);
+        
+        // 添加到页面
+        document.body.appendChild(soundControl);
+    }
+    
     // 优化的标签渲染函数
     renderTags(container, tags) {
         // 使用 uiUtils 如果存在
@@ -524,107 +697,289 @@ class LifeSimulatorGame {
         return true;
     }
 
-    // 处理选择
-    handleChoice(optionIndex) {
-        try {
-            if (!this.validateChoice(optionIndex)) {
-                this.errorHandlers.showError(window.GAME_CONSTANTS.ERROR_MESSAGES.INVALID_CHOICE);
-                return;
-            }
-            
-            const option = this.currentEvent.options[optionIndex];
-            if (!option) {
-                throw new Error("Invalid option selected");
-            }
+    // 选择选项
+    selectOption(optionIndex) {
+        if (!this.currentEvent || this.showResult) return;
+        
+        // 播放点击音效
+        if (typeof audioManager !== 'undefined') {
+            audioManager.playClick();
+        }
+        
+        // 添加选择效果
+        const optionButtons = document.querySelectorAll('.option-btn');
+        if (optionButtons[optionIndex]) {
+            optionButtons[optionIndex].classList.add('option-selected');
+        }
+        
+        // 处理选项结果
+        const result = this.currentEvent.options[optionIndex];
+        this.eventResult = result;
+        this.showResult = true;
+        
+        // 更新结果显示
+        document.getElementById('resultText').innerText = result.result;
+        document.getElementById('resultDisplay').style.display = 'block';
+        
+        // 添加结果显示动画
+        if (typeof uiEffects !== 'undefined') {
+            const resultDisplay = document.getElementById('resultDisplay');
+            uiEffects.fadeIn(resultDisplay);
+        }
+        
+        // 处理结果效果
+        this.processEventResult(result);
+        
+        // 检查成就
+        this.checkAchievements();
+    }
 
-            // 处理动态结果
-            let finalResult = option;
-            if (option.dynamic_result && typeof option.dynamic_result === 'function') {
-                const dynamicResult = option.dynamic_result(this.player);
-                finalResult = { ...option, ...dynamicResult };
-            }
-
-            // 应用效果
-            if (finalResult.effects) {
-                for (const [attr, value] of Object.entries(finalResult.effects)) {
-                    if (attr in this.player) {
-                        this.player[attr] = Math.max(0, this.player[attr] + value);
-                        if (attr !== 'money' && attr !== 'age') {
-                            this.player[attr] = Math.min(100, this.player[attr]);
-                        }
-                    }
-                }
-            }
-            
-            // 添加标签
-            if (finalResult.add_tags) {
-                finalResult.add_tags.forEach(tag => {
-                    if (!this.player.tags.includes(tag)) {
-                        this.player.tags.push(tag);
-                        console.log(`Added tag: ${tag}`);
-                        
-                        // 检查成就解锁
-                        if (typeof achievementManager !== 'undefined') {
-                            const achievement = achievementManager.checkAndUnlockByTag(tag);
-                            if (achievement) {
-                                console.log(`Achievement unlocked: ${achievement.name}`);
-                                if (achievement.golden) {
-                                    this.showGoldenAchievement(achievement);
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-            
-            // 移除标签
-            if (finalResult.remove_tags) {
-                this.player.tags = this.player.tags.filter(tag => !finalResult.remove_tags.includes(tag));
-            }
-            
-            // 记录历史
-            this.gameHistory.push(`${this.player.age}岁: ${this.currentEvent.title} - 选择"${option.text}"。结果: ${finalResult.result}`);
-
-            // 检查健康值
-            if (this.player.health <= 0) {
-                this.player.alive = false;
-                this.deathReason = `${this.playerName}在${this.player.age}岁时因健康耗尽而与世长辞。`;
+    // 更新显示
+    updateDisplay() {
+        if (this.gameState !== 'playing' || !this.player) return;
+        
+        document.getElementById('playerNameDisplay').textContent = this.playerName;
+        document.getElementById('ageDisplay').textContent = `${this.player.age}岁`;
+        document.getElementById('backgroundDisplay').textContent = this.player.background.name;
+        
+        const tagsContainer = document.getElementById('tagsContainer');
+        this.renderTags(tagsContainer, this.getDisplayTags());
+        
+        const eventContainer = document.getElementById('eventContainer');
+        eventContainer.innerHTML = '';
+        
+        if (this.showResult && this.eventResult) {
+            const resultDiv = document.createElement('div');
+            resultDiv.className = 'result-display';
+            resultDiv.innerHTML = `
+                <div class="result-text">${this.eventResult.result}</div>
+                <button class="btn continue-btn" onclick="game.nextEventLogic()">
+                    进入下一年
+                </button>
+            `;
+            eventContainer.appendChild(resultDiv);
+        } else if (this.currentEvent) {
+            const eventCard = document.createElement('div');
+            eventCard.className = 'event-card';
+            let optionsHTML = '';
+            this.currentEvent.options.forEach((option, index) => {
+                optionsHTML += `
+                    <button class="option-btn" onclick="game.selectOption(${index})">
+                        ${option.text}
+                    </button>
+                `;
+            });
+ 
+            eventCard.innerHTML = `
+                <div class="event-title">${this.currentEvent.title}</div>
+                <div class="event-description">${this.currentEvent.description}</div>
+                <div class="options-container">${optionsHTML}</div>
+            `;
+            eventContainer.appendChild(eventCard);
+        }
+    }
+ 
+    // 获取显示标签
+    getDisplayTags() {
+        if (!this.player) return [];
+        
+        let displayTags = [...this.player.tags];
+        
+        // 根据属性动态生成标签
+        if (this.player.health >= 90) displayTags.push("健康");
+        else if (this.player.health <= 30) displayTags.push("体弱多病");
+ 
+        if (this.player.money >= 100) displayTags.push("富有");
+        else if (this.player.money <= 20) displayTags.push("贫困");
+ 
+        if (this.player.intelligence >= 90) displayTags.push("聪明");
+        if (this.player.social >= 90) displayTags.push("社交达人");
+        if (this.player.luck >= 90) displayTags.push("幸运");
+        
+        return [...new Set(displayTags)];
+    }
+ 
+    // 游戏结束
+    endGame(reason = null) {
+        // 设置死亡原因
+        if (reason) {
+            this.deathReason = reason;
+        } else if (!this.deathReason) {
+            this.deathReason = '寿终正寝';
+        }
+        
+        // 保存游戏记录
+        this.saveGameRecord();
+        
+        // 获取当前屏幕和游戏结束屏幕
+        const currentScreen = this.getCurrentScreenElement();
+        const gameoverScreen = document.getElementById('gameoverScreen');
+        
+        // 使用UI效果管理器进行页面过渡
+        if (typeof uiEffects !== 'undefined') {
+            uiEffects.pageTransition(currentScreen, gameoverScreen, () => {
                 this.gameState = 'gameover';
-                this.endGame();
-                return;
+                this.updateGameoverUI();
+            });
+        } else {
+            currentScreen.style.display = 'none';
+            gameoverScreen.style.display = 'block';
+            this.gameState = 'gameover';
+            this.updateGameoverUI();
+        }
+        
+        // 播放游戏结束音效
+        if (typeof audioManager !== 'undefined') {
+            audioManager.play('gameover');
+        }
+    }
+    
+    // 更新游戏结束UI
+    updateGameoverUI() {
+        // 基本信息
+        document.getElementById('finalName').innerText = this.player.name;
+        document.getElementById('finalAge').innerText = this.player.age;
+        document.getElementById('deathReason').innerText = this.deathReason;
+        
+        // 标签
+        const finalTagsContainer = document.getElementById('finalTags');
+        finalTagsContainer.innerHTML = '';
+        
+        this.player.tags.forEach(tag => {
+            const tagElement = document.createElement('span');
+            tagElement.classList.add('tag');
+            tagElement.innerText = tag;
+            
+            // 添加特殊标签样式
+            if (tag.includes('金')) {
+                tagElement.classList.add('golden');
+            } else if (tag.includes('红')) {
+                tagElement.classList.add('red');
             }
             
-            // 设置事件结果
-            this.eventResult = {
-                text: finalResult.result,
-                hasNextEventChain: !!finalResult.continue_event
-            };
+            finalTagsContainer.appendChild(tagElement);
+        });
+        
+        // 历史记录
+        const historyContainer = document.getElementById('historyContainer');
+        historyContainer.innerHTML = '';
+        
+        this.gameHistory.forEach(event => {
+            const historyItem = document.createElement('div');
+            historyItem.classList.add('history-item');
+            historyItem.innerText = event;
+            historyContainer.appendChild(historyItem);
+        });
+        
+        // 添加游戏结束动画效果
+        if (typeof uiEffects !== 'undefined') {
+            // 创建结束动画
+            const animationContainer = document.createElement('div');
+            animationContainer.classList.add('gameover-animation');
+            document.body.appendChild(animationContainer);
             
-            // 检查是否有后续事件
-            if (finalResult.continue_event) {
-                this.nextEventId = finalResult.continue_event;
-            } else if (this.currentEvent.continue_event) {
-                this.nextEventId = this.currentEvent.continue_event;
-            }
+            // 动画结束后移除
+            setTimeout(() => {
+                animationContainer.remove();
+            }, 3000);
             
-            this.showResult = true;
-            this.updateDisplay();
+            // 为最终年龄添加数字递增动画
+            const finalAgeElement = document.getElementById('finalAge');
+            const targetAge = this.player.age;
+            let currentDisplayAge = 0;
             
-        } catch (error) {
-            this.errorHandlers.logError(error, "handleChoice");
-            this.errorHandlers.showError("处理选择时出错");
+            const ageInterval = setInterval(() => {
+                currentDisplayAge++;
+                finalAgeElement.innerText = currentDisplayAge;
+                
+                if (currentDisplayAge >= targetAge) {
+                    clearInterval(ageInterval);
+                }
+            }, 30);
+            
+            // 为结束屏幕元素添加渐入动画
+            const elementsToAnimate = [
+                document.getElementById('finalName').parentElement,
+                document.getElementById('finalAge').parentElement,
+                document.getElementById('deathReason').parentElement,
+                finalTagsContainer,
+                historyContainer
+            ];
+            
+            elementsToAnimate.forEach((element, index) => {
+                if (element) {
+                    setTimeout(() => {
+                        element.style.opacity = '0';
+                        element.style.transform = 'translateY(20px)';
+                        element.style.transition = 'all 0.5s ease';
+                        
+                        setTimeout(() => {
+                            element.style.opacity = '1';
+                            element.style.transform = 'translateY(0)';
+                        }, 50);
+                    }, index * 300);
+                }
+            });
         }
     }
 
-    validateChoice(optionIndex) {
-        return this.currentEvent && 
-               this.currentEvent.options && 
-               optionIndex >= 0 && 
-               optionIndex < this.currentEvent.options.length;
+    // 重新开始
+    restart() {
+        this.gameState = 'menu';
+        this.player = null;
+        this.currentEvent = null;
+        this.currentEventId = null;
+        this.eventResult = null;
+        this.gameHistory = [];
+        this.deathReason = '';
+        this.showResult = false;
+        this.selectedGender = null;
+        this.playerName = '';
+        this.nextEventId = null;
+    }
+ 
+    // 显示金色成就
+    showGoldenAchievement(achievement) {
+        const effectContainer = document.getElementById('goldenAchievementEffect');
+        if (!effectContainer) return;
+ 
+        const effectDiv = document.createElement('div');
+        effectDiv.className = 'golden-achievement-effect';
+        effectDiv.innerHTML = `
+            <div class="golden-achievement-content">
+                <div class="golden-achievement-title">🎉 获得成就！</div>
+                <div class="golden-achievement-desc">${achievement.name}</div>
+            </div>
+        `;
+        
+        effectContainer.appendChild(effectDiv);
+        
+        setTimeout(() => {
+            effectDiv.remove();
+        }, 1500);
     }
 
     // 下一个事件逻辑
     nextEventLogic() {
+        // 播放点击音效
+        if (typeof audioManager !== 'undefined') {
+            audioManager.playClick();
+        }
+        
+        // 添加淡出动画
+        if (typeof uiEffects !== 'undefined') {
+            const resultDisplay = document.querySelector('.result-display');
+            
+            uiEffects.fadeOut(resultDisplay, () => {
+                this.processNextEvent();
+            });
+        } else {
+            this.processNextEvent();
+        }
+    }
+    
+    // 处理下一个事件
+    processNextEvent() {
         this.showResult = false;
         
         // 年龄增长
@@ -648,6 +1003,12 @@ class LifeSimulatorGame {
                             result: option.result ? option.result.replace(/{user}/g, this.player.name) : option.result
                         }))
                     };
+                    
+                    // 播放过渡音效
+                    if (typeof audioManager !== 'undefined') {
+                        audioManager.playTransition();
+                    }
+                    
                     this.updateDisplay();
                     return;
                 }
@@ -689,6 +1050,12 @@ class LifeSimulatorGame {
                     }))
                 };
                 this.nextEventId = null;
+                
+                // 播放过渡音效
+                if (typeof audioManager !== 'undefined') {
+                    audioManager.playTransition();
+                }
+                
                 this.updateDisplay();
                 return;
             } else {
@@ -699,129 +1066,6 @@ class LifeSimulatorGame {
         
         // 常规生成随机事件
         this.generateEvent();
-    }
-
-    // 更新显示
-    updateDisplay() {
-        if (this.gameState !== 'playing' || !this.player) return;
-        
-        document.getElementById('playerNameDisplay').textContent = this.playerName;
-        document.getElementById('ageDisplay').textContent = `${this.player.age}岁`;
-        document.getElementById('backgroundDisplay').textContent = this.player.background.name;
-        
-        const tagsContainer = document.getElementById('tagsContainer');
-        this.renderTags(tagsContainer, this.getDisplayTags());
-        
-        const eventContainer = document.getElementById('eventContainer');
-        eventContainer.innerHTML = '';
-        
-        if (this.showResult && this.eventResult) {
-            const resultDiv = document.createElement('div');
-            resultDiv.className = 'result-display';
-            resultDiv.innerHTML = `
-                <div class="result-text">${this.eventResult.text}</div>
-                <button class="btn continue-btn" onclick="game.nextEventLogic()">
-                    进入下一年
-                </button>
-            `;
-            eventContainer.appendChild(resultDiv);
-        } else if (this.currentEvent) {
-            const eventCard = document.createElement('div');
-            eventCard.className = 'event-card';
-            let optionsHTML = '';
-            this.currentEvent.options.forEach((option, index) => {
-                optionsHTML += `
-                    <button class="option-btn" onclick="game.handleChoice(${index})">
-                        ${option.text}
-                    </button>
-                `;
-            });
- 
-            eventCard.innerHTML = `
-                <div class="event-title">${this.currentEvent.title}</div>
-                <div class="event-description">${this.currentEvent.description}</div>
-                <div class="options-container">${optionsHTML}</div>
-            `;
-            eventContainer.appendChild(eventCard);
-        }
-    }
- 
-    // 获取显示标签
-    getDisplayTags() {
-        if (!this.player) return [];
-        
-        let displayTags = [...this.player.tags];
-        
-        // 根据属性动态生成标签
-        if (this.player.health >= 90) displayTags.push("健康");
-        else if (this.player.health <= 30) displayTags.push("体弱多病");
- 
-        if (this.player.money >= 100) displayTags.push("富有");
-        else if (this.player.money <= 20) displayTags.push("贫困");
- 
-        if (this.player.intelligence >= 90) displayTags.push("聪明");
-        if (this.player.social >= 90) displayTags.push("社交达人");
-        if (this.player.luck >= 90) displayTags.push("幸运");
-        
-        return [...new Set(displayTags)];
-    }
- 
-    // 结束游戏
-    endGame() {
-        this.gameState = 'gameover';
-        showScreen('gameoverScreen');
-        
-        document.getElementById('finalAge').textContent = `${this.player.age}岁`;
-        document.getElementById('deathReason').textContent = this.deathReason;
-        
-        const finalTagsContainer = document.getElementById('finalTags');
-        this.renderTags(finalTagsContainer, this.getDisplayTags());
-        
-        const historyList = document.getElementById('historyList');
-        historyList.innerHTML = '';
-        const historyToShow = this.gameHistory.slice(-10);
-        historyToShow.forEach(item => {
-            const historyItem = document.createElement('div');
-            historyItem.className = 'history-item';
-            historyItem.textContent = item;
-            historyList.appendChild(historyItem);
-        });
-    }
- 
-    // 重新开始
-    restart() {
-        this.gameState = 'menu';
-        this.player = null;
-        this.currentEvent = null;
-        this.currentEventId = null;
-        this.eventResult = null;
-        this.gameHistory = [];
-        this.deathReason = '';
-        this.showResult = false;
-        this.selectedGender = null;
-        this.playerName = '';
-        this.nextEventId = null;
-    }
- 
-    // 显示金色成就
-    showGoldenAchievement(achievement) {
-        const effectContainer = document.getElementById('goldenAchievementEffect');
-        if (!effectContainer) return;
- 
-        const effectDiv = document.createElement('div');
-        effectDiv.className = 'golden-achievement-effect';
-        effectDiv.innerHTML = `
-            <div class="golden-achievement-content">
-                <div class="golden-achievement-title">🎉 获得成就！</div>
-                <div class="golden-achievement-desc">${achievement.name}</div>
-            </div>
-        `;
-        
-        effectContainer.appendChild(effectDiv);
-        
-        setTimeout(() => {
-            effectDiv.remove();
-        }, 1500);
     }
 }
  

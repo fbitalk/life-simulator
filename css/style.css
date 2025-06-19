@@ -887,4 +887,706 @@ body {
     max-height: calc(100vh - 400px);
     overflow-y: auto;
     padding-right: 10px;
+}
+
+/* 添加新的主题和动画 */
+
+/* 主题相关样式 */
+.theme-selector {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+}
+
+.theme-toggle {
+    background: rgba(255, 255, 255, 0.8);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+    transform: rotate(30deg);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.theme-options {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    padding: 10px 0;
+    width: 150px;
+    display: none;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+}
+
+.theme-options.show {
+    display: block;
+    transform: translateY(0);
+    animation: fadeInDown 0.3s ease;
+}
+
+.theme-option {
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.theme-option:hover {
+    background: rgba(102, 126, 234, 0.1);
+    padding-left: 20px;
+}
+
+/* 音效控制 */
+.sound-control {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 100;
+}
+
+.sound-toggle {
+    background: rgba(255, 255, 255, 0.8);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.sound-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* 屏幕转换动画 */
+.screen-enter {
+    animation: screenEnter 0.5s ease-out;
+}
+
+@keyframes screenEnter {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 标签动画 */
+.tag-animate {
+    animation: tagPop 0.5s ease forwards;
+}
+
+@keyframes tagPop {
+    0% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    70% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* 选项选择动画 */
+.option-selected {
+    animation: optionPulse 0.3s ease;
+}
+
+@keyframes optionPulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(0.95);
+        background: rgba(102, 126, 234, 0.9);
+        color: white;
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* 成就通知 */
+.achievement-notification {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    background: linear-gradient(135deg, #ffd700 0%, #ffcc00 100%);
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    z-index: 1000;
+    animation: slideInRight 0.5s ease forwards;
+    transition: all 0.5s ease;
+}
+
+.achievement-notification-hide {
+    animation: slideOutRight 0.5s ease forwards;
+}
+
+.achievement-notification-content {
+    display: flex;
+    align-items: center;
+}
+
+.achievement-notification-icon {
+    font-size: 2em;
+    margin-right: 15px;
+    animation: bounce 1s infinite alternate;
+}
+
+.achievement-notification-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.achievement-notification-name {
+    color: #333;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+@keyframes bounce {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-5px);
+    }
+}
+
+/* 游戏结束动画 */
+.gameover-animation {
+    animation: gameoverEffect 1.5s ease;
+}
+
+@keyframes gameoverEffect {
+    0% {
+        filter: blur(0);
+        transform: scale(1);
+    }
+    10% {
+        filter: blur(2px);
+        transform: scale(1.02);
+    }
+    20% {
+        filter: blur(0);
+        transform: scale(1);
+    }
+    100% {
+        filter: blur(0);
+    }
+}
+
+/* 主题定义 */
+/* 默认主题 - 已经在原CSS中定义 */
+
+/* 暗黑模式 */
+.theme-dark {
+    background: #121212;
+}
+
+.theme-dark .game-container {
+    background: rgba(30, 30, 30, 0.95);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    color: #e0e0e0;
+}
+
+.theme-dark .game-title,
+.theme-dark h2,
+.theme-dark h3 {
+    color: #bb86fc;
+}
+
+.theme-dark .menu-btn {
+    background: #2d2d2d;
+    border: 2px solid #bb86fc;
+    color: #e0e0e0;
+}
+
+.theme-dark .menu-btn:hover {
+    background: #bb86fc;
+    color: #121212;
+}
+
+.theme-dark .gender-card {
+    background: #2d2d2d;
+    border: 3px solid #4d4d4d;
+    color: #e0e0e0;
+}
+
+.theme-dark .gender-card.selected {
+    border-color: #bb86fc;
+    background: rgba(187, 134, 252, 0.2);
+}
+
+.theme-dark .gender-card:hover {
+    border-color: #bb86fc;
+}
+
+.theme-dark .name-input {
+    background: #2d2d2d;
+    border: 2px solid #4d4d4d;
+    color: #e0e0e0;
+}
+
+.theme-dark .name-input:focus {
+    border-color: #bb86fc;
+}
+
+.theme-dark .btn {
+    background: #2d2d2d;
+    color: #e0e0e0;
+    border: 2px solid #bb86fc;
+}
+
+.theme-dark .btn:hover {
+    background: #bb86fc;
+    color: #121212;
+}
+
+.theme-dark .tag {
+    background: #2d2d2d;
+    color: #e0e0e0;
+}
+
+.theme-dark .event-card,
+.theme-dark .achievement-card,
+.theme-dark .saved-life-item,
+.theme-dark .modal-content {
+    background: #2d2d2d;
+    border: 1px solid #4d4d4d;
+    color: #e0e0e0;
+}
+
+.theme-dark .option-btn {
+    background: #333;
+    color: #e0e0e0;
+    border: 1px solid #4d4d4d;
+}
+
+.theme-dark .option-btn:hover {
+    background: #bb86fc;
+    color: #121212;
+}
+
+/* 明亮模式 */
+.theme-light {
+    background: #f8f9fa;
+}
+
+.theme-light .game-container {
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+}
+
+.theme-light .game-title,
+.theme-light h2,
+.theme-light h3 {
+    color: #0066cc;
+}
+
+.theme-light .menu-btn {
+    background: white;
+    border: 2px solid #0066cc;
+    color: #333;
+}
+
+.theme-light .menu-btn:hover {
+    background: #0066cc;
+    color: white;
+}
+
+.theme-light .btn {
+    background: #0066cc;
+    color: white;
+}
+
+.theme-light .btn:hover {
+    background: #0055aa;
+}
+
+.theme-light .tag {
+    background: #e9f2ff;
+    color: #0066cc;
+}
+
+.theme-light .event-card {
+    border: 1px solid #e0e0e0;
+}
+
+/* 复古风格 */
+.theme-retro {
+    background: #ffe6cc;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.theme-retro .game-container {
+    background: #fff5e6;
+    box-shadow: 0 15px 40px rgba(160, 82, 45, 0.3);
+    border: 3px solid #a0522d;
+}
+
+.theme-retro .game-title,
+.theme-retro h2,
+.theme-retro h3 {
+    color: #8b4513;
+    text-shadow: 1px 1px 0 #f5deb3;
+}
+
+.theme-retro .menu-btn {
+    background: #f5deb3;
+    border: 2px solid #8b4513;
+    color: #8b4513;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.theme-retro .menu-btn:hover {
+    background: #8b4513;
+    color: #f5deb3;
+}
+
+.theme-retro .btn {
+    background: #8b4513;
+    color: #f5deb3;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.theme-retro .btn:hover {
+    background: #704214;
+}
+
+.theme-retro .tag {
+    background: #f5deb3;
+    color: #8b4513;
+    border: 1px dashed #8b4513;
+}
+
+.theme-retro .event-card {
+    border: 2px solid #8b4513;
+    background: #fff5e6;
+}
+
+.theme-retro .option-btn {
+    background: #f5deb3;
+    color: #8b4513;
+    border: 1px solid #8b4513;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.theme-retro .option-btn:hover {
+    background: #8b4513;
+    color: #f5deb3;
+}
+
+/* 未来科技 */
+.theme-future {
+    background: linear-gradient(135deg, #000428 0%, #004e92 100%);
+}
+
+.theme-future .game-container {
+    background: rgba(10, 25, 47, 0.95);
+    box-shadow: 0 20px 60px rgba(0, 74, 146, 0.5);
+    border: 1px solid #00ccff;
+    color: #e0f7ff;
+}
+
+.theme-future .game-title,
+.theme-future h2,
+.theme-future h3 {
+    color: #00ccff;
+    text-shadow: 0 0 10px rgba(0, 204, 255, 0.5);
+}
+
+.theme-future .menu-btn {
+    background: rgba(0, 20, 40, 0.6);
+    border: 2px solid #00ccff;
+    color: #00ccff;
+    box-shadow: 0 0 10px rgba(0, 204, 255, 0.3);
+}
+
+.theme-future .menu-btn:hover {
+    background: rgba(0, 204, 255, 0.3);
+    box-shadow: 0 0 20px rgba(0, 204, 255, 0.5);
+}
+
+.theme-future .btn {
+    background: rgba(0, 20, 40, 0.6);
+    color: #00ccff;
+    border: 1px solid #00ccff;
+    box-shadow: 0 0 10px rgba(0, 204, 255, 0.3);
+}
+
+.theme-future .btn:hover {
+    background: rgba(0, 204, 255, 0.3);
+    box-shadow: 0 0 20px rgba(0, 204, 255, 0.5);
+}
+
+.theme-future .tag {
+    background: rgba(0, 20, 40, 0.6);
+    color: #00ccff;
+    border: 1px solid #00ccff;
+    box-shadow: 0 0 5px rgba(0, 204, 255, 0.3);
+}
+
+.theme-future .event-card {
+    background: rgba(0, 20, 40, 0.6);
+    border: 1px solid #00ccff;
+    box-shadow: 0 0 10px rgba(0, 204, 255, 0.3);
+}
+
+.theme-future .option-btn {
+    background: rgba(0, 20, 40, 0.8);
+    color: #00ccff;
+    border: 1px solid #00ccff;
+}
+
+.theme-future .option-btn:hover {
+    background: rgba(0, 204, 255, 0.3);
+    box-shadow: 0 0 10px rgba(0, 204, 255, 0.5);
+}
+
+/* 移动设备适配 */
+@media (max-width: 768px) {
+    .theme-selector,
+    .sound-control {
+        transform: scale(0.8);
+    }
+    
+    .theme-selector {
+        top: 10px;
+        right: 10px;
+    }
+    
+    .sound-control {
+        top: 10px;
+        left: 10px;
+    }
+    
+    .achievement-notification {
+        width: 90%;
+        right: 5%;
+        left: 5%;
+        padding: 10px;
+    }
+}
+
+/* 添加新的过渡动画效果 */
+@keyframes fadeInScale {
+    0% { opacity: 0; transform: scale(0.9); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slideInBottom {
+    0% { opacity: 0; transform: translateY(30px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes rotateIn {
+    0% { opacity: 0; transform: rotateY(-90deg); }
+    100% { opacity: 1; transform: rotateY(0); }
+}
+
+@keyframes shimmer {
+    0% { background-position: -100% 0; }
+    100% { background-position: 100% 0; }
+}
+
+/* 增强按钮点击效果 */
+.menu-btn:active, .btn:active, .option-btn:active {
+    transform: scale(0.95);
+    transition: transform 0.1s;
+}
+
+/* 增强标签动画 */
+.tag {
+    animation: tagAppear 0.5s ease forwards;
+    transition: all 0.3s ease;
+}
+
+.tag:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+}
+
+/* 增强事件卡片动画 */
+.event-card {
+    animation: fadeInScale 0.5s ease-out;
+    transition: all 0.3s ease;
+}
+
+/* 增强选项按钮悬停效果 */
+.option-btn {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.option-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.2), 
+        transparent);
+    transition: all 0.5s ease;
+}
+
+.option-btn:hover::after {
+    left: 100%;
+}
+
+/* 增强页面转换动画 */
+.main-menu, .character-creation, .game-screen, .gameover-screen, 
+.achievements-screen, .replay-screen {
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.page-exit {
+    opacity: 0;
+    transform: translateX(-30px);
+}
+
+.page-enter {
+    opacity: 0;
+    transform: translateX(30px);
+}
+
+/* 增强结果显示动画 */
+.result-display {
+    animation: resultFadeIn 0.6s ease-out;
+}
+
+/* 添加波纹效果 */
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: scale(0);
+    animation: ripple 0.6s linear;
+    pointer-events: none;
+}
+
+@keyframes ripple {
+    to {
+        transform: scale(2.5);
+        opacity: 0;
+    }
+}
+
+/* 增强游戏结束屏幕动画 */
+.gameover-screen .final-age,
+.gameover-screen .death-reason,
+.gameover-screen .final-tags,
+.gameover-screen .history-container {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideInBottom 0.5s ease forwards;
+}
+
+.gameover-screen .final-age { animation-delay: 0.3s; }
+.gameover-screen .death-reason { animation-delay: 0.6s; }
+.gameover-screen .final-tags { animation-delay: 0.9s; }
+.gameover-screen .history-container { animation-delay: 1.2s; }
+
+/* 添加奖励动画效果 */
+.reward-effect {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+.reward-particle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: gold;
+    pointer-events: none;
+}
+
+@keyframes moveParticle {
+    0% { transform: translate(0, 0); opacity: 1; }
+    100% { transform: translate(var(--x), var(--y)); opacity: 0; }
+}
+
+/* 增强滚动条样式 */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(102, 126, 234, 0.5);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(118, 75, 162, 0.7);
 } 
