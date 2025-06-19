@@ -40,11 +40,11 @@ class LifeSimulatorGame {
             }
         };
         
+        // 保存的人生记录
+        this.savedLives = this.loadSavedLives();
+        
         // 初始化UI相关功能
         this.initializeUI();
-        
-        // 加载已保存的角色
-        this.loadSavedLives();
         
         // 初始化事件监听器
         this.initEventListeners();
@@ -1066,6 +1066,35 @@ class LifeSimulatorGame {
         
         // 常规生成随机事件
         this.generateEvent();
+    }
+
+    // 初始化事件监听器
+    initEventListeners() {
+        // 性别选择卡片的点击事件
+        document.querySelectorAll('.gender-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const gender = card.getAttribute('data-gender');
+                this.selectedGender = gender;
+                
+                // 更新UI
+                document.querySelectorAll('.gender-card').forEach(c => {
+                    c.classList.remove('selected');
+                });
+                card.classList.add('selected');
+                
+                // 更新开始按钮状态
+                updateStartButton();
+            });
+        });
+        
+        // 名字输入框的输入事件
+        const nameInput = document.getElementById('playerName');
+        if (nameInput) {
+            nameInput.addEventListener('input', () => {
+                this.playerName = nameInput.value.trim();
+                updateStartButton();
+            });
+        }
     }
 }
  
