@@ -14,7 +14,15 @@ const GAME_CONSTANTS = {
         INVALID_PLAYER: "无效的玩家数据",
         INIT_FAILED: "初始化失败",
         INVALID_EVENT: "无效的事件数据",
-        INVALID_TAG: "无效的标签数据"
+        INVALID_TAG: "无效的标签数据",
+        SAVE_FAILED: "保存失败"
+    },
+    
+    // 存储键名
+    STORAGE_KEYS: {
+        SAVED_LIVES: "life_simulator_saved_lives",
+        ACHIEVEMENTS: "life_simulator_achievements",
+        SETTINGS: "life_simulator_settings"
     },
     
     // 年龄段定义

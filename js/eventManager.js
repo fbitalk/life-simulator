@@ -17,6 +17,8 @@ const eventManager = {
     triggered_events: new Set(), // 追踪已触发的事件
     eventIndex: new Map(), // 事件索引
     continueEventsList: new Set(), // 追踪所有后续事件
+    lazyLoadedGroups: new Set(), // 追踪已加载的事件组
+    cachedTagEvents: new Map(), // 标签事件缓存
 
     // 错误处理
     errorHandlers: {
@@ -33,74 +35,63 @@ const eventManager = {
     // 使用导入的标签定义
     tag_definitions: tagDefinitions,
 
-    // 初始化事件索引
+    // 初始化事件索引 - 只加载必要的事件
     initializeEventIndex() {
         try {
             // 清空索引
             this.eventIndex.clear();
             this.continueEventsList.clear();
+            this.lazyLoadedGroups.clear();
+            this.cachedTagEvents.clear();
             
-            // 添加标签事件 - 确保使用正确的变量名
-            if (window.TAG_EVENTS) {
-                Object.entries(window.TAG_EVENTS).forEach(([id, event]) => {
-                    this.eventIndex.set(id, event);
-                    console.log(`Added tag event: ${id}`); // 调试信息
-                });
-                console.log(`Loaded ${Object.keys(window.TAG_EVENTS).length} tag events`);
-            } else {
-                console.error('TAG_EVENTS not found!');
-            }
-
-            // 添加年龄段事件
-            if (this.ageEvents) {
-                Object.entries(this.ageEvents).forEach(([ageGroup, events]) => {
-                    Object.entries(events).forEach(([id, event]) => {
-                        this.eventIndex.set(id, event);
-                    });
-                });
-                console.log(`Loaded age events for ${Object.keys(this.ageEvents).length} age groups`);
-            }
-
-            // 添加开局事件
-            if (window.STARTING_EVENTS) {
-                Object.entries(window.STARTING_EVENTS).forEach(([id, event]) => {
-                    this.eventIndex.set(id, event);
-                });
-                console.log(`Loaded ${Object.keys(window.STARTING_EVENTS).length} starting events`);
-            }
-
-            // 添加开局标签事件
-            if (window.STARTING_TAG_EVENTS) {
-                Object.entries(window.STARTING_TAG_EVENTS).forEach(([id, event]) => {
-                    this.eventIndex.set(id, event);
-                });
-            }
-
+            // 只预加载开局事件
+            this.loadStartingEvents();
+            
+            console.log('Event index initialized with starting events');
+            console.log(`Starting events in index: ${this.eventIndex.size}`);
+            
             // 收集所有后续事件ID
             this.collectContinueEvents();
-
-            console.log('Event index initialized successfully');
-            console.log(`Total events in index: ${this.eventIndex.size}`);
-            console.log(`Total continue events: ${this.continueEventsList.size}`);
-            
-            // 调试：检查小学生相关事件是否被加载
-            const elementaryEvents = Array.from(this.eventIndex.keys()).filter(key => 
-                key.includes('elementary')
-            );
-            console.log(`Elementary school events loaded: ${elementaryEvents.length}`, elementaryEvents);
-            
-            // 调试：检查是否有小学生标签的事件
-            const studentTagEvents = [];
-            this.eventIndex.forEach((event, id) => {
-                if (event.trigger_conditions?.required_tags?.includes('小学生')) {
-                    studentTagEvents.push(id);
-                }
-            });
-            console.log(`Events requiring 小学生 tag: ${studentTagEvents.length}`, studentTagEvents);
             
         } catch (error) {
             this.errorHandlers.logError(error, 'initializeEventIndex');
             throw error;
+        }
+    },
+
+    // 加载开局事件
+    loadStartingEvents() {
+        if (this.lazyLoadedGroups.has('starting')) return;
+        
+        // 添加开局事件
+        if (window.STARTING_EVENTS) {
+            Object.entries(window.STARTING_EVENTS).forEach(([id, event]) => {
+                this.eventIndex.set(id, event);
+            });
+            console.log(`Loaded ${Object.keys(window.STARTING_EVENTS).length} starting events`);
+        }
+
+        // 添加开局标签事件
+        if (window.STARTING_TAG_EVENTS) {
+            Object.entries(window.STARTING_TAG_EVENTS).forEach(([id, event]) => {
+                this.eventIndex.set(id, event);
+            });
+            console.log(`Loaded ${Object.keys(window.STARTING_TAG_EVENTS).length} starting tag events`);
+        }
+        
+        this.lazyLoadedGroups.add('starting');
+    },
+
+    // 按需加载特定年龄段的事件
+    loadAgeGroupEvents(ageGroup) {
+        if (!ageGroup || this.lazyLoadedGroups.has(`age_${ageGroup}`)) return;
+        
+        if (this.ageEvents && this.ageEvents[ageGroup]) {
+            Object.entries(this.ageEvents[ageGroup]).forEach(([id, event]) => {
+                this.eventIndex.set(id, event);
+            });
+            console.log(`Loaded age events for ${ageGroup}`);
+            this.lazyLoadedGroups.add(`age_${ageGroup}`);
         }
     },
 
@@ -111,7 +102,6 @@ const eventManager = {
             // 检查事件本身是否有continue_event属性
             if (event.continue_event) {
                 this.continueEventsList.add(event.continue_event);
-                console.log(`Added continue event: ${event.continue_event}`);
             }
             
             // 检查事件的选项是否有continue_event属性
@@ -119,7 +109,6 @@ const eventManager = {
                 event.options.forEach(option => {
                     if (option.continue_event) {
                         this.continueEventsList.add(option.continue_event);
-                        console.log(`Added continue event from option: ${option.continue_event}`);
                     }
                     
                     // 检查条件结果中的continue_event
@@ -127,13 +116,14 @@ const eventManager = {
                         option.conditional_results.forEach(result => {
                             if (result.continue_event) {
                                 this.continueEventsList.add(result.continue_event);
-                                console.log(`Added continue event from conditional result: ${result.continue_event}`);
                             }
                         });
                     }
                 });
             }
         });
+        
+        console.log(`Collected ${this.continueEventsList.size} continue events`);
     },
 
     // 检查事件是否为后续事件
@@ -145,6 +135,9 @@ const eventManager = {
     getAvailableEvents(player, ageGroup) {
         const availableEvents = [];
         
+        // 按需加载特定年龄段的事件
+        this.loadAgeGroupEvents(ageGroup);
+        
         // 检查年龄段事件
         if (this.ageEvents && this.ageEvents[ageGroup]) {
             Object.entries(this.ageEvents[ageGroup]).forEach(([eventId, event]) => {
@@ -153,7 +146,6 @@ const eventManager = {
                 
                 // 跳过后续事件（它们应该只通过前置事件触发）
                 if (this.isContinueEvent(eventId)) {
-                    console.log(`Skipping continue event: ${eventId} from random pool`);
                     return;
                 }
                 
@@ -164,7 +156,7 @@ const eventManager = {
             });
         }
         
-        // 检查标签事件
+        // 检查标签事件 
         for (const tag of player.tags) {
             const tagEventsObj = this.getTagEvents(tag);
             Object.entries(tagEventsObj).forEach(([eventId, event]) => {
@@ -173,7 +165,6 @@ const eventManager = {
                 
                 // 跳过后续事件（它们应该只通过前置事件触发）
                 if (this.isContinueEvent(eventId)) {
-                    console.log(`Skipping continue event: ${eventId} from random pool`);
                     return;
                 }
                 
@@ -189,11 +180,42 @@ const eventManager = {
 
     // 获取事件
     getEvent(eventId) {
+        // 尝试从已加载事件中获取
         const event = this.eventIndex.get(eventId);
-        if (!event) {
-            console.warn(`Event not found: ${eventId}`);
+        if (event) return event;
+        
+        // 尝试从各种来源加载事件
+        if (window.STARTING_EVENTS && window.STARTING_EVENTS[eventId]) {
+            const event = window.STARTING_EVENTS[eventId];
+            this.eventIndex.set(eventId, event);
+            return event;
         }
-        return event;
+        
+        if (window.STARTING_TAG_EVENTS && window.STARTING_TAG_EVENTS[eventId]) {
+            const event = window.STARTING_TAG_EVENTS[eventId];
+            this.eventIndex.set(eventId, event);
+            return event;
+        }
+        
+        if (window.TAG_EVENTS && window.TAG_EVENTS[eventId]) {
+            const event = window.TAG_EVENTS[eventId];
+            this.eventIndex.set(eventId, event);
+            return event;
+        }
+        
+        // 在所有年龄段事件中搜索
+        if (this.ageEvents) {
+            for (const ageGroup in this.ageEvents) {
+                if (this.ageEvents[ageGroup] && this.ageEvents[ageGroup][eventId]) {
+                    const event = this.ageEvents[ageGroup][eventId];
+                    this.eventIndex.set(eventId, event);
+                    return event;
+                }
+            }
+        }
+        
+        console.warn(`Event not found: ${eventId}`);
+        return null;
     },
 
     // 检查事件是否已触发
@@ -214,14 +236,18 @@ const eventManager = {
 
     // 获取开局事件
     getStartEvents() {
+        this.loadStartingEvents();
         return this.startEvents;
     },
 
     // 获取标签相关事件（改进版）
     getTagEvents(tag) {
-        const events = {};
+        // 检查缓存
+        if (this.cachedTagEvents.has(tag)) {
+            return this.cachedTagEvents.get(tag);
+        }
         
-        console.log(`Getting events for tag: ${tag}`); // 调试信息
+        const events = {};
         
         // 1. 从 TAG_EVENTS 中直接查找与该标签相关的事件
         if (window.TAG_EVENTS) {
@@ -230,27 +256,21 @@ const eventManager = {
                     event.trigger_conditions.required_tags && 
                     event.trigger_conditions.required_tags.includes(tag)) {
                     events[eventId] = event;
-                    console.log(`Found event ${eventId} for tag ${tag}`); // 调试信息
+                    // 同时将事件添加到索引中
+                    this.eventIndex.set(eventId, event);
                 }
             });
-        } else {
-            console.error('TAG_EVENTS not available when getting tag events');
         }
         
         // 2. 从标签定义中获取指定的事件
         const tagDef = this.tag_definitions[tag] || this.tag_definitions.get?.(tag);
         if (tagDef) {
-            console.log(`Found tag definition for ${tag}`, tagDef); // 调试信息
-            
             // 处理优先事件
             if (tagDef.priority_events) {
                 tagDef.priority_events.forEach(eventId => {
                     const event = this.getEvent(eventId);
                     if (event) {
                         events[eventId] = event;
-                        console.log(`Added priority event ${eventId} for tag ${tag}`);
-                    } else {
-                        console.warn(`Priority event not found: ${eventId} for tag: ${tag}`);
                     }
                 });
             }
@@ -261,17 +281,13 @@ const eventManager = {
                     const event = this.getEvent(eventId);
                     if (event) {
                         events[eventId] = event;
-                        console.log(`Added exclusive event ${eventId} for tag ${tag}`);
-                    } else {
-                        console.warn(`Exclusive event not found: ${eventId} for tag: ${tag}`);
                     }
                 });
             }
-        } else {
-            console.log(`No tag definition found for ${tag}`);
         }
 
-        console.log(`Total found ${Object.keys(events).length} events for tag: ${tag}`);
+        // 将结果保存到缓存
+        this.cachedTagEvents.set(tag, events);
         return events;
     },
 
@@ -285,7 +301,6 @@ const eventManager = {
         if (conditions.age_range && 
             (player.age < conditions.age_range[0] || 
              player.age > conditions.age_range[1])) {
-            console.log(`Event ${eventId} failed age check: player age ${player.age}, required ${conditions.age_range}`);
             return false;
         }
         
@@ -295,7 +310,6 @@ const eventManager = {
                 player.tags.includes(tag)
             );
             if (!hasAllTags) {
-                console.log(`Event ${eventId} requires tags: ${conditions.required_tags}, player has: ${player.tags}`);
                 return false;
             }
         }
@@ -306,7 +320,6 @@ const eventManager = {
                 player.tags.includes(tag)
             );
             if (hasExcludedTag) {
-                console.log(`Event ${eventId} excluded due to tags`);
                 return false;
             }
         }
@@ -315,7 +328,6 @@ const eventManager = {
         if (conditions.min_attributes) {
             for (const [attr, minValue] of Object.entries(conditions.min_attributes)) {
                 if (player[attr] < minValue) {
-                    console.log(`Event ${eventId} requires ${attr} >= ${minValue}, player has ${player[attr]}`);
                     return false;
                 }
             }
