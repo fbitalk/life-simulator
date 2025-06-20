@@ -202,7 +202,7 @@ const ageEvents = {
 
         "start_school": {
             title: "开始上学",
-            description: "4岁时开始上学，成为了祖国花朵。",
+            description: "到了入学年龄，{user}开始了小学生活。",
             trigger_conditions: {
                 age_range: [4, 4],
                 excluded_tags: ["小学生"]
@@ -401,35 +401,9 @@ const ageEvents = {
                 },
                 {
                     text: "电子琴",
-                    result: "{user}喜欢在电子琴上敲敲打打，展现出音乐天赋。",
+                    result: "{user}喜欢在电子琴上敲敲打打，展现出音乐天赋，音乐天赋提升了。",
                     effects: {},
-                    dynamic_result: function (player) {
-                        // 使用标准函数处理动态标签
-                        if (window.eventManager && window.eventManager.updateDynamicTag) {
-                            return window.eventManager.updateDynamicTag(
-                                player,
-                                "音乐天赋",
-                                1,
-                                "{user}喜欢在电子琴上敲敲打打，音乐天赋提升了。"
-                            );
-                        }
-                        
-                        // 如果没有标准函数，使用内部实现
-                        let currentLevel = 0;
-                        const levelTagPrefix = "音乐天赋:";
-                        const existingLevelTag = player.tags.find(tag => tag.startsWith(levelTagPrefix));
-                        let newTags = player.tags.filter(tag => !tag.startsWith(levelTagPrefix));
-                        if (existingLevelTag) {
-                            currentLevel = parseInt(existingLevelTag.split(":")[1]);
-                        }
-                        newTags.push(`${levelTagPrefix}${currentLevel + 1}`);
-                        return {
-                            result: "{user}喜欢在电子琴上敲敲打打，音乐天赋提升了。",
-                            effects: {},
-                            add_tags: newTags,
-                            remove_tags: existingLevelTag ? [existingLevelTag] : []
-                        };
-                    }
+                    add_tags: ["音乐天赋"]
                 },
                 {
                     text: "拐杖",

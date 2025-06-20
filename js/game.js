@@ -29,11 +29,6 @@ class LifeSimulatorGame {
             showError: (message) => {
                 console.error(message);
                 alert(message);
-                
-                // 播放错误音效
-                if (typeof audioManager !== 'undefined') {
-                    audioManager.playError();
-                }
             },
             logError: (error, context) => {
                 console.error(`Error in ${context}:`, error);
@@ -57,9 +52,6 @@ class LifeSimulatorGame {
         
         // 创建主题选择器
         this.createThemeSelector();
-        
-        // 创建音效控制
-        this.createSoundControl();
     }
     
     // 创建背景动画元素
@@ -126,11 +118,6 @@ class LifeSimulatorGame {
             option.addEventListener('click', () => {
                 this.applyTheme(theme.value);
                 themeOptions.classList.remove('show');
-                
-                // 播放点击音效
-                if (typeof audioManager !== 'undefined') {
-                    audioManager.playClick();
-                }
             });
             
             themeOptions.appendChild(option);
@@ -141,11 +128,6 @@ class LifeSimulatorGame {
         // 添加切换事件
         themeToggle.addEventListener('click', () => {
             themeOptions.classList.toggle('show');
-            
-            // 播放点击音效
-            if (typeof audioManager !== 'undefined') {
-                audioManager.playClick();
-            }
         });
         
         // 添加到页面
@@ -168,50 +150,6 @@ class LifeSimulatorGame {
         localStorage.setItem('theme', theme);
     }
     
-    // 创建音效控制
-    createSoundControl() {
-        // 检查是否已经存在音效控制
-        if (document.querySelector('.sound-control')) {
-            return;
-        }
-        
-        // 创建音效控制容器
-        const soundControl = document.createElement('div');
-        soundControl.classList.add('sound-control');
-        
-        // 获取当前音效状态
-        const soundEnabled = typeof audioManager !== 'undefined' ? audioManager.enabled : true;
-        
-        // 创建音效切换按钮
-        const soundToggle = document.createElement('div');
-        soundToggle.classList.add('sound-toggle');
-        soundToggle.innerHTML = soundEnabled ? 
-            '<i class="fas fa-volume-up"></i>' : 
-            '<i class="fas fa-volume-mute"></i>';
-        
-        // 添加切换事件
-        soundToggle.addEventListener('click', () => {
-            if (typeof audioManager !== 'undefined') {
-                const newState = !audioManager.enabled;
-                audioManager.setEnabled(newState);
-                
-                soundToggle.innerHTML = newState ? 
-                    '<i class="fas fa-volume-up"></i>' : 
-                    '<i class="fas fa-volume-mute"></i>';
-                
-                // 如果开启了音效，播放点击音效
-                if (newState) {
-                    audioManager.playClick();
-                }
-            }
-        });
-        
-        soundControl.appendChild(soundToggle);
-        
-        // 添加到页面
-        document.body.appendChild(soundControl);
-    }
-    
     // 优化的标签渲染函数
     renderTags(container, tags) {
         // 使用 uiUtils 如果存在
@@ -230,37 +168,28 @@ class LifeSimulatorGame {
             // 检查标签类型
             let displayText = `#${tag}`;
             
-            // 检查是否是动态标签
+            // 检查标签定义
             if (typeof eventManager !== 'undefined' && eventManager.tag_definitions) {
-                // 提取标签基本名称（不含数值）
-                const tagNameOnly = tag.split(':')[0];
-                // 尝试从多种格式的标签定义中获取
+                // 提取标签基本名称
+                const tagNameOnly = tag;
+                // 尝试从标签定义中获取
                 const tagDef = this.getTagDefinition(tagNameOnly);
-                
-                // 如果是动态标签，格式化显示
-                if (tagDef?.is_dynamic) {
-                    const parts = tag.split(':');
-                    if (parts.length > 1) {
-                        displayText = `#${parts[0]}:${parts[1]}`;
-                    }
-                }
                 
                 // 应用特殊样式
                 if (tagDef?.is_red) {
                     tagElement.classList.add('red');
                 }
-            }
-            
-            // 检查成就系统
-            if (typeof achievementManager !== 'undefined') {
-                const achievement = achievementManager.getAchievementByTag(tag);
-                if (achievement?.golden) tagElement.classList.add('golden');
+                
+                if (tagDef?.is_blue) {
+                    tagElement.classList.add('blue');
+                }
             }
             
             tagElement.textContent = displayText;
             fragment.appendChild(tagElement);
         });
         
+        // 清空并填充容器
         container.innerHTML = '';
         container.appendChild(fragment);
     }
@@ -366,26 +295,10 @@ class LifeSimulatorGame {
                 return;
             }
 
-            // 从 STARTING_EVENTS 中随机选择一个开局事件
-            const startEventKeys = Object.keys(window.STARTING_EVENTS);
-            
-            // 根据权重选择事件
-            const weightedEvents = [];
-            startEventKeys.forEach(key => {
-                const event = window.STARTING_EVENTS[key];
-                const weight = event.weight || 10;
-                for (let i = 0; i < weight; i++) {
-                    weightedEvents.push(key);
-                }
-            });
-            
-            const selectedEventKey = weightedEvents[Math.floor(Math.random() * weightedEvents.length)];
-            const startEvent = window.STARTING_EVENTS[selectedEventKey];
-            
-            // 初始化玩家基础属性
-            const baseAttributes = startEvent.effects || {
+            // 初始化玩家基础属性 - 使用默认属性
+            const baseAttributes = window.DEFAULT_PLAYER_ATTRIBUTES || {
                 money: 50,
-                health: 80,
+                health: 70,
                 intelligence: 70,
                 social: 70,
                 luck: 70
@@ -396,49 +309,63 @@ class LifeSimulatorGame {
                 gender: this.selectedGender,
                 age: 0,
                 background: { 
-                    name: startEvent.title, 
-                    description: startEvent.description.replace(/{user}/g, this.playerName) 
+                    name: "初入人生", 
+                    description: `${this.playerName}来到了这个世界。` 
                 },
                 ...baseAttributes,
                 tags: [this.selectedGender === 'male' ? '男性' : '女性'],
                 alive: true
             };
             
-            // 添加开局标签
-            if (startEvent.add_tags) {
-                this.player.tags.push(...startEvent.add_tags);
+            this.gameState = 'playing';
+            this.gameHistory = [`0岁: 出生`];
+            
+            // 从开局事件中随机选择一个作为第一个事件
+            const availableStartEvents = [];
+            
+            if (window.STARTING_EVENTS) {
+                Object.entries(window.STARTING_EVENTS).forEach(([id, event]) => {
+                    // 跳过连续事件（它们应该只通过前置事件触发）
+                    if (eventManager && eventManager.isContinueEvent && eventManager.isContinueEvent(id)) {
+                        return;
+                    }
+                    
+                    // 检查事件条件是否满足
+                    if (eventManager && eventManager.checkEventConditions(event, id, this.player)) {
+                        // 考虑事件权重
+                        const weight = event.weight || 10;
+                        for (let i = 0; i < weight; i++) {
+                            availableStartEvents.push([id, event]);
+                        }
+                    }
+                });
             }
             
-            this.gameState = 'playing';
-            this.gameHistory = [`0岁: ${startEvent.title}`];
-            
-            // 设置当前事件
-            if (startEvent.options && startEvent.options.length > 0) {
-                this.currentEvent = {
-                    title: startEvent.title,
-                    description: startEvent.description.replace(/{user}/g, this.playerName),
-                    options: startEvent.options.map(option => ({
-                        ...option,
-                        text: option.text,
-                        result: option.result ? option.result.replace(/{user}/g, this.playerName) : option.result
-                    }))
-                };
+            // 如果有可用的开局事件，随机选择一个
+            if (availableStartEvents.length > 0) {
+                const randomIndex = Math.floor(Math.random() * availableStartEvents.length);
+                const [eventId, selectedEvent] = availableStartEvents[randomIndex];
+                
+                console.log(`选择开局事件: ${eventId}`);
+                
+                // 标记为已触发（除非是连续事件）
+                if (eventManager && !eventManager.isContinueEvent(eventId)) {
+                    eventManager.markEventAsTriggered(eventId);
+                }
+                
+                // 设置为当前事件
+                this.currentEvent = this.formatEvent({ id: eventId, event: selectedEvent });
             } else {
-                // 如果没有选项，使用默认选项
+                // 如果没有可用的开局事件，使用默认事件
                 this.currentEvent = {
-                    title: startEvent.title,
-                    description: startEvent.description.replace(/{user}/g, this.playerName),
+                    title: "初入人生",
+                    description: `${this.playerName}来到了这个世界。`,
                     options: [{
                         text: "开始人生",
                         result: "新的人生开始了...",
                         effects: {}
                     }]
                 };
-            }
-            
-            // 检查是否有后续事件
-            if (startEvent.continue_event) {
-                this.currentEventId = selectedEventKey;
             }
             
             this.showResult = false;
@@ -454,189 +381,143 @@ class LifeSimulatorGame {
 
     // 生成事件
     generateEvent() {
-        console.log(`Generating event for age ${this.player.age}, tags: ${this.player.tags.join(', ')}`);
-        
-        // 获取当前年龄段
-        let ageGroup = null;
-        if (this.player.age >= 1 && this.player.age <= 5) {
-            ageGroup = 'toddler';
-        } else if (this.player.age >= 6 && this.player.age <= 12) {
-            ageGroup = 'childhood';
-        } else if (this.player.age >= 13 && this.player.age <= 18) {
-            ageGroup = 'teenager';
-        } else if (this.player.age >= 19 && this.player.age <= 30) {
-            ageGroup = 'adult';
-        } else if (this.player.age >= 31 && this.player.age <= 50) {
-            ageGroup = 'middleAge';
-        } else if (this.player.age >= 51) {
-            ageGroup = 'elderly';
+        // 如果有后续事件，优先处理
+        if (this.currentEvent && this.currentEvent.continue_event) {
+            const continueEventId = this.currentEvent.continue_event;
+            const continueEvent = eventManager.getContinueEvent(continueEventId);
+            
+            if (continueEvent) {
+                console.log(`Processing continue event: ${continueEventId}`);
+                // 连续事件不会标记为已触发，因为它们只能通过前置事件触发
+                this.currentEvent = this.formatEvent({ id: continueEventId, event: continueEvent });
+                this.showResult = false;
+                this.eventResult = null;
+                this.updateDisplay();
+                return;
+            }
         }
+        
+        // 确定年龄段
+        const ageGroup = this.getAgeGroup();
 
         let eventFound = false;
+        let availableEvents = [];
         
         if (typeof eventManager !== 'undefined') {
-            // 使用Set优化标签查询
-            const playerTagsSet = new Set(this.player.tags);
-            const availableEvents = [];
-            const processedEvents = new Set(); // 避免重复处理同一事件
+            // 1. 首先检查玩家是否有红色标签
+            const redTags = this.getPlayerRedTags();
             
-            // 1. 先检查红色标签 - 如果有红色标签，只处理其独占事件
-            const redTags = this.player.tags.filter(tag => {
-                const tagDef = eventManager.tag_definitions && 
-                               (eventManager.tag_definitions[tag] || eventManager.tag_definitions.get?.(tag));
-                return tagDef && tagDef.is_red;
-            });
+            // 先获取红色标签事件
+            const redTagEvents = redTags.length > 0 ? eventManager.getRedTagEvents(this.player) : [];
             
-            if (redTags.length > 0) {
-                console.log('Found red tags, only processing exclusive events');
-                // 对于每个红色标签，只处理其独占事件
-                for (const redTag of redTags) {
-                    const tagDef = eventManager.tag_definitions && 
-                                   (eventManager.tag_definitions[redTag] || eventManager.tag_definitions.get?.(redTag));
-                    
-                    if (tagDef && tagDef.exclusive_events) {
-                        for (const eventId of tagDef.exclusive_events) {
-                            if (processedEvents.has(eventId)) continue;
-                            
-                            const event = eventManager.getEvent ? eventManager.getEvent(eventId) : null;
-                            if (event && this.checkEventConditions(event, eventId)) {
-                                availableEvents.push({ id: eventId, event, priority: 10 }); // 最高优先级
-                                processedEvents.add(eventId);
-                            }
-                        }
-                    }
-                }
-                
-                // 如果找到了红色标签的独占事件，直接从中选择，不再处理其他事件
-                if (availableEvents.length > 0) {
-                    // 直接选择
-                    const selected = availableEvents[Math.floor(Math.random() * availableEvents.length)];
-                    if (eventManager.markEventAsTriggered) {
-                        eventManager.markEventAsTriggered(selected.id);
-                    }
-                    this.currentEvent = this.formatEvent(selected);
-                    eventFound = true;
-                    this.showResult = false;
-                    this.eventResult = null;
-                    this.updateDisplay();
-                    return;
-                }
+            if (redTagEvents.length > 0) {
+                // 如果有红色标签事件，优先处理
+                console.log('找到红色标签事件，优先触发');
+                availableEvents = redTagEvents;
+            } else {
+                // 无论是否有红色标签，只要没有满足条件的红色标签事件，就获取常规事件
+                console.log('获取常规事件');
+                const regularEvents = eventManager.getAvailableEvents(this.player, ageGroup);
+                availableEvents = availableEvents.concat(regularEvents);
             }
             
-            // 2. 检查普通标签的独占和优先事件
-            console.log('Checking tag events...');
-            // 先收集所有独占事件和优先事件
-            const exclusiveEvents = [];
-            const priorityEvents = [];
+            console.log(`总共找到 ${availableEvents.length} 个可用事件`);
             
-            this.player.tags.forEach(tag => {
-                const tagDef = eventManager.tag_definitions && 
-                               (eventManager.tag_definitions[tag] || eventManager.tag_definitions.get?.(tag));
+            // 选择事件
+            const selectedEvent = this.selectEventByPriority(availableEvents);
+            
+            if (selectedEvent) {
+                const [eventId, event] = selectedEvent;
                 
-                if (tagDef) {
-                    // 收集独占事件
-                    if (tagDef.exclusive_events) {
-                        tagDef.exclusive_events.forEach(eventId => {
-                            if (!processedEvents.has(eventId)) {
-                                exclusiveEvents.push(eventId);
-                                processedEvents.add(eventId);
-                            }
-                        });
-                    }
-                    
-                    // 收集优先事件
-                    if (tagDef.priority_events) {
-                        tagDef.priority_events.forEach(eventId => {
-                            if (!processedEvents.has(eventId)) {
-                                priorityEvents.push(eventId);
-                                processedEvents.add(eventId);
-                            }
-                        });
-                    }
+                console.log(`选择事件: ${eventId}, 优先级: ${event.priority || 0}`);
+                
+                // 标记为已触发（除非是连续事件）
+                if (!eventManager.isContinueEvent(eventId)) {
+                    eventManager.markEventAsTriggered(eventId);
                 }
                 
-                // 检查标签事件
-                const tagEvents = eventManager.getTagEvents ? eventManager.getTagEvents(tag) : {};
-                Object.entries(tagEvents).forEach(([eventId, event]) => {
-                    if (processedEvents.has(eventId)) return;
-                    
-                    if (this.checkEventConditions(event, eventId)) {
-                        availableEvents.push({ id: eventId, event, priority: 2 });
-                        processedEvents.add(eventId);
-                    }
-                });
-            });
-            
-            // 处理收集到的独占事件
-            for (const eventId of exclusiveEvents) {
-                const event = eventManager.getEvent ? eventManager.getEvent(eventId) : null;
-                if (event && this.checkEventConditions(event, eventId)) {
-                    availableEvents.push({ id: eventId, event, priority: 3 });
-                }
-            }
-            
-            // 处理收集到的优先事件
-            for (const eventId of priorityEvents) {
-                const event = eventManager.getEvent ? eventManager.getEvent(eventId) : null;
-                if (event && this.checkEventConditions(event, eventId)) {
-                    availableEvents.push({ id: eventId, event, priority: 2 });
-                }
-            }
-            
-            // 3. 检查年龄段事件
-            console.log(`Checking age group events for ${ageGroup}...`);
-            if (ageGroup) {
-                const ageGroupEvents = eventManager.ageEvents && eventManager.ageEvents[ageGroup] || {};
-                Object.entries(ageGroupEvents).forEach(([eventId, event]) => {
-                    if (processedEvents.has(eventId)) return;
-                    
-                    if (this.checkEventConditions(event, eventId)) {
-                        availableEvents.push({ id: eventId, event, priority: 1 });
-                        processedEvents.add(eventId);
-                    }
-                });
-            }
-            
-            console.log(`Total available events: ${availableEvents.length}`);
-            
-            // 4. 选择事件
-            if (availableEvents.length > 0) {
-                // 按优先级排序
-                availableEvents.sort((a, b) => b.priority - a.priority);
-                // 如果有高优先级事件，只从高优先级中选择
-                const maxPriority = availableEvents[0].priority;
-                const highPriorityEvents = availableEvents.filter(e => e.priority === maxPriority);
-                const selected = highPriorityEvents[Math.floor(Math.random() * highPriorityEvents.length)];
-                
-                console.log(`Selected event: ${selected.id}`);
-                
-                if (eventManager.markEventAsTriggered) {
-                    eventManager.markEventAsTriggered(selected.id);
-                }
-                this.currentEvent = this.formatEvent(selected);
+                this.currentEvent = this.formatEvent({ id: eventId, event });
                 eventFound = true;
             }
         }
         
         // 如果没有找到事件，显示无事发生
         if (!eventFound) {
-            console.log('No event found, using default peaceful year event');
-            this.currentEvent = {
-                title: "平静的一年",
-                description: `${this.player.name}度过了平静的一年，没有发生特别的事情。`,
-                options: [
-                    {
-                        text: "继续",
-                        result: "时光静静流逝...",
-                        effects: {}
-                    }
-                ]
-            };
+            this.currentEvent = this.createDefaultEvent();
         }
         
         this.showResult = false;
         this.eventResult = null;
         this.updateDisplay();
+    }
+    
+    // 创建默认事件 - 新增辅助方法
+    createDefaultEvent() {
+        console.log('未找到事件，使用默认平静的一年事件');
+        return {
+            title: "平静的一年",
+            description: `${this.player.name}度过了平静的一年，没有发生特别的事情。`,
+            options: [
+                {
+                    text: "继续",
+                    result: "时光静静流逝...",
+                    effects: {}
+                }
+            ]
+        };
+    }
+    
+    // 获取玩家红色标签 - 新增辅助方法
+    getPlayerRedTags() {
+        if (!this.player || !this.player.tags) return [];
+        
+        return this.player.tags.filter(tag => {
+            const tagDef = eventManager.tag_definitions[tag] || eventManager.tag_definitions.get?.(tag);
+            return tagDef && tagDef.is_red;
+        });
+    }
+    
+    // 按优先级选择事件 - 新增辅助方法
+    selectEventByPriority(availableEvents) {
+        if (!availableEvents || availableEvents.length === 0) return null;
+        
+        // 按优先级排序
+        availableEvents.sort((a, b) => {
+            const priorityA = a[1].priority || 0;
+            const priorityB = b[1].priority || 0;
+            return priorityB - priorityA;
+        });
+        
+        // 获取最高优先级
+        const maxPriority = availableEvents[0][1].priority || 0;
+        
+        // 如果有设置了优先级的事件，只从最高优先级中选择
+        const highPriorityEvents = availableEvents.filter(e => 
+            (e[1].priority || 0) === maxPriority
+        );
+        
+        // 从高优先级事件中随机选择一个
+        return highPriorityEvents[Math.floor(Math.random() * highPriorityEvents.length)];
+    }
+    
+    // 获取年龄段 - 新增辅助方法
+    getAgeGroup() {
+        if (this.player.age === 0) {
+            return 'newborn';
+        } else if (this.player.age >= 1 && this.player.age <= 5) {
+            return 'toddler';
+        } else if (this.player.age >= 6 && this.player.age <= 12) {
+            return 'childhood';
+        } else if (this.player.age >= 13 && this.player.age <= 18) {
+            return 'teenager';
+        } else if (this.player.age >= 19 && this.player.age <= 30) {
+            return 'adult';
+        } else if (this.player.age >= 31 && this.player.age <= 50) {
+            return 'middleAge';
+        } else if (this.player.age >= 51) {
+            return 'elderly';
+        }
+        return null;
     }
     
     // 格式化事件对象 - 新增辅助方法
@@ -699,39 +580,100 @@ class LifeSimulatorGame {
 
     // 选择选项
     selectOption(optionIndex) {
-        if (!this.currentEvent || this.showResult) return;
+        if (!this.currentEvent || !this.currentEvent.options || 
+            optionIndex >= this.currentEvent.options.length) {
+            return;
+        }
+
+        const option = this.currentEvent.options[optionIndex];
         
-        // 播放点击音效
-        if (typeof audioManager !== 'undefined') {
-            audioManager.playClick();
+        // 检查是否有连续事件
+        if (option.continue_event) {
+            this.currentEvent.continue_event = option.continue_event;
         }
         
-        // 添加选择效果
-        const optionButtons = document.querySelectorAll('.option-btn');
-        if (optionButtons[optionIndex]) {
-            optionButtons[optionIndex].classList.add('option-selected');
+        let result = option.result || "你做出了选择";
+
+        // 处理条件结果
+        if (option.conditional_results && Array.isArray(option.conditional_results)) {
+            for (const condResult of option.conditional_results) {
+                if (this.checkConditions(condResult.conditions)) {
+                    result = condResult.result || result;
+                    if (condResult.effects) option.effects = condResult.effects;
+                    if (condResult.add_tags) option.add_tags = condResult.add_tags;
+                    if (condResult.remove_tags) option.remove_tags = condResult.remove_tags;
+                    if (condResult.continue_event) {
+                        this.currentEvent.continue_event = condResult.continue_event;
+                    }
+                    break;
+                }
+            }
         }
         
-        // 处理选项结果
-        const result = this.currentEvent.options[optionIndex];
+        // 应用效果
+        if (option.effects) {
+            this.applyEffects(option.effects);
+        }
+        
+        // 处理标签效果
+        if (option.add_tags && Array.isArray(option.add_tags)) {
+            // 添加标签
+            option.add_tags.forEach(tag => {
+                if (!this.player.tags.includes(tag)) {
+                    this.player.tags.push(tag);
+                }
+            });
+        }
+        if (option.remove_tags && Array.isArray(option.remove_tags)) {
+            // 移除标签
+            option.remove_tags.forEach(tag => {
+                const index = this.player.tags.indexOf(tag);
+                if (index !== -1) {
+                    this.player.tags.splice(index, 1);
+                }
+            });
+        }
+
+        // 保存结果
         this.eventResult = result;
         this.showResult = true;
+        this.updateDisplay();
+    }
+    
+    // 检查条件 - 只检查标签条件，不再检查属性条件
+    checkConditions(conditions) {
+        if (!conditions) return true;
         
-        // 更新结果显示
-        document.getElementById('resultText').innerText = result.result;
-        document.getElementById('resultDisplay').style.display = 'block';
+        // 默认结果的条件
+        if (conditions.default === true) return true;
         
-        // 添加结果显示动画
-        if (typeof uiEffects !== 'undefined') {
-            const resultDisplay = document.getElementById('resultDisplay');
-            uiEffects.fadeIn(resultDisplay);
+        // 检查标签
+        if (conditions.tags && Array.isArray(conditions.tags) && conditions.tags.length > 0) {
+            const hasAllTags = conditions.tags.every(tag => this.player.tags.includes(tag));
+            if (!hasAllTags) return false;
         }
         
-        // 处理结果效果
-        this.processEventResult(result);
+        // 检查"任一"条件
+        if (conditions.any_of && Array.isArray(conditions.any_of) && conditions.any_of.length > 0) {
+            const meetsAnyCondition = conditions.any_of.some(condSet => {
+                if (condSet.tags) {
+                    return condSet.tags.some(tag => this.player.tags.includes(tag));
+                }
+                return false;
+            });
+            
+            if (!meetsAnyCondition) return false;
+        }
         
-        // 检查成就
-        this.checkAchievements();
+        // 检查"非"条件
+        if (conditions.not) {
+            if (conditions.not.tags) {
+                const hasExcludedTag = conditions.not.tags.some(tag => this.player.tags.includes(tag));
+                if (hasExcludedTag) return false;
+            }
+        }
+        
+        return true;
     }
 
     // 更新显示
@@ -752,7 +694,7 @@ class LifeSimulatorGame {
             const resultDiv = document.createElement('div');
             resultDiv.className = 'result-display';
             resultDiv.innerHTML = `
-                <div class="result-text">${this.eventResult.result}</div>
+                <div class="result-text">${this.eventResult || "继续"}</div>
                 <button class="btn continue-btn" onclick="game.nextEventLogic()">
                     进入下一年
                 </button>
@@ -792,52 +734,46 @@ class LifeSimulatorGame {
         if (this.player.money >= 100) displayTags.push("富有");
         else if (this.player.money <= 20) displayTags.push("贫困");
  
-        if (this.player.intelligence >= 90) displayTags.push("聪明");
-        if (this.player.social >= 90) displayTags.push("社交达人");
-        if (this.player.luck >= 90) displayTags.push("幸运");
+        if (this.player.intelligence >= 80) displayTags.push("聪明");
+        if (this.player.social >= 80) displayTags.push("外向");
+        if (this.player.luck >= 80) displayTags.push("幸运");
         
         return [...new Set(displayTags)];
     }
  
     // 游戏结束
     endGame(reason = null) {
-        // 设置死亡原因
+        if (this.gameState === 'gameover') return;
+        
+        this.gameState = 'gameover';
+        
         if (reason) {
             this.deathReason = reason;
-        } else if (!this.deathReason) {
-            this.deathReason = '寿终正寝';
         }
         
-        // 保存游戏记录
-        this.saveGameRecord();
-        
-        // 获取当前屏幕和游戏结束屏幕
-        const currentScreen = this.getCurrentScreenElement();
-        const gameoverScreen = document.getElementById('gameoverScreen');
-        
-        // 使用UI效果管理器进行页面过渡
-        if (typeof uiEffects !== 'undefined') {
-            uiEffects.pageTransition(currentScreen, gameoverScreen, () => {
-                this.gameState = 'gameover';
-                this.updateGameoverUI();
-            });
-        } else {
-            currentScreen.style.display = 'none';
-            gameoverScreen.style.display = 'block';
-            this.gameState = 'gameover';
-            this.updateGameoverUI();
+        // 解锁年龄相关成就
+        if (typeof achievementManager !== 'undefined') {
+            achievementManager.checkAgeAchievements(this.player.age);
+            
+            // 检查特殊成就
+            achievementManager.checkSpecialAchievements(this.player.tags, this.deathReason);
+            
+            // 更新UI显示
+            if (typeof achievementManager.renderAchievements === 'function') {
+                achievementManager.renderAchievements();
+            }
         }
         
-        // 播放游戏结束音效
-        if (typeof audioManager !== 'undefined') {
-            audioManager.play('gameover');
-        }
+        // 更新游戏结束UI
+        this.updateGameoverUI();
+        
+        // 保存游戏数据
+        this.saveGameData();
     }
     
     // 更新游戏结束UI
     updateGameoverUI() {
         // 基本信息
-        document.getElementById('finalName').innerText = this.player.name;
         document.getElementById('finalAge').innerText = this.player.age;
         document.getElementById('deathReason').innerText = this.deathReason;
         
@@ -861,7 +797,7 @@ class LifeSimulatorGame {
         });
         
         // 历史记录
-        const historyContainer = document.getElementById('historyContainer');
+        const historyContainer = document.getElementById('historyList');
         historyContainer.innerHTML = '';
         
         this.gameHistory.forEach(event => {
@@ -870,57 +806,6 @@ class LifeSimulatorGame {
             historyItem.innerText = event;
             historyContainer.appendChild(historyItem);
         });
-        
-        // 添加游戏结束动画效果
-        if (typeof uiEffects !== 'undefined') {
-            // 创建结束动画
-            const animationContainer = document.createElement('div');
-            animationContainer.classList.add('gameover-animation');
-            document.body.appendChild(animationContainer);
-            
-            // 动画结束后移除
-            setTimeout(() => {
-                animationContainer.remove();
-            }, 3000);
-            
-            // 为最终年龄添加数字递增动画
-            const finalAgeElement = document.getElementById('finalAge');
-            const targetAge = this.player.age;
-            let currentDisplayAge = 0;
-            
-            const ageInterval = setInterval(() => {
-                currentDisplayAge++;
-                finalAgeElement.innerText = currentDisplayAge;
-                
-                if (currentDisplayAge >= targetAge) {
-                    clearInterval(ageInterval);
-                }
-            }, 30);
-            
-            // 为结束屏幕元素添加渐入动画
-            const elementsToAnimate = [
-                document.getElementById('finalName').parentElement,
-                document.getElementById('finalAge').parentElement,
-                document.getElementById('deathReason').parentElement,
-                finalTagsContainer,
-                historyContainer
-            ];
-            
-            elementsToAnimate.forEach((element, index) => {
-                if (element) {
-                    setTimeout(() => {
-                        element.style.opacity = '0';
-                        element.style.transform = 'translateY(20px)';
-                        element.style.transition = 'all 0.5s ease';
-                        
-                        setTimeout(() => {
-                            element.style.opacity = '1';
-                            element.style.transform = 'translateY(0)';
-                        }, 50);
-                    }, index * 300);
-                }
-            });
-        }
     }
 
     // 重新开始
@@ -961,111 +846,84 @@ class LifeSimulatorGame {
 
     // 下一个事件逻辑
     nextEventLogic() {
-        // 播放点击音效
-        if (typeof audioManager !== 'undefined') {
-            audioManager.playClick();
+        // 如果已经显示结果，点击后进入下一个事件
+        if (this.showResult) {
+            this.showResult = false;
+            this.processNextEvent();
+            return;
         }
         
-        // 添加淡出动画
-        if (typeof uiEffects !== 'undefined') {
-            const resultDisplay = document.querySelector('.result-display');
-            
-            uiEffects.fadeOut(resultDisplay, () => {
-                this.processNextEvent();
-            });
-        } else {
-            this.processNextEvent();
+        // 没有显示结果时，选择第一个选项
+        if (this.currentEvent && this.currentEvent.options && this.currentEvent.options.length > 0) {
+            this.selectOption(0);
         }
     }
     
     // 处理下一个事件
     processNextEvent() {
-        this.showResult = false;
+        // 如果有连续事件，直接处理连续事件而不增加年龄
+        if (this.currentEvent && this.currentEvent.continue_event) {
+            console.log('处理连续事件，不增加年龄');
+            this.generateEvent();
+            return;
+        }
         
-        // 年龄增长
+        // 如果没有连续事件，则正常进入下一年
         this.player.age++;
+        console.log(`进入下一年，当前年龄: ${this.player.age}`);
         
-        // 检查是否需要添加小学生标签（4-5岁时）
-        if (this.player.age === 4 || this.player.age === 5) {
-            if (!this.player.tags.includes('小学生')) {
-                console.log('Checking for school start event...');
-                // 检查是否有开始上学的事件
-                const schoolStartEvent = eventManager.getEvent ? eventManager.getEvent('start_school') : null;
-                if (schoolStartEvent && this.checkEventConditions(schoolStartEvent, 'start_school')) {
-                    console.log('Triggering school start event');
-                    this.currentEvent = {
-                        id: 'start_school',
-                        title: schoolStartEvent.title,
-                        description: schoolStartEvent.description.replace(/{user}/g, this.player.name),
-                        options: schoolStartEvent.options.map(option => ({
-                            ...option,
-                            text: option.text,
-                            result: option.result ? option.result.replace(/{user}/g, this.player.name) : option.result
-                        }))
-                    };
-                    
-                    // 播放过渡音效
-                    if (typeof audioManager !== 'undefined') {
-                        audioManager.playTransition();
-                    }
-                    
-                    this.updateDisplay();
-                    return;
-                }
-            }
-        }
-        
-        // 检查成就解锁 - 年龄相关
-        if (typeof achievementManager !== 'undefined') {
-            // 检查百岁成就
-            if (this.player.age >= 100) {
-                achievementManager.unlockAchievement('centenarian');
-            }
-            // 检查青少年成就
-            if (this.player.age === 13) {
-                achievementManager.unlockAchievement('teenager');
-            }
-            // 检查成年成就
-            if (this.player.age === 18) {
-                achievementManager.unlockAchievement('adult');
-            }
-        }
-        
-        // 检查是否有继续事件
-        if (this.nextEventId) {
-            const nextEvent = eventManager.getEvent ? eventManager.getEvent(this.nextEventId) : null;
-            if (nextEvent) {
-                console.log(`Continuing to event: ${this.nextEventId}`);
-                if (eventManager.markEventAsTriggered) {
-                    eventManager.markEventAsTriggered(this.nextEventId);
-                }
-                this.currentEvent = {
-                    id: this.nextEventId,
-                    title: nextEvent.title,
-                    description: nextEvent.description.replace(/{user}/g, this.player.name),
-                    options: nextEvent.options.map(option => ({
-                        ...option,
-                        text: option.text,
-                        result: option.result ? option.result.replace(/{user}/g, this.player.name) : option.result
-                    }))
-                };
-                this.nextEventId = null;
-                
-                // 播放过渡音效
-                if (typeof audioManager !== 'undefined') {
-                    audioManager.playTransition();
-                }
-                
-                this.updateDisplay();
+        // 死亡检查 - 简单按年龄概率
+        if (this.player.age >= 60) {
+            // 60岁以上，每年有逐渐增加的死亡概率
+            const deathChance = (this.player.age - 60) * 0.02;
+            if (Math.random() < deathChance) {
+                this.endGame(`${this.player.name}安详地离开了人世，享年${this.player.age}岁。`);
                 return;
-            } else {
-                console.error(`Next event not found: ${this.nextEventId}`);
-                this.nextEventId = null;
             }
         }
         
-        // 常规生成随机事件
+        // 特定年龄段的标签更新
+        this.updateAgeTags();
+        
+        // 生成新的事件
         this.generateEvent();
+    }
+
+    // 更新年龄相关标签
+    updateAgeTags() {
+        // 获取当前年龄段
+        const currentAgeGroup = this.getAgeGroup();
+        
+        // 所有可能的年龄段
+        const allAgeGroups = ['newborn', 'toddler', 'childhood', 'teenager', 'adult', 'middleAge', 'elderly'];
+        
+        // 移除所有其他年龄段标签
+        allAgeGroups.forEach(ageGroup => {
+            if (ageGroup !== currentAgeGroup) {
+                const index = this.player.tags.indexOf(ageGroup);
+                if (index !== -1) {
+                    this.player.tags.splice(index, 1);
+                }
+            }
+        });
+        
+        // 添加当前年龄段标签
+        if (!this.player.tags.includes(currentAgeGroup)) {
+            this.player.tags.push(currentAgeGroup);
+        }
+        
+        // 特殊年龄阶段处理
+        if (this.player.age === 18) {
+            // 成年
+            if (!this.player.tags.includes('adult_milestone')) {
+                this.player.tags.push('adult_milestone');
+            }
+        } else if (this.player.age === 60) {
+            // 退休年龄
+            if (!this.player.tags.includes('retirement_age')) {
+                this.player.tags.push('retirement_age');
+            }
+        }
     }
 
     // 初始化事件监听器
@@ -1095,6 +953,58 @@ class LifeSimulatorGame {
                 updateStartButton();
             });
         }
+    }
+
+    // 应用效果
+    applyEffects(effects) {
+        if (!effects || !this.player) return;
+        
+        // 处理属性变化
+        for (const [attr, value] of Object.entries(effects)) {
+            if (attr === 'add_tags' && Array.isArray(value)) {
+                // 添加标签
+                value.forEach(tag => {
+                    if (!this.player.tags.includes(tag)) {
+                        this.player.tags.push(tag);
+                    }
+                });
+            } else if (attr === 'remove_tags' && Array.isArray(value)) {
+                // 移除标签
+                value.forEach(tag => {
+                    const index = this.player.tags.indexOf(tag);
+                    if (index !== -1) {
+                        this.player.tags.splice(index, 1);
+                    }
+                });
+            } else if (attr === 'death') {
+                // 处理死亡
+                this.player.alive = false;
+                const reason = typeof value === 'string' ? value : '未知原因';
+                this.endGame(reason);
+            } else if (attr === 'next_event') {
+                // 处理下一个事件 - 这个已经在selectOption中处理了
+                continue;
+            } else if (typeof this.player[attr] === 'number' && typeof value === 'number') {
+                // 处理数值属性
+                this.player[attr] += value;
+            } else {
+                // 直接赋值
+                this.player[attr] = value;
+            }
+        }
+        
+        // 记录事件到历史
+        if (this.currentEvent && this.currentEvent.title) {
+            this.gameHistory.push(`${this.player.age}岁: ${this.currentEvent.title}`);
+        }
+    }
+
+    // 保存游戏数据
+    saveGameData() {
+        // 保存游戏记录
+        this.saveLifeRecord();
+        
+        // 这里可以添加其他需要保存的游戏数据
     }
 }
  

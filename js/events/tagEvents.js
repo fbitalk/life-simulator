@@ -650,21 +650,9 @@ const TAG_EVENTS = {
             },
             {
                 text: "Good good study, day day up",
-                result: "{user}的回答非常中式，外教努力理解中。",
+                result: "{user}的回答非常中式，外教努力理解中，学习成绩下降了。",
                 effects: {},
-                dynamic_result: function (player) {
-                    return window.tagUtils?.updateDynamicTag(
-                        player, 
-                        "学习成绩:", 
-                        -3, 
-                        "{user}的回答非常中式，外教努力理解中，学习成绩下降了。"
-                    ) || {
-                        result: "{user}的回答非常中式，外教努力理解中，学习成绩下降了。",
-                        effects: {},
-                        add_tags: [],
-                        remove_tags: []
-                    };
-                }
+                add_tags: ["学习成绩"]
             },
             {
                 text: "42",
@@ -674,21 +662,9 @@ const TAG_EVENTS = {
             },
             {
                 text: "You are very handsome",
-                result: "{user}的回答让外教心花怒放。",
+                result: "{user}的回答让外教心花怒放，学习成绩提升了。",
                 effects: {},
-                dynamic_result: function (player) {
-                    return window.tagUtils?.updateDynamicTag(
-                        player, 
-                        "学习成绩:", 
-                        1, 
-                        "{user}的回答让外教心花怒放，学习成绩提升了。"
-                    ) || {
-                        result: "{user}的回答让外教心花怒放，学习成绩提升了。",
-                        effects: {},
-                        add_tags: [],
-                        remove_tags: []
-                    };
-                }
+                add_tags: ["学习成绩"]
             },
             {
                 text: "I am fine, thank you. And you?",
@@ -755,88 +731,33 @@ const TAG_EVENTS = {
             },
             { 
                 text: "eating", 
-                result: "{user}的答案时态有些问题。", 
-                dynamic_result: function (player) { 
-                    return window.tagUtils?.updateDynamicTag(
-                        player, 
-                        "学习成绩:", 
-                        1, 
-                        "{user}的答案时态有些问题，学习成绩提升了。"
-                    ) || {
-                        result: "{user}的答案时态有些问题，学习成绩提升了。",
-                        effects: {},
-                        add_tags: [],
-                        remove_tags: []
-                    };
-                }
+                result: "{user}的答案时态有些问题，学习成绩提升了。", 
+                effects: {},
+                add_tags: ["学习成绩"]
             },
             { 
                 text: "am", 
-                result: "{user}的答案语法不太对哦。", 
-                dynamic_result: function (player) { 
-                    return window.tagUtils?.updateDynamicTag(
-                        player, 
-                        "学习成绩:", 
-                        1, 
-                        "{user}的答案语法不太对哦，学习成绩提升了。"
-                    ) || {
-                        result: "{user}的答案语法不太对哦，学习成绩提升了。",
-                        effects: {},
-                        add_tags: [],
-                        remove_tags: []
-                    };
-                }
+                result: "{user}的答案语法不太对哦，学习成绩提升了。", 
+                effects: {},
+                add_tags: ["学习成绩"]
             },
             { 
                 text: "吃了", 
-                result: "{user}用中文回答了英文题。", 
-                dynamic_result: function (player) { 
-                    return window.tagUtils?.updateDynamicTag(
-                        player, 
-                        "学习成绩:", 
-                        1, 
-                        "{user}用中文回答了英文题，学习成绩提升了。"
-                    ) || {
-                        result: "{user}用中文回答了英文题，学习成绩提升了。",
-                        effects: {},
-                        add_tags: [],
-                        remove_tags: []
-                    };
-                }
+                result: "{user}用中文回答了英文题，学习成绩提升了。", 
+                effects: {},
+                add_tags: ["学习成绩"]
             },
             { 
                 text: "apple", 
-                result: "{user}似乎没理解题目。", 
-                dynamic_result: function (player) { 
-                    return window.tagUtils?.updateDynamicTag(
-                        player, 
-                        "学习成绩:", 
-                        1, 
-                        "{user}似乎没理解题目，学习成绩提升了。"
-                    ) || {
-                        result: "{user}似乎没理解题目，学习成绩提升了。",
-                        effects: {},
-                        add_tags: [],
-                        remove_tags: []
-                    };
-                }
+                result: "{user}似乎没理解题目，学习成绩提升了。", 
+                effects: {},
+                add_tags: ["学习成绩"]
             },
             { 
                 text: "yesterday", 
-                result: "{user}把题目里的词又填了一遍。", 
-                dynamic_result: function (player) { 
-                    return window.tagUtils?.updateDynamicTag(
-                        player, 
-                        "学习成绩:", 
-                        1, 
-                        "{user}把题目里的词又填了一遍，学习成绩提升了。"
-                    ) || {
-                        result: "{user}把题目里的词又填了一遍，学习成绩提升了。",
-                        effects: {},
-                        add_tags: [],
-                        remove_tags: []
-                    };
-                }
+                result: "{user}把题目里的词又填了一遍，学习成绩提升了。", 
+                effects: {},
+                add_tags: ["学习成绩"]
             },
             { 
                 text: "我不吃苹果", 
@@ -1582,6 +1503,112 @@ const TAG_EVENTS = {
                 result: "{user}利用如意门帮助了一些迷路的孩子回家，获得了好评。",
                 effects: { social: 20, luck: 10 },
                 add_tags: ["乐于助人"]
+            }
+        ]
+    },
+
+    // 添加一个带优先级的标签事件示例
+    "priority_tag_event": {
+        title: "优先级测试事件",
+        description: "{user}遇到了一个优先级测试事件。",
+        priority: 50, // 设置较高优先级
+        trigger_conditions: {
+            required_tags: ["小学生"],
+            age_range: [7, 12]
+        },
+        options: [
+            {
+                text: "接受挑战",
+                result: "{user}勇敢地接受了挑战。",
+                effects: { intelligence: 5, social: 3 }
+            },
+            {
+                text: "谨慎处理",
+                result: "{user}谨慎地处理了这个情况。",
+                effects: { intelligence: 3, social: 1 }
+            }
+        ]
+    },
+
+    // 添加一个连续事件样例 - 起始事件
+    "continuous_event_start": {
+        title: "神秘的来信",
+        description: "{user}收到了一封神秘的来信...",
+        trigger_conditions: {
+            required_tags: ["学霸"],
+            age_range: [10, 18]
+        },
+        options: [
+            {
+                text: "打开信件",
+                result: "{user}决定打开这封神秘的信件。",
+                continue_event: "continuous_event_part2"
+            },
+            {
+                text: "丢弃信件",
+                result: "{user}将信件丢进了垃圾桶。",
+                effects: { luck: -2 }
+            }
+        ]
+    },
+
+    // 连续事件的第二部分
+    "continuous_event_part2": {
+        title: "信件的内容",
+        description: "信中写着一段神秘的文字...",
+        options: [
+            {
+                text: "尝试解读",
+                result: "{user}试图解读这段神秘的文字。",
+                effects: { intelligence: 3 },
+                continue_event: "continuous_event_part3"
+            },
+            {
+                text: "寻求帮助",
+                result: "{user}决定寻求他人的帮助。",
+                effects: { social: 2 },
+                continue_event: "continuous_event_part3"
+            }
+        ]
+    },
+
+    // 连续事件的第三部分
+    "continuous_event_part3": {
+        title: "秘密揭晓",
+        description: "终于，{user}解开了谜题...",
+        options: [
+            {
+                text: "接受任务",
+                result: "{user}接受了信中提到的任务。",
+                effects: { intelligence: 5, luck: 5 },
+                add_tags: ["神秘使命"]
+            },
+            {
+                text: "婉拒邀请",
+                result: "{user}决定不参与这件事。",
+                effects: { social: -2 }
+            }
+        ]
+    },
+
+    // 添加一个红色标签事件示例
+    "red_tag_exclusive_event": {
+        title: "诅咒之力",
+        description: "诅咒的力量在{user}体内翻腾...",
+        trigger_conditions: {
+            required_tags: ["诅咒之子"],
+            age_range: [8, 80]
+        },
+        options: [
+            {
+                text: "压制诅咒",
+                result: "{user}成功地压制了诅咒的力量，但这需要极大的意志力。",
+                effects: { health: -5, intelligence: 2 }
+            },
+            {
+                text: "释放力量",
+                result: "{user}释放了一部分诅咒之力，周围的空气变得凝重。",
+                effects: { health: -2, social: -3, luck: -1 }
             }
         ]
     }

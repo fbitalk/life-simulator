@@ -181,35 +181,6 @@ export class EventSystem {
         return this;
     }
     
-    // 更新动态标签
-    updateDynamicTag(player, tagPrefix, change, resultText) {
-        try {
-            if (!player || !player.tags) {
-                throw new Error(GAME_CONSTANTS.ERROR_MESSAGES.INVALID_PLAYER);
-            }
-            
-            const existingTag = player.tags.find(tag => tag.startsWith(tagPrefix));
-            const currentValue = existingTag ? parseInt(existingTag.split(':')[1]) || 0 : 0;
-            const newValue = Math.max(0, Math.min(currentValue + change, GAME_CONSTANTS.MAX_ATTRIBUTE));
-            const newTag = `${tagPrefix}${newValue}`;
-            
-            return {
-                result: resultText || `{user}的${tagPrefix}变化了`,
-                effects: {},
-                add_tags: [newTag],
-                remove_tags: existingTag ? [existingTag] : []
-            };
-        } catch (error) {
-            console.error('Failed to update dynamic tag:', error);
-            return {
-                result: "更新失败",
-                effects: {},
-                add_tags: [],
-                remove_tags: []
-            };
-        }
-    }
-    
     // 清理事件系统
     cleanup() {
         this.events.clear();

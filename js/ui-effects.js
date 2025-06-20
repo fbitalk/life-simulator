@@ -16,16 +16,6 @@ class UIEffects {
                 this.createRippleEffect(e);
             }
         });
-        
-        // 播放音效
-        document.addEventListener('click', (e) => {
-            if (e.target.matches('button, .btn, .menu-btn, .option-btn')) {
-                // 如果存在音效管理器，播放点击音效
-                if (typeof audioManager !== 'undefined') {
-                    audioManager.playClick();
-                }
-            }
-        });
     }
     
     /**
@@ -60,11 +50,6 @@ class UIEffects {
      * @param {Function} callback - 过渡完成后的回调函数
      */
     pageTransition(fromElement, toElement, callback) {
-        // 如果存在音效管理器，播放过渡音效
-        if (typeof audioManager !== 'undefined') {
-            audioManager.playTransition();
-        }
-        
         // 添加退出动画类
         fromElement.classList.add('page-exit');
         
@@ -202,11 +187,6 @@ class UIEffects {
         `;
         
         document.body.appendChild(notification);
-        
-        // 播放成就音效
-        if (typeof audioManager !== 'undefined') {
-            audioManager.playAchievement();
-        }
         
         // 5秒后移除通知
         setTimeout(() => {

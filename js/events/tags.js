@@ -327,25 +327,19 @@ const TAG_DEFINITIONS = new Map([
         priority_events: []
     }],
     
-    // 动态标签 - 可随游戏进程变化的数值
+    // 动态标签修改为普通标签
     ["音乐天赋", {
         description: "音乐方面的天赋水平",
-        is_dynamic: true,
-        prefix: "音乐天赋",
         exclusive_events: [],
         priority_events: ["music_competition", "music_scholarship"]
     }],
     ["学习成绩", {
         description: "学习成绩水平",
-        is_dynamic: true,
-        prefix: "学习成绩",
         exclusive_events: [],
         priority_events: ["academic_competition", "scholarship_opportunity"]
     }],
     ["美术天赋", {
         description: "美术成绩水平",
-        is_dynamic: true,
-        prefix: "美术天赋",
         exclusive_events: [],
         priority_events: ["art_competition"]
     }],
@@ -354,7 +348,7 @@ const TAG_DEFINITIONS = new Map([
     ["诅咒之子", {
         description: "被神秘力量诅咒",
         is_red: true,
-        exclusive_events: ["curse_event"],
+        exclusive_events: ["red_tag_exclusive_event"],
         priority_events: []
     }],
     ["绝症", {
