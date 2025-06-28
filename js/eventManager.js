@@ -436,6 +436,11 @@ class EventManager {
                     if (tagEvents && tagEvents.events && tagEvents.events[eventId]) {
                         return { id: eventId, ...tagEvents.events[eventId] };
                     }
+                    
+                    // 搜索年龄段事件（直接在二级对象中定义的事件）
+                    if (tagEvents && typeof tagEvents === 'object' && tagEvents[eventId]) {
+                        return { id: eventId, ...tagEvents[eventId] };
+                    }
                 }
             }
         }

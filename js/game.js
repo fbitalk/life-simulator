@@ -570,10 +570,21 @@ class LifeSimulatorGame {
         // 处理选项结果
         const result = eventManager.processOptionResult(option, this.player);
         
+        // 将death_flag转换为risk:1处理
+        if (option.death_flag) {
+            // 如果选项有指定的死亡原因，使用它；否则使用结果文本
+            const deathReason = option.death_reason || result.result.replace(/{user}/g, this.player.name);
+            this.handleDeath(deathReason, "risk");
+            
+            // 记录历史
+            this.recordHistory(this.currentEvent, optionIndex, result);
+            return;
+        }
+        
         // 检查是否有risk标记，如果有且触发死亡
         if (option.risk && Math.random() < option.risk) {
-            // 如果选项有指定的死亡描述，使用它；否则使用结果文本
-            const deathReason = option.death_desc || result.result.replace(/{user}/g, this.player.name);
+            // 如果选项有指定的死亡原因，使用它；否则使用结果文本
+            const deathReason = option.death_reason || result.result.replace(/{user}/g, this.player.name);
             this.handleDeath(deathReason, "risk");
             
             // 记录历史

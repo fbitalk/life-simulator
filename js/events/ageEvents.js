@@ -100,7 +100,7 @@ const ageEvents = {
                 }
             ]
         },
-        
+
 
         "wolf_at_door": {
             "title": "大灰狼来了",
@@ -147,14 +147,14 @@ const ageEvents = {
             "description": "有一天，{user}的抽屉里爬出一只巨大的狸猫，说是{user}孙子从未来派它来帮助{user}。{user}独自在家，{user}___",
             "trigger_conditions": {
                 "age_range": [4, 4],  // 适合幼儿阶段
-                "not_tags": [] 
+                "not_tags": []
             },
             "options": [
                 {
                     "text": "打电话报警",
                     "result": "{user}慌张地拨打了报警电话，但警察到达后什么也没找到，狸猫早已消失不见。{user}被当作恶作剧处理。",
-                    "effects": { 
-                        "social": -10, 
+                    "effects": {
+                        "social": -10,
                         "luck": -5,
                         "intelligence": 5  // 学会了理性思考
                     },
@@ -163,8 +163,8 @@ const ageEvents = {
                 {
                     "text": "泡茶，迎客",
                     "result": "{user}礼貌地为狸猫泡了茶。狸猫很感动，送给了{user}一个神奇的道具作为礼物，并承诺会在关键时刻帮助{user}。",
-                    "effects": { 
-                        "luck": 20, 
+                    "effects": {
+                        "luck": 20,
                         "social": 15,
                         "intelligence": 10
                     },
@@ -174,8 +174,8 @@ const ageEvents = {
                 {
                     "text": "挥挥手，说来盘昆特牌吧",
                     "result": "{user}提议玩昆特牌。狸猫大笑，原来它也是昆特牌高手！一场激烈的对决后，{user}技艺大增。",
-                    "effects": { 
-                        "intelligence": 15, 
+                    "effects": {
+                        "intelligence": 15,
                         "social": 10,
                         "luck": 5
                     },
@@ -184,8 +184,8 @@ const ageEvents = {
                 {
                     "text": "装作不在家",
                     "result": "{user}躲在角落装作不在家。狸猫摇摇头离开了，留下一句话：'勇气不足的人无法改变命运。'",
-                    "effects": { 
-                        "social": -5, 
+                    "effects": {
+                        "social": -5,
                         "luck": -10,
                         "health": -5  // 错过了机会
                     },
@@ -194,8 +194,8 @@ const ageEvents = {
                 {
                     "text": "我不认识什么叮当",
                     "result": "{user}困惑地表示不认识任何叫'叮当'的人。狸猫解释说可能时间线有误。",
-                    "effects": { 
-                        "intelligence": 12, 
+                    "effects": {
+                        "intelligence": 12,
                         "luck": 8,
                         "social": 5
                     },
@@ -258,7 +258,7 @@ const ageEvents = {
                 {
                     "text": "记忆面包",
                     "result": "{user}选择了记忆面包。从此学习变得轻松许多，但也变得有些依赖这种捷径。",
-                    "effects": { 
+                    "effects": {
                         "intelligence": 25,
                         "social": -5  // 有些脱离现实
                     },
@@ -268,7 +268,7 @@ const ageEvents = {
                 {
                     "text": "竹蜻蜓",
                     "result": "{user}选择了竹蜻蜓。据说能够让{user}自由飞翔，但不知道怎么用。",
-                    "effects": { 
+                    "effects": {
                         "luck": 15,
                         "social": 10,
                         "health": 10
@@ -279,7 +279,7 @@ const ageEvents = {
                 {
                     "text": "如意门",
                     "result": "{user}选择了如意门。据说能够瞬间到达任何地方，但不知道怎么用。",
-                    "effects": { 
+                    "effects": {
                         "intelligence": 15,
                         "social": 20,
                         "luck": 10
@@ -290,7 +290,7 @@ const ageEvents = {
                 {
                     "text": "什么都不要，保持平凡",
                     "result": "{user}礼貌地拒绝了礼物，表示平凡的生活就很好。狸猫朝{user}神秘一笑，祝福{user}一生平安。",
-                    "effects": { 
+                    "effects": {
                         "health": 15,
                         "social": 15,
                         "luck": 10
@@ -360,42 +360,11 @@ const ageEvents = {
                     "effects": { "intelligence": 5 },
                     "add_tags": ["音乐：1"],
                     "continue_event": "toddler_music_talent"
-                },
-                
-            ]
-        },
-        "toddler_music_talent": {
-            "title": "音乐天赋",
-            "description": "{user}很喜欢搞音乐，他的目标是____",         
-            "is_continue": true,
-            "options": [
-                {
-                    "text": "当一名歌手",
-                    "result": "{user}每天都在唱歌，梦想成为一名歌手。",
-                    "effects": { "social": 5, "san": 5 },
-                    "add_tags": ["音乐：1"]
-                },
-                {
-                    "text": "当一名舞者",
-                    "result": "{user}喜欢跳舞，动作灵活，节奏感很强。",
-                    "effects": { "health": 5, "social": 5 },
-                    "add_tags": []
-                },
-                {
-                    "text": "成为MC石头",
-                    "result": "{user}喜欢模仿MC石头的风格，rap说得有模有样。",
-                    "effects": { "intelligence": 5, "social": 5 },
-                    "add_tags": []
-                },
-                {
-                    "text": "吹口哨",
-                    "result": "{user}学会了吹口哨，常常用口哨表达心情。",
-                    "effects": { "san": 5 },
-                    "add_tags": []
                 }
+
             ]
         },
-
+        
         "toddler_animal_talk_choice": {
             "title": "与谁对话？",
             "description": "{user}发现自己能和特定动物讲话，会是谁呢？",
@@ -436,6 +405,37 @@ const ageEvents = {
                     "result": "{user}和一只会思考的鸭子讨论哲学，脑洞大开。",
                     "effects": { "intelligence": 5 },
                     "add_tags": ["哲学"]
+                }
+            ]
+        },
+        "toddler_music_talent": {
+            "title": "音乐天赋",
+            "description": "{user}很喜欢搞音乐，他的目标是____",
+            "is_continue": true,
+            "options": [
+                {
+                    "text": "当一名歌手",
+                    "result": "{user}每天都在唱歌，梦想成为一名歌手。",
+                    "effects": { "social": 5, "san": 5 },
+                    "add_tags": ["音乐：1"]
+                },
+                {
+                    "text": "当一名舞者",
+                    "result": "{user}喜欢跳舞，动作灵活，节奏感很强。",
+                    "effects": { "health": 5, "social": 5 },
+                    "add_tags": []
+                },
+                {
+                    "text": "成为MC石头",
+                    "result": "{user}喜欢模仿MC石头的风格，rap说得有模有样。",
+                    "effects": { "intelligence": 5, "social": 5 },
+                    "add_tags": []
+                },
+                {
+                    "text": "吹口哨",
+                    "result": "{user}学会了吹口哨，常常用口哨表达心情。",
+                    "effects": { "san": 5 },
+                    "add_tags": []
                 }
             ]
         },
@@ -499,12 +499,12 @@ const ageEvents = {
                 },
             ]
         },
-       
+
     },
-    
+
     // 少年期 (6-12岁)
     "少年": {
-        
+
         "childhood_hobby": {
             "title": "儿时爱好",
             "description": "你对某项活动产生了浓厚的兴趣。",
@@ -543,7 +543,7 @@ const ageEvents = {
             "description": "有同学在欺负一个比较内向的同学，{user}看到了这一幕。",
             "trigger_conditions": { "age_range": [13, 18], "excluded_tags": ["恶霸"] },
             "options": [
-                    {
+                {
                     "text": "挺身而出",
                     "result": "{user}勇敢地站出来制止了霸凌行为，赢得了大家的尊重。",
                     "effects": { "social": 20, "health": -8, "intelligence": 5 },
@@ -554,7 +554,7 @@ const ageEvents = {
                     "text": "上前嘲讽",
                     "risk": 1,
                     "result": "{user}上前嘲讽了被霸凌的同学，被一堆人围殴致死。",
-                    "effects": { "social": 10, "health": -8, "intelligence": 5 },
+                    "risk": 1,
                 },
                 {
                     "text": "告诉老师",
@@ -568,9 +568,9 @@ const ageEvents = {
                     "remove_tags": ["勇敢"]
                 }
             ]
-        },
+        }
     },
-    
+
     // 青少年 (13-18岁)
     "青少年": {
         "puberty_changes": {
@@ -646,19 +646,59 @@ const ageEvents = {
                 }
             ]
         },
-        
+
 
     },
-    
+
     // 青年期 (19-30岁)
     "青年": {
-        
+        "car_accident": {
+            "title": "车祸瞬间",
+            "description": "你正在坐出租车玩手机，突然，发生了车祸你...",
+            "trigger_conditions": {
+                "age_range": [19, 25]
+            },
+            "options": [
+                {
+                    "text": "拍照发朋友圈",
+                    "result": "前方发生车祸，你掏出手机准备拍照发朋友圈。",
+               
+                },
+                {
+                    "text": "我要回去！我的外卖还没到！",
+                    "result": "前方发生车祸，你大声要求司机掉头回去。",
+                },
+                {
+                    "text": "啥都不做",
+                    "result": "你正在坐出租车玩手机，发生了车祸，你被卡车撞死。",
+                    "add_tags": ["异世界：魔界"],
+                    "continue_event": "isekai_arrival"
+                },
+                {
+                    "text": "这一定是梦，让我捏自己一下",
+                    "result": "你用力捏了自己一下，疼得大叫。就在这时，一辆卡车撞向了出租车。",
+                    "risk": 1,
+                    "death_reason": "验证现实的代价"
+                },
+                {
+                    "text": "寒冰附体",
+                    "result": "你不知为何喊出了“寒冰附体”，但什么也没发生。",
+                },
+                {
+                    "text": "芭比Q了家人们",
+                    "result": "你喊了一声“芭比Q了家人们”，然后被卡车撞死了。",
+                    "risk": 1,
+                    "death_reason": "最后的遗言竟是网络流行语"
+                }
+            ]
+        },
+
         "wrong_number_president": {
             "title": "打错电话",
             "description": "{user}有一次打错电话，打给了美国总统。",
             "trigger_conditions": {
                 "age_range": [20, 25]
-                },
+            },
             "options": [
                 {
                     "text": "立马挂电话",
@@ -675,50 +715,50 @@ const ageEvents = {
                     "result": "{user}关心地问总统吃饭了没，把总统逗笑了。",
                     "effects": { "social": 15, "luck": 5 },
                     "add_tags": ["幽默"]
-                    },
-                    {
-                        text: "约出来吃宵夜",
+                },
+                {
+                    text: "约出来吃宵夜",
                     "result": "{user}大胆地约总统吃宵夜，对方婉拒但称赞了{user}的勇气。",
                     "effects": { "social": 8, "luck": 8 },
                     "add_tags": ["胆大"]
-                    },
-                    {
+                },
+                {
                     "text": "反映社会问题",
                     "result": "{user}认真地向总统反映了一些社会问题，得到了重视。",
                     "effects": { "intelligence": 15, "social": 10 },
                     "add_tags": ["社会责任感"]
                 },
-                    {
+                {
                     "text": "装成中国移动推销",
                     "result": "{user}装成客服推销套餐，把总统都整懵了。",
                     "effects": { "social": 5, "luck": 10 },
                     "add_tags": ["恶作剧大师"]
                 },
-                    {
+                {
                     "text": "求个国家职位",
                     "result": "{user}打错了电话，打给了美国总统。{user}将计就计，竟然向总统说：'给我个国家的职务做做吧。'",
                     "effects": { "luck": 20 },
                     "continue_event": "president_job_offer"
                 }
-                ]
-            },
+            ]
+        },
 
-            "president_job_offer": {
+        "president_job_offer": {
             "title": "总统的回应",
             "description": "电话里沉默了一下，接着有翻书的声音。没过多久，电话里头的总统说：'好的，铲屎官的职位现在空缺，{user}，你就做吧。'",
             "is_continue": true,
-                "options": [
-                    {
+            "options": [
+                {
                     "text": "接受任命",
                     "result": "美国总统赋予{user}所谓'铲屎官'职位。",
                     "effects": { "social": 20, "luck": 15 },
                     "add_tags": ["阿美丽卡:铲屎官"],
                     "continue_event": "mysterious_package"
-                    }
-                ]
-            },
+                }
+            ]
+        },
 
-            "mysterious_package": {
+        "mysterious_package": {
             "title": "神秘包裹",
             "description": "没多久，{user}收到一副墨镜，和一条铁棒状的仪器，这个仪器有一个按钮，按下这个按钮后，会发出闪光。任何人看到这个闪光，都会忘记30分钟前发生的所有事情。",
             "is_continue": true,
@@ -729,9 +769,9 @@ const ageEvents = {
                     "effects": { "intelligence": 20, "social": 15, "luck": 20 },
                     "add_tags": []
                 }
-                ]
-            },
-            "heroic_rescue_adult": {
+            ]
+        },
+        "heroic_rescue_adult": {
             "title": "英雄时刻",
             "description": "大楼着火了，{user}听到里面有人呼救！",
             "trigger_conditions": {
@@ -755,89 +795,87 @@ const ageEvents = {
                             "result": "{user}成功救出了被困人员，成为了真正的英雄！",
                             "effects": { "social": 40, "health": -20, "luck": 30 },
                             "add_tags": ["英雄"],
-                            "continue_event": "hero_ceremony"
+                        },
+                        {
+                            "conditions": {
+                                "tags": ["警察"]
                             },
-                            {
-                                "conditions": {
-                                    "tags": ["警察"]
-                                },
-                                "result": "{user}专业地组织撤离，最大程度减少了伤亡。",
-                                "effects": { "social": 30, "intelligence": 10 },
-                                "add_tags": ["专业救援"]
-                            },
-                            {
-                                "conditions": { "default": true },
-                                "result": "{user}勇敢地冲了进去，但被浓烟呛得不轻...",
-                                "effects": { "health": -40, "social": 15 },
-                                "risk": 0.3
-                            }
-                        ]
-                    },
-                    {
-                        "text": "呼叫消防队",
-                        "result": "{user}及时呼叫了消防队，协助疏散人群。",
-                        "effects": { "social": 10, "intelligence": 5 }
-                    }
-                ]
-            },
-
-            "complex_investment": {
-                "title": "复杂投资决策",
-                "description": "一个高风险高回报的投资机会出现了。",
-                "trigger_conditions": {
-                    "age_range": [25, 60],
-                    "min_attributes": { "money": 80 }
+                            "result": "{user}专业地组织撤离，最大程度减少了伤亡。",
+                            "effects": { "social": 30, "intelligence": 10 },
+                            "add_tags": ["专业救援"]
+                        },
+                        {
+                            "conditions": { "default": true },
+                            "result": "{user}勇敢地冲了进去，但被浓烟呛得不轻...",
+                            "effects": { "health": -40, "social": 15 },
+                            "risk": 0.3
+                        }
+                    ]
                 },
-                "options": [
+                {
+                    "text": "呼叫消防队",
+                    "result": "{user}及时呼叫了消防队，协助疏散人群。",
+                    "effects": { "social": 10, "intelligence": 5 }
+                }
+            ]
+        },
+        "complex_investment": {
+            "title": "复杂投资决策",
+            "description": "一个高风险高回报的投资机会出现了。",
+            "trigger_conditions": {
+                "age_range": [25, 60],
+                "min_attributes": { "money": 80 }
+            },
+            "options": [
                 {
                     "text": "全部投入",
                     "conditional_results": [
-                            {
-                                "conditions": {
-                                    "tags": ["企业家"],
-                                    "attributes": { "intelligence": 85, "luck": 70 },
-                                    "all_required": true
-                                },
-                                "result": "{user}的判断完全正确，投资获得了巨大成功！",
-                                "effects": { "money": 200, "intelligence": 15 },
-                                "add_tags": ["投资大亨"],
-                                "continue_event": "business_empire"
+                        {
+                            "conditions": {
+                                "tags": ["企业家"],
+                                "attributes": { "intelligence": 85, "luck": 70 },
+                                "all_required": true
                             },
-                            {
-                                "conditions": {
-                                    "any_of": [
-                                        { "tags": ["富二代"] },
-                                        { "attributes": { "luck": 90 } }
-                                    ]
-                                },
-                                "result": "凭借运气或资源，{user}的投资获得了不错的回报。",
-                                "effects": { "money": 80, "social": 10 }
+                            "result": "{user}的判断完全正确，投资获得了巨大成功！",
+                            "effects": { "money": 200, "intelligence": 15 },
+                            "add_tags": ["投资大亨"],
+                            "continue_event": "business_empire"
+                        },
+                        {
+                            "conditions": {
+                                "any_of": [
+                                    { "tags": ["富二代"] },
+                                    { "attributes": { "luck": 90 } }
+                                ]
                             },
-                            {
-                                "conditions": {
-                                    "not": { "tags": ["投资失败", "破产"] },
-                                    "attributes": { "intelligence": 70 }
-                                },
-                                "result": "{user}的投资有一定收益，但没有预期那么好。",
-                                "effects": { "money": 30 }
+                            "result": "凭借运气或资源，{user}的投资获得了不错的回报。",
+                            "effects": { "money": 80, "social": 10 }
+                        },
+                        {
+                            "conditions": {
+                                "not": { "tags": ["投资失败", "破产"] },
+                                "attributes": { "intelligence": 70 }
                             },
-                            {
-                                "conditions": { "default": true },
-                                "result": "投资失败了，{user}损失惨重...",
-                                "effects": { "money": -60, "health": -15 },
-                                "add_tags": ["投资失败"]
-                            }
-                        ]
-                    },
-                    {
-                        "text": "谨慎观望",
-                        "result": "{user}选择了观望，错过了机会。",
-                        "effects": { "intelligence": 5 }
-                    }
-                ]
-            },
+                            "result": "{user}的投资有一定收益，但没有预期那么好。",
+                            "effects": { "money": 30 }
+                        },
+                        {
+                            "conditions": { "default": true },
+                            "result": "投资失败了，{user}损失惨重...",
+                            "effects": { "money": -60, "health": -15 },
+                            "add_tags": ["投资失败"]
+                        }
+                    ]
+                },
+                {
+                    "text": "谨慎观望",
+                    "result": "{user}选择了观望，错过了机会。",
+                    "effects": { "intelligence": 5 }
+                }
+            ]
+        }
     },
-    
+
     // 中年期 (31-60岁)
     "中年": {
         "career_crossroads": {
@@ -889,8 +927,7 @@ const ageEvents = {
             ]
         }
     },
-    
-    // 老年期 (61岁以上)
+    // 老年期 (61岁-110岁)
     "老年": {
         "retirement": {
             "title": "退休生活",
@@ -917,6 +954,51 @@ const ageEvents = {
                     "effects": { "social": 10, "intelligence": 5, "health": -5 },
                     "add_tags": ["老骥伏枥"]
                 }
+            ]
+        },
+        "old_man_talk_choice": {
+            "title": "问卷调查",
+            "description": "{user}在公园里散步，遇到了一个老人，老人说：“年轻人，你愿意帮我一个忙吗？然后递给{user}一张问卷。”",
+            "trigger_conditions": {
+                "age_range": [80, 100],
+                "not_tags": ["不解之谜"]
+            },
+            "options": [
+                {
+                    "text": "继续",
+                    "result": "你答应了老人的请求，老人非常高兴。",
+                    "effects": {},
+                    "continue_event": "author_survey"
+                }
+            ]   
+        },
+        "author_survey": {
+            "title": "作者调查",
+            "description": "{user}接过问卷，发现是作者的调查问卷。{user}开始填写问卷,通通填十分满意，直到最后，有一个对作者说的话，{user}填了_。",
+            "is_continue": true,    
+            "options": [
+                {
+                    "text": "游戏太好玩了，我十分满意",
+                    "result": "{user}填写了问卷，非常满意。",
+                    "effects": { "social": 10, "intelligence": 10 },
+                },
+                {
+                    "text": "游戏太难了，不满意",
+                    "result": "{user}填写了问卷，非常不满意。",
+                    "effects": { "social": -10, "intelligence": -10 },
+                },
+                {
+                    "text": "游戏太无聊了，我十分不满意",
+                    "result": "{user}填写了问卷，非常不满意。",
+                    "effects": { "social": -10, "intelligence": -10 },
+                },
+                {
+                    "text": "这个游戏作者是个傻逼吧",
+                    "result": "{user}对游戏作者破口大骂。",
+                    "effects": { "social": -10, "intelligence": -10 },
+                    "add_tags": ["地狱模式", "不解之谜"]
+                }
+                
             ]
         },
         "health_crisis": {
@@ -961,7 +1043,11 @@ const ageEvents = {
                 }
             ]
         }
-    }
+    },
+    // 超人期 (110岁以上)
+    "超人": {
+    },
+        
 };
 
 // 暴露到全局
