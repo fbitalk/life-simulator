@@ -926,33 +926,232 @@ body {
     border-left: 3px solid #667eea;
 }
 
-/* 响应式设计 */
+/* 移动设备适配 - 增强版 */
 @media (max-width: 768px) {
     .game-container {
         width: 95%;
         padding: 20px;
+        height: 95vh;
+        max-height: none;
     }
     
     .game-title {
-        font-size: 2em;
+        font-size: 1.8em;
+        margin-bottom: 15px;
+    }
+    
+    .game-description {
+        font-size: 0.9em;
+        margin-bottom: 20px;
+    }
+
+    /* 主菜单按钮调整 */
+    .menu-buttons {
+        gap: 12px;
+    }
+
+    .menu-btn {
+        padding: 14px 20px;
+        font-size: 1em;
+    }
+
+    /* 性别选择调整 */
+    .gender-selection {
+        flex-direction: row;
+        gap: 15px;
+    }
+    
+    .gender-card {
+        padding: 15px;
+        width: 120px;
+    }
+    
+    /* 状态栏和标签容器调整 */
+    .status-bar {
+        flex-direction: column;
+        padding: 10px;
+        gap: 10px;
     }
     
     .status-info {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+    
+    .tags-container {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+    }
+    
+    .tag {
+        font-size: 0.8em;
+        padding: 5px 10px;
+        margin: 2px;
+    }
+    
+    /* 事件卡片调整 */
+    .event-card {
+        padding: 15px;
+    }
+    
+    .event-title {
+        font-size: 1.3em;
+        margin-bottom: 10px;
+    }
+    
+    .event-description {
+        font-size: 0.95em;
+    }
+    
+    .event-options {
+        gap: 10px;
+    }
+    
+    .option-btn {
+        padding: 12px;
+    }
+    
+    .option-icon {
+        font-size: 1.5em;
+        margin-right: 8px;
+    }
+    
+    /* 弹窗调整 */
+    .modal-content {
+        width: 95%;
+        padding: 15px;
+    }
+    
+    /* 回放界面调整 */
+    #replayModalHistoryContainer {
+        max-height: 200px;
+    }
+    
+    /* 成就界面调整 */
+    .achievements-container {
+        top: 60px;
+    }
+    
+    .achievement-card {
+        padding: 15px;
+        min-height: 120px;
+    }
+    
+    .achievement-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1.8em;
+    }
+    
+    .achievement-name {
+        font-size: 1.1em;
+    }
+    
+    /* 游戏结束界面调整 */
+    .final-age {
+        font-size: 2.5em;
+    }
+    
+    .death-reason {
+        font-size: 1.1em;
+    }
+    
+    .history-item {
+        padding: 10px;
+        font-size: 0.9em;
+    }
+    
+    .gameover-buttons {
         flex-direction: column;
         gap: 10px;
     }
-
-    .gender-selection {
-        flex-direction: column;
-        align-items: center;
+    
+    /* 导航按钮调整 */
+    .back-btn {
+        font-size: 1.5em;
+        top: 15px;
+        left: 15px;
     }
-
-    .gameover-buttons {
-        flex-direction: column;
+    
+    /* 控制元素调整 */
+    .theme-selector,
+    .sound-control {
+        transform: scale(0.8);
+        top: 5px;
     }
-    .modal-content {
+    
+    .theme-selector {
+        right: 5px;
+    }
+    
+    .sound-control {
+        left: auto;
+        right: 60px;
+    }
+    
+    /* 动画效果调整，让移动端更流畅 */
+    .floating-shape {
+        opacity: 0.4;
+    }
+    
+    /* 横屏模式优化 */
+    @media (orientation: landscape) {
+        .game-container {
+            height: 90vh;
+        }
+        
+        .gender-selection {
+            flex-direction: row;
+        }
+        
+        .achievement-card {
+            min-height: 100px;
+        }
+        
+        .status-bar {
+            flex-direction: row;
+        }
+    }
+}
+
+/* 小屏移动设备 */
+@media (max-width: 480px) {
+    .game-container {
+        padding: 15px;
+    }
+    
+    .game-title {
+        font-size: 1.5em;
+    }
+    
+    .menu-btn {
+        padding: 12px 15px;
+        font-size: 0.9em;
+    }
+    
+    .gender-card {
+        padding: 12px;
+        width: 100px;
+    }
+    
+    .gender-icon {
+        font-size: 2em;
+    }
+    
+    .name-input {
         width: 90%;
-        padding: 20px;
+        padding: 12px;
+    }
+    
+    .event-title {
+        font-size: 1.2em;
+    }
+    
+    .event-description {
+        font-size: 0.9em;
     }
 }
 
@@ -2147,5 +2346,206 @@ body {
     100% {
         opacity: 0.5;
         transform: scale(0.95);
+    }
+}
+
+/* 触摸设备优化 */
+@media (hover: none) and (pointer: coarse) {
+    /* 增大可点击区域 */
+    .menu-btn,
+    .option-btn,
+    .btn,
+    .gender-card,
+    .back-btn,
+    .continue-btn,
+    .next-event-btn,
+    .close-btn {
+        min-height: 44px; /* 苹果推荐的最小触摸目标尺寸 */
+    }
+
+    /* 取消悬停效果，改为active效果 */
+    .menu-btn:hover,
+    .option-btn:hover,
+    .btn:hover {
+        transform: none;
+        box-shadow: none;
+    }
+
+    .menu-btn:active,
+    .option-btn:active,
+    .btn:active {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    /* 滚动优化 */
+    .achievements-container,
+    .saved-lives-list,
+    #replayModalHistoryContainer,
+    .history-container {
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+    }
+
+    /* 防止iOS点击闪烁 */
+    * {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    /* 让滑动更流畅 */
+    .game-container {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* 禁用某些悬停动画以提高性能 */
+    .achievement-card:hover,
+    .event-card:hover,
+    .tag:hover {
+        transform: none;
+    }
+}
+
+/* 设备方向变化时的平滑过渡 */
+@media screen and (orientation: portrait), screen and (orientation: landscape) {
+    body {
+        transition: all 0.3s ease;
+    }
+}
+
+/* 性能优化 - 减少移动设备上的动画复杂度 */
+@media (max-width: 768px) {
+    /* 使用硬件加速 */
+    .game-container,
+    .event-card,
+    .option-btn,
+    .menu-btn,
+    .btn {
+        transform: translateZ(0);
+        backface-visibility: hidden;
+        perspective: 1000px;
+    }
+
+    /* 简化一些复杂动画 */
+    .floating-shape {
+        display: none; /* 移动端隐藏背景动画 */
+    }
+
+    .golden-achievement-effect,
+    .reward-effect {
+        opacity: 0.7; /* 降低特效强度 */
+    }
+}
+
+/* 移动设备特定样式 */
+.mobile-device .game-container {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* 移动设备横屏/竖屏特定样式 */
+.mobile-device.portrait .game-container {
+    width: 95%;
+    height: 95vh;
+}
+
+.mobile-device.landscape .game-container {
+    width: 95%;
+    height: 85vh;
+}
+
+/* 触摸活跃状态 */
+.touch-active {
+    transform: scale(0.97) !important;
+    transition: transform 0.1s !important;
+}
+
+/* 移动设备上隐藏某些复杂效果 */
+.mobile-device .floating-shape {
+    opacity: 0.2;
+}
+
+/* 移动设备上使用更大的按钮和更大的字体 */
+.mobile-device .menu-btn,
+.mobile-device .btn,
+.mobile-device .option-btn {
+    font-size: 1.05em;
+}
+
+/* 移动端滑动组件优化 */
+.mobile-device .tags-container,
+.mobile-device .achievements-container,
+.mobile-device .saved-lives-list,
+.mobile-device #replayModalHistoryContainer,
+.mobile-device .history-container {
+    scrollbar-width: thin;
+    -ms-overflow-style: none;
+}
+
+.mobile-device .tags-container::-webkit-scrollbar,
+.mobile-device .achievements-container::-webkit-scrollbar,
+.mobile-device .saved-lives-list::-webkit-scrollbar,
+.mobile-device #replayModalHistoryContainer::-webkit-scrollbar,
+.mobile-device .history-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* 调整触摸目标大小 */
+.mobile-device .tag {
+    margin: 3px;
+    padding: 6px 12px;
+}
+
+/* 竖屏/横屏适配 */
+@media screen and (orientation: portrait) {
+    .mobile-device .status-bar {
+        flex-direction: column;
+    }
+}
+
+@media screen and (orientation: landscape) {
+    .mobile-device .status-bar {
+        flex-direction: row;
+    }
+    
+    .mobile-device .gender-selection {
+        display: flex;
+        flex-direction: row;
+    }
+}
+
+/* 移动端滑动和滚动动画 */
+.mobile-device {
+    overscroll-behavior: contain; /* 防止页面弹跳 */
+}
+
+.mobile-device .achievements-container,
+.mobile-device .saved-lives-list,
+.mobile-device #replayModalHistoryContainer,
+.mobile-device .history-container {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+}
+
+/* 高DPI设备优化 */
+@media screen and (min-resolution: 2dppx) {
+    .mobile-device .game-container {
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+    
+    .mobile-device .tag,
+    .mobile-device .btn,
+    .mobile-device .option-btn {
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+}
+
+/* 安全区域适配(针对全面屏手机) */
+@supports (padding: max(0px)) {
+    .mobile-device .game-container {
+        padding-left: max(20px, env(safe-area-inset-left));
+        padding-right: max(20px, env(safe-area-inset-right));
+        padding-top: max(20px, env(safe-area-inset-top));
+        padding-bottom: max(20px, env(safe-area-inset-bottom));
     }
 } 

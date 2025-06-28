@@ -551,6 +551,12 @@ const ageEvents = {
                     "remove_tags": ["胆小"]
                 },
                 {
+                    "text": "上前嘲讽",
+                    "risk": 1,
+                    "result": "{user}上前嘲讽了被霸凌的同学，被一堆人围殴致死。",
+                    "effects": { "social": 10, "health": -8, "intelligence": 5 },
+                },
+                {
                     "text": "告诉老师",
                     "result": "{user}选择告诉老师，老师及时制止了霸凌。",
                     "effects": { "social": -5, "intelligence": 8 }

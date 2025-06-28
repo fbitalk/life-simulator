@@ -5,6 +5,7 @@
 // 页面加载完成后执行
 document.addEventListener('DOMContentLoaded', function() {
     initUIEffects();
+    mobileAdapter.init();
 });
 
 /**
@@ -349,4 +350,95 @@ function createNextEventButtonEffect(button) {
     setTimeout(() => {
         arrow.remove();
     }, 800);
-} 
+}
+
+// 移动端适配工具
+const mobileAdapter = {
+    // 检测设备类型
+    isMobile: function() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+               window.innerWidth <= 768;
+    },
+    
+    // 检测设备方向
+    isPortrait: function() {
+        return window.innerHeight > window.innerWidth;
+    },
+    
+    // 初始化移动端优化
+    init: function() {
+        // 添加设备类型标识
+        if (this.isMobile()) {
+            document.body.classList.add('mobile-device');
+            
+            if (this.isPortrait()) {
+                document.body.classList.add('portrait');
+                document.body.classList.remove('landscape');
+            } else {
+                document.body.classList.add('landscape');
+                document.body.classList.remove('portrait');
+            }
+            
+            // 优化触摸事件
+            this.optimizeTouchEvents();
+        } else {
+            document.body.classList.add('desktop-device');
+            document.body.classList.remove('mobile-device', 'portrait', 'landscape');
+        }
+        
+        // 监听设备方向变化
+        window.addEventListener('resize', () => {
+            if (this.isMobile()) {
+                if (this.isPortrait()) {
+                    document.body.classList.add('portrait');
+                    document.body.classList.remove('landscape');
+                } else {
+                    document.body.classList.add('landscape');
+                    document.body.classList.remove('portrait');
+                }
+            }
+        });
+    },
+    
+    // 优化触摸事件
+    optimizeTouchEvents: function() {
+        // 修复移动端300ms点击延迟问题
+        document.addEventListener('touchstart', function() {}, {passive: true});
+        
+        // 优化移动端滚动体验
+        const scrollElements = document.querySelectorAll('.achievements-container, .saved-lives-list, #replayModalHistoryContainer, .history-container');
+        scrollElements.forEach(el => {
+            el.addEventListener('touchstart', function() {}, {passive: true});
+        });
+        
+        // 替换鼠标悬停为触摸事件
+        const buttons = document.querySelectorAll('.menu-btn, .option-btn, .btn, .gender-card');
+        buttons.forEach(btn => {
+            btn.addEventListener('touchstart', function() {
+                this.classList.add('touch-active');
+            }, {passive: true});
+            
+            btn.addEventListener('touchend', function() {
+                this.classList.remove('touch-active');
+            }, {passive: true});
+        });
+    },
+    
+    // 调整UI元素大小和位置
+    adjustUI: function() {
+        // 当在移动设备且是横向模式时，调整一些关键UI元素
+        if (this.isMobile() && !this.isPortrait()) {
+            // 特定的横屏调整
+        }
+    }
+};
+
+// 响应页面大小变化
+window.addEventListener('resize', function() {
+    mobileAdapter.adjustUI();
+});
+
+// 防止缩放导致的布局问题（iOS设备）
+document.addEventListener('gesturestart', function(e) {
+    e.preventDefault();
+}); 

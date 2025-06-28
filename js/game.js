@@ -18,6 +18,7 @@ class LifeSimulatorGame {
         this.currentEvent = null;
         this.isGameOver = false;
         this.deathReason = "";
+        this.deathType = "";
         
         // 初始化游戏
         this.init();
@@ -225,7 +226,7 @@ class LifeSimulatorGame {
     }
     
     /**
-     * 显示事件卡片
+     * 显示事件
      * @param {Object} event - 事件对象
      */
     displayEvent(event) {
@@ -275,8 +276,12 @@ class LifeSimulatorGame {
         const options = document.createElement('div');
         options.className = 'event-options';
         
+        // 判断是否有选项、是否有连续事件
+        const hasOptions = event.options && Array.isArray(event.options) && event.options.length > 0;
+        const hasContinueEvent = !!event.continue_event;
+        
         // 为每个选项创建按钮
-        if (event.options && Array.isArray(event.options)) {
+        if (hasOptions) {
             event.options.forEach((option, index) => {
                 const button = document.createElement('button');
                 button.className = 'option-btn';
@@ -301,7 +306,7 @@ class LifeSimulatorGame {
                 button.addEventListener('click', () => this.handleOptionSelect(option, index));
                 options.appendChild(button);
             });
-        } else if (event.continue_event) {
+        } else if (hasContinueEvent) {
             // 如果没有选项但有后续事件，添加一个"继续"按钮
             const button = document.createElement('button');
             button.className = 'option-btn';
@@ -318,16 +323,51 @@ class LifeSimulatorGame {
             button.appendChild(content);
             
             button.addEventListener('click', () => {
-                // 处理继续事件
+                // 记录历史
+                const autoResult = {
+                    result: event.description ? event.description.replace(/{user}/g, this.player.name) : "",
+                    effects: event.effects || {}
+                };
+                this.recordHistory(event, 0, autoResult);
+                
+                // 应用事件效果
+                if (event.effects) {
+                    this.applyEffects(event.effects);
+                }
+                
+                // 处理标签添加和移除
+                if (event.add_tags && Array.isArray(event.add_tags)) {
+                    event.add_tags.forEach(tag => {
+                        if (!this.player.tags.includes(tag)) {
+                            this.player.tags.push(tag);
+                            this.showTagEffect(tag, 'add');
+                        }
+                    });
+                }
+                
+                if (event.remove_tags && Array.isArray(event.remove_tags)) {
+                    event.remove_tags.forEach(tag => {
+                        const index = this.player.tags.indexOf(tag);
+                        if (index !== -1) {
+                            this.player.tags.splice(index, 1);
+                            this.showTagEffect(tag, 'remove');
+                        }
+                    });
+                }
+                
+                // 获取并显示后续事件
                 const nextEvent = eventManager.getContinuationEvent(event.continue_event);
                 if (nextEvent) {
                     this.currentEvent = nextEvent;
                     this.displayEvent(nextEvent);
+                } else {
+                    console.error(`无法找到后续事件: ${event.continue_event}`);
+                    this.progressToNextYear();
                 }
             });
             options.appendChild(button);
         } else {
-            console.warn("事件没有选项:", event);
+            console.warn("事件既没有选项也没有后续事件:", event);
             // 添加一个默认的继续按钮
             const button = document.createElement('button');
             button.className = 'option-btn';
@@ -530,8 +570,22 @@ class LifeSimulatorGame {
         // 处理选项结果
         const result = eventManager.processOptionResult(option, this.player);
         
+        // 检查是否有risk标记，如果有且触发死亡
+        if (option.risk && Math.random() < option.risk) {
+            // 如果选项有指定的死亡描述，使用它；否则使用结果文本
+            const deathReason = option.death_desc || result.result.replace(/{user}/g, this.player.name);
+            this.handleDeath(deathReason, "risk");
+            
+            // 记录历史
+            this.recordHistory(this.currentEvent, optionIndex, result);
+            return;
+        }
+        
         // 应用结果影响
         this.applyEffects(result.effects);
+        
+        // 如果游戏已结束，不继续处理
+        if (this.isGameOver) return;
         
         // 添加/移除标签
         if (result.add_tags && result.add_tags.length > 0) {
@@ -642,7 +696,7 @@ class LifeSimulatorGame {
                         
                     // 检查是否死亡
                     if (this.player.attributes[attr] <= 0) {
-                        this.handleDeath("健康归零");
+                        this.handleDeath("突发心脏病而死", "health");
                         return;
                     }
                 }
@@ -740,10 +794,13 @@ class LifeSimulatorGame {
             this.applyEffects({ [ATTRIBUTES.HEALTH]: -GAME_CONFIG.YEARLY_HEALTH_DECREASE_VALUE });
         }
         
+        // 如果由于健康下降导致游戏结束，不继续执行
+        if (this.isGameOver) return;
+        
         // 80岁后进行死亡检定
         if (this.player.age >= GAME_CONFIG.DEATH_CHECK_AGE) {
             if (this.rollDeathCheck()) {
-                this.handleDeath("寿终正寝");
+                this.handleDeath("自然老死", "age");
                 return;
             }
         }
@@ -823,10 +880,12 @@ class LifeSimulatorGame {
     /**
      * 处理玩家死亡
      * @param {String} reason - 死亡原因
+     * @param {String} type - 死亡类型 (risk/health/age)
      */
-    handleDeath(reason) {
+    handleDeath(reason, type) {
         this.isGameOver = true;
         this.deathReason = reason;
+        this.deathType = type; // 记录死亡类型
         
         // 显示游戏结束界面
         setTimeout(() => {
@@ -844,7 +903,22 @@ class LifeSimulatorGame {
         
         // 更新结束界面信息
         document.getElementById('finalAge').textContent = `${this.player.age}岁`;
-        document.getElementById('deathReason').textContent = `死因：${this.deathReason}`;
+        
+        // 根据死亡类型显示对应的死亡原因
+        const deathReasonElement = document.getElementById('deathReason');
+        if (this.deathType === "risk") {
+            // 风险选项死亡，直接显示选项结果
+            deathReasonElement.textContent = `死因：${this.deathReason}`;
+        } else if (this.deathType === "health") {
+            // 健康值为0死亡，显示固定文本
+            deathReasonElement.textContent = `死因：${this.deathReason}`;
+        } else if (this.deathType === "age") {
+            // 死亡检定死亡，显示自然老死
+            deathReasonElement.textContent = `死因：${this.deathReason}`;
+        } else {
+            // 其他情况
+            deathReasonElement.textContent = `死因：${this.deathReason}`;
+        }
         
         // 显示最终标签
         const finalTagsContainer = document.getElementById('finalTags');
