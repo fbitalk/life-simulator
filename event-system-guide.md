@@ -571,7 +571,74 @@ luck >= 80("幸运");
 }
 ```
 
-### 2. 风险选项死亡
+### 2. 使用death_flag标记
+
+更直接的方式是在选项结果中使用`death_flag`字段，明确指示这是一个死亡结局：
+
+```javascript
+"life_threatening_choice": {
+    "title": "生死抉择",
+    "description": "你发现自己身处一个危险的境地，必须做出选择。",
+    "options": [
+        {
+            "text": "冒险一搏",
+            "result": "你决定冒险，但不幸遭遇了意外。",
+            "death_flag": true, // 直接标记为死亡结局
+            "death_reason": "意外事故" // 自定义死亡原因
+        },
+        {
+            "text": "寻求帮助",
+            "result": "你找到了安全的方法脱离危险。",
+            "effects": { "social": 5 }
+        }
+    ]
+}
+```
+
+### 3. 条件性死亡
+
+你还可以根据不同条件设置不同的死亡几率：
+
+```javascript
+"risky_surgery": {
+    "title": "高风险手术",
+    "description": "医生告诉你需要进行一次高风险手术。",
+    "options": [
+        {
+            "text": "接受手术",
+            "conditional_results": [
+                {
+                    "conditions": { 
+                        "min_attributes": { "health": 50, "luck": 60 } 
+                    },
+                    "result": "手术非常成功，你完全康复了。",
+                    "effects": { "health": 30 }
+                },
+                {
+                    "conditions": { 
+                        "min_attributes": { "health": 30 } 
+                    },
+                    "result": "手术过程艰难，但你最终挺了过来。",
+                    "effects": { "health": 10 }
+                },
+                {
+                    "conditions": { "default": true },
+                    "result": "你的身体状况太差，没能挺过手术。",
+                    "death_flag": true,
+                    "death_reason": "手术失败"
+                }
+            ]
+        },
+        {
+            "text": "拒绝手术",
+            "result": "你决定不冒这个风险，但病情可能会持续恶化。",
+            "effects": { "health": -20 }
+        }
+    ]
+}
+```
+
+### 4. 风险选项死亡
 
 风险选项是一种概率性死亡机制，通过在选项中添加`risk`属性来实现。`risk`的值是一个0到1之间的数字，表示选择此选项时死亡的概率：
 
@@ -583,7 +650,7 @@ luck >= 80("幸运");
         {
             "text": "跳下悬崖寻宝",
             "risk": 0.8, // 80%概率死亡
-            "death_reason": "你跳下悬崖，但被巨浪吞没，再也没能浮出水面。", // 自定义死亡描述
+            "death_desc": "你跳下悬崖，但被巨浪吞没，再也没能浮出水面。", // 自定义死亡描述
             "result": "奇迹般地，你成功跳入水中并找到了宝藏！",
             "effects": { "money": 100 },
             "add_tags": ["冒险家"]
@@ -604,8 +671,9 @@ luck >= 80("幸运");
 
 风险选项死亡的特点:
 1. 使用`risk`属性定义死亡概率（0-1之间的小数）
-2. 可以使用`death_reason`属性自定义死亡描述文本
-3. 如果没有提供`death_reason`，系统将使用选项的结果文本作为死亡原因
+2. 可以使用`death_desc`属性自定义死亡描述文本
+3. 如果没有提供`death_desc`，系统将使用选项的结果文本作为死亡原因
+4. 风险死亡会显示"选项结果或death_desc"作为死因，区别于其他死亡类型
 
 ```javascript
 // 更复杂的风险选项示例，结合条件判断
@@ -629,14 +697,14 @@ luck >= 80("幸运");
                     "effects": { "money": 50, "health": -20 }
                 }
             ],
-            "death_reason": "你触发了一个古老的机关，被困在迅速崩塌的遗迹中。" // 当风险触发时显示的死亡描述
+            "death_desc": "你触发了一个古老的机关，被困在迅速崩塌的遗迹中。" // 当风险触发时显示的死亡描述
         },
         {
             "text": "组织专业团队",
             "risk": 0.1, // 降低风险到10%
             "result": "在专业团队的协助下，你们安全地探索了遗迹并发现了价值不菲的文物。",
             "effects": { "money": 80, "social": 10 },
-            "death_reason": "尽管有专业团队，一场突如其来的坍塌还是导致了悲剧。"
+            "death_desc": "尽管有专业团队，一场突如其来的坍塌还是导致了悲剧。"
         },
         {
             "text": "向当局报告",
