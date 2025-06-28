@@ -69,11 +69,13 @@
         </div>
 
         <!-- 成就界面 -->
-        <div class="achievements-screen" id="achievementsScreen">
+        <div class="achievements-screen" id="achievementsScreen" style="display: none;">
             <button class="back-btn" onclick="backToMainMenu()">←</button>
-            <h2 style="text-align: center; color: #667eea; margin-bottom: 20px;">成就系统</h2>
-            <div class="achievements-grid" id="achievementsGrid">
-                <!-- 成就卡片将在这里动态生成 -->
+            <h2 style="text-align: center; color: #667eea; margin-bottom: 10px;">成就系统</h2>
+            <div class="achievements-container">
+                <div class="achievements-grid" id="achievementsGrid">
+                    <!-- 成就卡片将在这里动态生成 -->
+                </div>
             </div>
         </div>
 
@@ -209,7 +211,8 @@
         
         function showAchievements() {
             document.getElementById('mainMenu').style.display = 'none';
-            document.getElementById('achievementsScreen').style.display = 'block';
+            const achievementsScreen = document.getElementById('achievementsScreen');
+            achievementsScreen.style.display = 'flex';
             if (typeof achievementManager !== 'undefined' && 
                 typeof achievementManager.renderAchievements === 'function') {
                 achievementManager.renderAchievements();

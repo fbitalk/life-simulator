@@ -83,8 +83,37 @@ class LifeSimulatorGame {
         // 添加性别标签
         if (this.player.gender === "male") {
             this.player.tags.push("男性");
+            // 检查性别标签类型并显示相应效果
+            if (this.isRedTag("男性")) {
+                this.showTagEffect("男性", 'red');
+            } else if (this.isBlackTag("男性")) {
+                this.showTagEffect("男性", 'black');
+            } else if (this.isPurpleTag("男性")) {
+                this.showTagEffect("男性", 'purple');
+            } else if (this.isPinkTag("男性")) {
+                this.showTagEffect("男性", 'pink');
+            }
         } else if (this.player.gender === "female") {
             this.player.tags.push("女性");
+            // 检查性别标签类型并显示相应效果
+            if (this.isRedTag("女性")) {
+                this.showTagEffect("女性", 'red');
+            } else if (this.isBlackTag("女性")) {
+                this.showTagEffect("女性", 'black');
+            } else if (this.isPurpleTag("女性")) {
+                this.showTagEffect("女性", 'purple');
+            } else if (this.isPinkTag("女性")) {
+                this.showTagEffect("女性", 'pink');
+            }
+        }
+        
+        // 检查持久性标签并显示相应效果
+        if (this.persistentTags && this.persistentTags.length > 0) {
+            this.persistentTags.forEach(tag => {
+                if (this.isBlackTag(tag)) {
+                    this.showTagEffect(tag, 'black');
+                }
+            });
         }
         
         this.player.history = [];
@@ -145,15 +174,15 @@ class LifeSimulatorGame {
             
             // 根据标签类型设置样式
             if (this.isBlackTag(tag)) {
-                tagEl.classList.add('tag-black');
+                tagEl.classList.add('black');
             } else if (this.isRedTag(tag)) {
-                tagEl.classList.add('tag-red');
+                tagEl.classList.add('red');
             } else if (this.isPurpleTag(tag)) {
-                tagEl.classList.add('tag-purple');
+                tagEl.classList.add('purple');
             } else if (this.isPinkTag(tag)) {
-                tagEl.classList.add('tag-pink');
+                tagEl.classList.add('pink');
             } else if (this.isGoldenTag(tag)) {
-                tagEl.classList.add('tag-golden');
+                tagEl.classList.add('golden');
             }
             
             tagEl.textContent = tag;
@@ -510,8 +539,16 @@ class LifeSimulatorGame {
                 if (!this.player.tags.includes(tag)) {
                     this.player.tags.push(tag);
                     
-                    // 检查是否获得了金色成就标签
-                    if (this.isGoldenTag(tag)) {
+                    // 检查标签类型并显示相应效果
+                    if (this.isRedTag(tag)) {
+                        this.showTagEffect(tag, 'red');
+                    } else if (this.isBlackTag(tag)) {
+                        this.showTagEffect(tag, 'black');
+                    } else if (this.isPurpleTag(tag)) {
+                        this.showTagEffect(tag, 'purple');
+                    } else if (this.isPinkTag(tag)) {
+                        this.showTagEffect(tag, 'pink');
+                    } else if (this.isGoldenTag(tag)) {
                         this.showGoldenAchievementEffect(tag);
                     }
                 }
@@ -530,6 +567,39 @@ class LifeSimulatorGame {
         
         // 显示结果
         this.displayResult(result);
+    }
+    
+    /**
+     * 显示标签获得效果
+     * @param {String} tag - 标签名称
+     * @param {String} type - 标签类型 (red, black, purple, pink)
+     */
+    showTagEffect(tag, type) {
+        // 创建标签效果元素
+        const effectElement = document.createElement('div');
+        effectElement.className = `${type}-tag-effect`;
+        
+        // 创建内容容器
+        const contentElement = document.createElement('div');
+        contentElement.className = `${type}-tag-content`;
+        
+        // 添加标签图标和文本
+        contentElement.innerHTML = `
+            <div style="font-size: 24px; margin-bottom: 10px;">✨</div>
+            <div style="font-size: 18px; margin-bottom: 5px;">获得新标签</div>
+            <div style="font-size: 24px; font-weight: bold;">${tag}</div>
+        `;
+        
+        // 添加到效果元素
+        effectElement.appendChild(contentElement);
+        
+        // 添加到页面
+        document.body.appendChild(effectElement);
+        
+        // 动画结束后移除元素
+        setTimeout(() => {
+            document.body.removeChild(effectElement);
+        }, 1500);
     }
     
     /**
@@ -608,12 +678,16 @@ class LifeSimulatorGame {
      * 更新属性标签
      */
     updateAttributeTags() {
+        // 记录新添加的标签
+        let newTags = [];
+        
         // 遍历所有属性阈值设置
         for (const [attr, thresholds] of Object.entries(ATTRIBUTE_THRESHOLDS)) {
             // 高阈值标签
             if (thresholds.HIGH && this.player.attributes[attr] >= thresholds.HIGH.value) {
                 if (!this.player.tags.includes(thresholds.HIGH.tag)) {
                     this.player.tags.push(thresholds.HIGH.tag);
+                    newTags.push(thresholds.HIGH.tag);
                 }
             } else if (thresholds.HIGH && this.player.tags.includes(thresholds.HIGH.tag)) {
                 // 移除不再满足的高阈值标签
@@ -624,10 +698,27 @@ class LifeSimulatorGame {
             if (thresholds.LOW && this.player.attributes[attr] <= thresholds.LOW.value) {
                 if (!this.player.tags.includes(thresholds.LOW.tag)) {
                     this.player.tags.push(thresholds.LOW.tag);
+                    newTags.push(thresholds.LOW.tag);
                 }
             } else if (thresholds.LOW && this.player.tags.includes(thresholds.LOW.tag)) {
                 // 移除不再满足的低阈值标签
                 this.player.tags = this.player.tags.filter(tag => tag !== thresholds.LOW.tag);
+            }
+        }
+        
+        // 为新添加的标签显示颜色效果
+        for (const tag of newTags) {
+            // 检查标签类型并显示相应效果
+            if (this.isRedTag(tag)) {
+                this.showTagEffect(tag, 'red');
+            } else if (this.isBlackTag(tag)) {
+                this.showTagEffect(tag, 'black');
+            } else if (this.isPurpleTag(tag)) {
+                this.showTagEffect(tag, 'purple');
+            } else if (this.isPinkTag(tag)) {
+                this.showTagEffect(tag, 'pink');
+            } else if (this.isGoldenTag(tag)) {
+                this.showGoldenAchievementEffect(tag);
             }
         }
     }
@@ -675,6 +766,9 @@ class LifeSimulatorGame {
         // 获取当前年龄段
         const currentAgeGroup = getAgeGroup(this.player.age);
         
+        // 检查是否已经有该年龄段标签
+        const hasAgeGroupTag = this.player.tags.includes(currentAgeGroup);
+        
         // 移除所有年龄段标签
         Object.values(AGE_GROUPS).forEach(group => {
             if (this.player.tags.includes(group.name)) {
@@ -684,6 +778,22 @@ class LifeSimulatorGame {
         
         // 添加当前年龄段标签
         this.player.tags.push(currentAgeGroup);
+        
+        // 如果是新添加的年龄段标签，检查标签类型并显示相应效果
+        if (!hasAgeGroupTag) {
+            // 检查标签类型并显示相应效果
+            if (this.isRedTag(currentAgeGroup)) {
+                this.showTagEffect(currentAgeGroup, 'red');
+            } else if (this.isBlackTag(currentAgeGroup)) {
+                this.showTagEffect(currentAgeGroup, 'black');
+            } else if (this.isPurpleTag(currentAgeGroup)) {
+                this.showTagEffect(currentAgeGroup, 'purple');
+            } else if (this.isPinkTag(currentAgeGroup)) {
+                this.showTagEffect(currentAgeGroup, 'pink');
+            } else if (this.isGoldenTag(currentAgeGroup)) {
+                this.showGoldenAchievementEffect(currentAgeGroup);
+            }
+        }
     }
     
     /**
@@ -745,15 +855,15 @@ class LifeSimulatorGame {
             tagEl.className = 'tag';
             
             if (this.isBlackTag(tag)) {
-                tagEl.classList.add('tag-black');
+                tagEl.classList.add('black');
             } else if (this.isRedTag(tag)) {
-                tagEl.classList.add('tag-red');
+                tagEl.classList.add('red');
             } else if (this.isPurpleTag(tag)) {
-                tagEl.classList.add('tag-purple');
+                tagEl.classList.add('purple');
             } else if (this.isPinkTag(tag)) {
-                tagEl.classList.add('tag-pink');
+                tagEl.classList.add('pink');
             } else if (this.isGoldenTag(tag)) {
-                tagEl.classList.add('tag-golden');
+                tagEl.classList.add('golden');
             }
             
             tagEl.textContent = tag;
@@ -1009,8 +1119,21 @@ function showLifeDetails(life) {
             const tagEl = document.createElement('div');
             tagEl.className = 'tag';
             
-            // 判断标签类型 - 在回放界面我们只能使用保存的信息，无法再次判断标签类型
-            // 这里简化处理，暂不添加标签颜色
+            // 尝试使用window.game对象来判断标签类型
+            if (window.game) {
+                if (window.game.isBlackTag(tag)) {
+                    tagEl.classList.add('black');
+                } else if (window.game.isRedTag(tag)) {
+                    tagEl.classList.add('red');
+                } else if (window.game.isPurpleTag(tag)) {
+                    tagEl.classList.add('purple');
+                } else if (window.game.isPinkTag(tag)) {
+                    tagEl.classList.add('pink');
+                } else if (window.game.isGoldenTag(tag)) {
+                    tagEl.classList.add('golden');
+                }
+            }
+            
             tagEl.textContent = tag;
             tagsContainer.appendChild(tagEl);
         });

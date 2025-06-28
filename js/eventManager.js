@@ -162,7 +162,8 @@ class EventManager {
         // 检查普通标签事件
         if (this.allEvents.common[tag] && this.allEvents.common[tag].events) {
             Object.entries(this.allEvents.common[tag].events).forEach(([eventId, event]) => {
-                if (this.checkEventConditions(event, player)) {
+                // 排除标记为连续事件的事件
+                if (!event.is_continue && this.checkEventConditions(event, player)) {
                     result.push([eventId, event]);
                 }
             });
@@ -171,7 +172,8 @@ class EventManager {
         // 检查红色标签事件
         if (this.allEvents.red[tag] && this.allEvents.red[tag].events) {
             Object.entries(this.allEvents.red[tag].events).forEach(([eventId, event]) => {
-                if (this.checkEventConditions(event, player)) {
+                // 排除标记为连续事件的事件
+                if (!event.is_continue && this.checkEventConditions(event, player)) {
                     result.push([eventId, event]);
                 }
             });
@@ -180,7 +182,8 @@ class EventManager {
         // 检查黑色标签事件
         if (this.allEvents.black[tag] && this.allEvents.black[tag].events) {
             Object.entries(this.allEvents.black[tag].events).forEach(([eventId, event]) => {
-                if (this.checkEventConditions(event, player)) {
+                // 排除标记为连续事件的事件
+                if (!event.is_continue && this.checkEventConditions(event, player)) {
                     result.push([eventId, event]);
                 }
             });
@@ -189,7 +192,8 @@ class EventManager {
         // 检查紫色标签事件
         if (this.allEvents.purple[tag] && this.allEvents.purple[tag].events) {
             Object.entries(this.allEvents.purple[tag].events).forEach(([eventId, event]) => {
-                if (this.checkEventConditions(event, player)) {
+                // 排除标记为连续事件的事件
+                if (!event.is_continue && this.checkEventConditions(event, player)) {
                     result.push([eventId, event]);
                 }
             });
@@ -198,7 +202,8 @@ class EventManager {
         // 检查粉色标签事件
         if (this.allEvents.pink[tag] && this.allEvents.pink[tag].events) {
             Object.entries(this.allEvents.pink[tag].events).forEach(([eventId, event]) => {
-                if (this.checkEventConditions(event, player)) {
+                // 排除标记为连续事件的事件
+                if (!event.is_continue && this.checkEventConditions(event, player)) {
                     result.push([eventId, event]);
                 }
             });
@@ -207,7 +212,8 @@ class EventManager {
         // 检查男性标签事件
         if (tag === "男性" && this.allEvents.male) {
             Object.entries(this.allEvents.male).forEach(([eventId, event]) => {
-                if (this.checkEventConditions(event, player)) {
+                // 排除标记为连续事件的事件
+                if (!event.is_continue && this.checkEventConditions(event, player)) {
                     result.push([eventId, event]);
                 }
             });
@@ -216,7 +222,8 @@ class EventManager {
         // 检查女性标签事件
         if (tag === "女性" && this.allEvents.female) {
             Object.entries(this.allEvents.female).forEach(([eventId, event]) => {
-                if (this.checkEventConditions(event, player)) {
+                // 排除标记为连续事件的事件
+                if (!event.is_continue && this.checkEventConditions(event, player)) {
                     result.push([eventId, event]);
                 }
             });
@@ -236,7 +243,8 @@ class EventManager {
         
         if (this.allEvents.age[ageGroup]) {
             Object.entries(this.allEvents.age[ageGroup]).forEach(([eventId, event]) => {
-                if (this.checkEventConditions(event, player)) {
+                // 排除标记为连续事件的事件
+                if (!event.is_continue && this.checkEventConditions(event, player)) {
                     result.push([eventId, event]);
                 }
             });

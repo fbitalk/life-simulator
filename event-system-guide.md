@@ -23,7 +23,8 @@
     ],
     "continue_event": "next_event_without_options", // 可选，无选项时自动连接到下一个事件
     "auto_skip": false, // 可选，设为true时自动跳过此事件
-    "allowRepeat": false // 可选，设为true时允许此事件重复触发
+    "allowRepeat": false, // 可选，设为true时允许此事件重复触发
+    "is_continue": false // 可选，标记为连续事件，防止被随机触发
 }
 ```
 
@@ -38,6 +39,7 @@
 *   **`continue_event`**: 指向下一个要触发的事件ID。
 *   **`auto_skip`**: 如果设为true，事件会自动跳过并进入下一年。
 *   **`allowRepeat`**: 如果设为true，即使事件已经触发过，仍可再次触发。
+*   **`is_continue`**: 标记为连续事件，防止被随机触发。
 
 ---
 
@@ -154,6 +156,24 @@ luck >= 80("幸运");
             "text": "选择B路线",
             "result": "你选择了B路线",
             "continue_event": "event_b" // 选择后立即触发event_b
+        }
+    ]
+}
+```
+
+### 连续事件标记 `is_continue`
+
+为了防止连续事件被随机触发，所有作为连续事件的事件应该添加`is_continue: true`标记。这样系统在随机选择事件时会自动跳过这些事件，它们只能通过前置事件的`continue_event`属性触发。
+
+```javascript
+"event2": {
+    "title": "第二章",
+    "description": "故事继续...",
+    "is_continue": true, // 标记为连续事件，防止被随机触发
+    "options": [
+        {
+            "text": "继续阅读",
+            "result": "你继续阅读这个故事。"
         }
     ]
 }

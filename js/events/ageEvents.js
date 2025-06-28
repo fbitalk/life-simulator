@@ -24,7 +24,7 @@ const ageEvents = {
                     "text": "说一些意外的词",
                     "result": "你说的第一个词出人意料，让家人惊讶不已。",
                     "effects": { "intelligence": 5 },
-                    "add_tags": ["出其不意"]
+                    "add_tags": ["创造力"]
                 }
             ]
         },
@@ -253,6 +253,7 @@ const ageEvents = {
         "tanuki_gift_choice": {
             "title": "狸猫的礼物",
             "description": "狸猫拿出了几样神奇的道具，让{user}选择一样作为礼物...",
+            "is_continue": true,
             "options": [
                 {
                     "text": "记忆面包",
@@ -365,7 +366,8 @@ const ageEvents = {
         },
         "toddler_music_talent": {
             "title": "音乐天赋",
-            "description": "{user}很喜欢搞音乐，他的目标是——",         
+            "description": "{user}很喜欢搞音乐，他的目标是____",         
+            "is_continue": true,
             "options": [
                 {
                     "text": "当一名歌手",
@@ -397,6 +399,7 @@ const ageEvents = {
         "toddler_animal_talk_choice": {
             "title": "与谁对话？",
             "description": "{user}发现自己能和特定动物讲话，会是谁呢？",
+            "is_continue": true,
             "options": [
                 {
                     "text": "海豚",
@@ -544,8 +547,8 @@ const ageEvents = {
                     "text": "挺身而出",
                     "result": "{user}勇敢地站出来制止了霸凌行为，赢得了大家的尊重。",
                     "effects": { "social": 20, "health": -8, "intelligence": 5 },
-                    "add_tags": ["正义感", "勇敢", "英雄"],
-                    "remove_tags": ["胆小鬼"]
+                    "add_tags": ["正义感", "勇敢"],
+                    "remove_tags": ["胆小"]
                 },
                 {
                     "text": "告诉老师",
@@ -599,13 +602,13 @@ const ageEvents = {
                             "conditions": { "min_attributes": { "intelligence": 70 } },
                             "result": "凭借出色的成绩，你成功考入了重点高中。",
                             "effects": { "intelligence": 10, "social": 5 },
-                            "add_tags": ["优等生"]
+                            "add_tags": []
                         },
                         {
                             "conditions": { "default": true },
                             "result": "尽管努力，但成绩不够理想，未能进入重点高中。",
                             "effects": { "intelligence": 5 },
-                            "add_tags": ["普通学生"]
+                            "add_tags": []
                         }
                     ]
                 },
@@ -636,49 +639,14 @@ const ageEvents = {
                     "effects": { "intelligence": 10, "social": -5 }
                 }
             ]
-        }
+        },
+        
+
     },
     
     // 青年期 (19-30岁)
     "青年": {
-        "college_entrance": {
-            "title": "大学选择",
-            "description": "高考结束，你需要选择一所大学和专业。",
-            "trigger_conditions": {
-                "age_range": [18, 18]
-            },
-            "options": [
-                {
-                    "text": "名牌大学",
-                    "conditional_results": [
-                        {
-                            "conditions": { "min_attributes": { "intelligence": 80 } },
-                            "result": "凭借优异的成绩，你被一所名牌大学录取。",
-                            "effects": { "intelligence": 15, "social": 10 },
-                            "add_tags": ["名校生"]
-                        },
-                        {
-                            "conditions": { "default": true },
-                            "result": "虽然你尝试了，但没能达到名校的录取标准。",
-                            "effects": { "intelligence": 5 },
-                            "add_tags": ["努力派"]
-                        }
-                    ]
-                },
-                {
-                    "text": "选择热门专业",
-                    "result": "你选择了一个就业前景好的热门专业。",
-                    "effects": { "intelligence": 10, "money": 10 },
-                    "add_tags": ["实用主义"]
-                },
-                {
-                    "text": "追随兴趣",
-                    "result": "你选择了自己真正喜欢的专业，即使它不一定好就业。",
-                    "effects": { "intelligence": 15, "money": -5, "san": 10 },
-                    "add_tags": ["理想主义"]
-                }
-            ]
-        },
+        
         "wrong_number_president": {
             "title": "打错电话",
             "description": "{user}有一次打错电话，打给了美国总统。",
@@ -732,10 +700,8 @@ const ageEvents = {
             "president_job_offer": {
             "title": "总统的回应",
             "description": "电话里沉默了一下，接着有翻书的声音。没过多久，电话里头的总统说：'好的，铲屎官的职位现在空缺，{user}，你就做吧。'",
-            "trigger_conditions": {
-                "age_range": [20, 25]
-                },
-                options: [
+            "is_continue": true,
+                "options": [
                     {
                     "text": "接受任命",
                     "result": "美国总统赋予{user}所谓'铲屎官'职位。",
@@ -749,13 +715,13 @@ const ageEvents = {
             "mysterious_package": {
             "title": "神秘包裹",
             "description": "没多久，{user}收到一副墨镜，和一条铁棒状的仪器，这个仪器有一个按钮，按下这个按钮后，会发出闪光。任何人看到这个闪光，都会忘记30分钟前发生的所有事情。",
-
+            "is_continue": true,
             "options": [
                 {
                     "text": "收下装备",
                     "result": "{user}成为了最年轻的特工！",
                     "effects": { "intelligence": 20, "social": 15, "luck": 20 },
-                    "add_tags": ["黑衣人", "特工"]
+                    "add_tags": []
                 }
                 ]
             },
@@ -764,7 +730,7 @@ const ageEvents = {
             "description": "大楼着火了，{user}听到里面有人呼救！",
             "trigger_conditions": {
                 "age_range": [19, 50],
-                "excluded_tags": ["残疾", "胆小鬼"]
+                "excluded_tags": ["残疾"]
             },
             "options": [
                 {
@@ -773,7 +739,7 @@ const ageEvents = {
                         {
                             "conditions": {
                                 "any_of": [
-                                    { "tags": ["英雄", "消防员"] },
+                                    { "tags": ["消防员"] },
                                     {
                                         "attributes": { "health": 80, "intelligence": 70 },
                                         "all_required": true
@@ -782,7 +748,7 @@ const ageEvents = {
                             },
                             "result": "{user}成功救出了被困人员，成为了真正的英雄！",
                             "effects": { "social": 40, "health": -20, "luck": 30 },
-                            "add_tags": ["英雄", "救火英雄"],
+                            "add_tags": ["英雄"],
                             "continue_event": "hero_ceremony"
                             },
                             {
@@ -822,7 +788,7 @@ const ageEvents = {
                     "conditional_results": [
                             {
                                 "conditions": {
-                                    "tags": ["企业家", "投资高手"],
+                                    "tags": ["企业家"],
                                     "attributes": { "intelligence": 85, "luck": 70 },
                                     "all_required": true
                                 },
@@ -864,47 +830,6 @@ const ageEvents = {
                     }
                 ]
             },
-        "job_hunting": {
-            "title": "求职",
-            "description": "大学毕业后，你开始寻找工作。",
-            "trigger_conditions": {
-                "age_range": [22, 24]
-            },
-            "options": [
-                {
-                    "text": "大公司",
-                    "conditional_results": [
-                        {
-                            "conditions": { 
-                                "min_attributes": { "intelligence": 70, "social": 60 },
-                                "required_tags": ["名校生"]
-                            },
-                            "result": "凭借良好的学历和能力，你成功进入一家知名大公司。",
-                            "effects": { "money": 20, "social": 10 },
-                            "add_tags": ["职场精英"]
-                        },
-                        {
-                            "conditions": { "default": true },
-                            "result": "经过多轮面试，你没能通过大公司的选拔。",
-                            "effects": { "san": -5 },
-                            "add_tags": ["求职中"]
-                        }
-                    ]
-                },
-                {
-                    "text": "创业",
-                    "result": "你决定和几个志同道合的朋友一起创业。",
-                    "effects": { "money": -10, "social": 10, "luck": -10 },
-                    "add_tags": ["创业者"]
-                },
-                {
-                    "text": "稳定工作",
-                    "result": "你找到了一份稳定但平凡的工作。",
-                    "effects": { "money": 10, "san": 5 },
-                    "add_tags": ["普通职员"]
-                }
-            ]
-        }
     },
     
     // 中年期 (31-60岁)

@@ -4,15 +4,7 @@ const achievementManager = {
     // 成就定义
     achievements: [
         // 1星成就（容易）
-        {
-            id: 'first_choice',
-            name: '人生第一步',
-            description: '做出第一个人生选择',
-            icon: '👶',
-            stars: 1,
-            condition: 'first_choice',
-            unlocked: false
-        },
+        
         {
             id: 'bird_person',
             name: '鸟人',
@@ -217,19 +209,73 @@ const achievementManager = {
         const container = document.getElementById('achievementsGrid');
         container.innerHTML = '';
         
-        this.achievements.forEach(achievement => {
+        // 先显示已解锁的成就，然后是未解锁的，并按难度由低到高排序
+        const sortedAchievements = [...this.achievements].sort((a, b) => {
+            // 首先按解锁状态排序
+            if (a.unlocked && !b.unlocked) return -1;
+            if (!a.unlocked && b.unlocked) return 1;
+            
+            // 然后按星级排序（由低到高）
+            return a.stars - b.stars;
+        });
+        
+        sortedAchievements.forEach(achievement => {
             const card = document.createElement('div');
             card.className = `achievement-card ${achievement.unlocked ? 'unlocked' : 'locked'}`;
             
-            const starsHTML = '⭐'.repeat(achievement.stars);
+            // 如果是金色成就，添加golden类
+            if (achievement.golden) {
+                card.classList.add('golden');
+            }
             
-            card.innerHTML = `
-                <div class="achievement-icon">${achievement.icon}</div>
-                <div class="achievement-name">${achievement.name}</div>
-                <div class="achievement-stars">${starsHTML}</div>
-            `;
+            // 创建内容容器
+            const content = document.createElement('div');
+            content.className = 'achievement-content';
             
-            card.title = achievement.description;
+            // 创建头部（图标和名称）
+            const header = document.createElement('div');
+            header.className = 'achievement-header';
+            
+            // 图标
+            const icon = document.createElement('div');
+            icon.className = 'achievement-icon';
+            icon.textContent = achievement.icon;
+            header.appendChild(icon);
+            
+            // 名称
+            const name = document.createElement('div');
+            name.className = 'achievement-name';
+            name.textContent = achievement.name;
+            header.appendChild(name);
+            
+            content.appendChild(header);
+            
+            // 描述
+            const description = document.createElement('div');
+            description.className = 'achievement-description';
+            description.textContent = achievement.description;
+            content.appendChild(description);
+            
+            card.appendChild(content);
+            
+            // 星级显示（最多20星）
+            const stars = document.createElement('div');
+            stars.className = 'achievement-stars';
+            
+            // 根据难度显示星星，每颗星代表5%的难度
+            const starCount = Math.min(20, achievement.stars);
+            stars.textContent = '★'.repeat(starCount);
+            
+            card.appendChild(stars);
+            
+            // 如果成就未解锁，添加一个锁定图标
+            if (!achievement.unlocked) {
+                const lockIcon = document.createElement('div');
+                lockIcon.className = 'achievement-lock';
+                lockIcon.innerHTML = '🔒';
+                card.appendChild(lockIcon);
+            }
+            
             container.appendChild(card);
         });
     }
