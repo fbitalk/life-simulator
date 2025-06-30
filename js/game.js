@@ -1352,7 +1352,32 @@ function renderSavedLives() {
         const viewButton = document.createElement('button');
         viewButton.className = 'btn';
         viewButton.textContent = '查看详情';
-        viewButton.addEventListener('click', () => showLifeDetails(life));
+        
+        // 添加点击事件监听器
+        viewButton.addEventListener('click', function(e) {
+            e.preventDefault(); // 阻止默认行为
+            e.stopPropagation(); // 阻止事件冒泡
+            showLifeDetails(life);
+        });
+        
+        // 添加触摸事件监听器，解决移动端问题
+        viewButton.addEventListener('touchstart', function(e) {
+            e.preventDefault(); // 阻止默认行为
+            e.stopPropagation(); // 阻止事件冒泡
+            showLifeDetails(life);
+        }, { passive: false });
+        
+        // 整个卡片也可点击
+        card.addEventListener('click', function(e) {
+            e.preventDefault();
+            showLifeDetails(life);
+        });
+        
+        // 整个卡片添加触摸事件
+        card.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            showLifeDetails(life);
+        }, { passive: false });
         
         card.appendChild(header);
         card.appendChild(date);

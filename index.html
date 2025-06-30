@@ -271,6 +271,20 @@
             document.getElementById('lifeDetailsScreen').style.display = 'none';
             // 只显示主菜单
             document.getElementById('mainMenu').style.display = 'block';
+            
+            // 为所有返回按钮添加触摸事件监听
+            const backButtons = document.querySelectorAll('.back-btn');
+            backButtons.forEach(button => {
+                // 添加触摸事件监听
+                button.addEventListener('touchstart', function(e) {
+                    e.preventDefault();
+                    // 调用按钮原有的onclick函数
+                    const onclickAttr = this.getAttribute('onclick');
+                    if (onclickAttr) {
+                        eval(onclickAttr);
+                    }
+                }, { passive: false });
+            });
         });
     </script>
 </body>
