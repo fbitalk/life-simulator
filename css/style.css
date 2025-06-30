@@ -314,31 +314,59 @@ body {
 .replay-screen {
     display: none;
     animation: fadeIn 0.5s ease-out;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
 }
 
 .saved-lives-list {
     margin-top: 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    max-height: calc(100% - 100px);
+    overflow-y: auto;
+    padding-right: 10px;
 }
 
-.saved-life-item {
+.saved-life-card {
     background: white;
     border-radius: 15px;
     padding: 20px;
-    margin-bottom: 15px;
     cursor: pointer;
     transition: all 0.3s ease;
     border: 2px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    height: 100%;
+    position: relative;
+    overflow: hidden;
 }
 
-.saved-life-item:hover {
+.saved-life-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 5px;
+    height: 100%;
+    background: linear-gradient(to bottom, #667eea 0%, #764ba2 100%);
+}
+
+.saved-life-card:hover {
     border-color: #667eea;
-    transform: translateX(5px);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
 }
 
-.saved-life-info {
+.saved-life-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f0f0f0;
 }
 
 .saved-life-name {
@@ -350,6 +378,16 @@ body {
 .saved-life-age {
     font-size: 1.1em;
     color: #666;
+    background: rgba(102, 126, 234, 0.1);
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+.saved-life-date {
+    color: #888;
+    font-size: 0.9em;
+    margin-bottom: 15px;
 }
 
 .saved-life-tags {
@@ -357,6 +395,13 @@ body {
     display: flex;
     flex-wrap: wrap;
     gap: 5px;
+}
+
+.no-saves {
+    text-align: center;
+    color: #888;
+    font-size: 1.1em;
+    margin-top: 50px;
 }
 
 /* 金色标签样式 */
@@ -623,11 +668,49 @@ body {
     background: rgba(102, 126, 234, 0.15);
     color: #333;
     backdrop-filter: none;
+    display: inline-block;
+    margin: 5px;
+    animation: none; /* 移除在模态框内的默认动画 */
 }
+
+#replayModalTags .tag.red {
+    background: linear-gradient(135deg, #ff4444, #cc0000, #ff4444);
+    color: white;
+    font-weight: bold;
+    animation: none; /* 移除在模态框内的默认脉冲动画 */
+    box-shadow: 0 2px 5px rgba(255, 0, 0, 0.3);
+}
+
+#replayModalTags .tag.purple {
+    background: linear-gradient(135deg, #9c27b0, #673ab7, #9c27b0);
+    color: white;
+    font-weight: bold;
+    animation: none;
+    box-shadow: 0 2px 5px rgba(128, 0, 128, 0.3);
+}
+
+#replayModalTags .tag.pink {
+    background: linear-gradient(135deg, #ff6b9e, #ff0066, #ff6b9e);
+    color: white;
+    font-weight: bold;
+    animation: none;
+    box-shadow: 0 2px 5px rgba(255, 77, 148, 0.3);
+}
+
+#replayModalTags .tag.black {
+    background: linear-gradient(135deg, #333333, #000000, #333333);
+    color: white;
+    font-weight: bold;
+    animation: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
 #replayModalTags .tag.golden {
-     background: linear-gradient(135deg, #ffd700, #ffed4e);
+     background: linear-gradient(135deg, #ffd700, #ffed4e, #ffd700);
      color: #333;
      font-weight: bold;
+     animation: none;
+     box-shadow: 0 2px 5px rgba(255, 215, 0, 0.3);
 }
 
 @keyframes tagAppear {
@@ -2518,6 +2601,27 @@ body {
         display: flex;
         flex-direction: row;
     }
+    
+    /* 确保移动设备横屏时事件界面布局与PC端一致 */
+    .mobile-device.landscape .event-history-section {
+        display: flex;
+        flex-direction: row;
+        height: 55%; /* 调整高度比例 */
+    }
+    
+    .mobile-device.landscape .event-history {
+        flex: 7;
+        margin-right: 15px;
+        margin-bottom: 0;
+    }
+    
+    .mobile-device.landscape .character-info {
+        flex: 3;
+    }
+    
+    .mobile-device.landscape .current-event-section {
+        height: 45%;
+    }
 }
 
 /* 移动端滑动和滚动动画 */
@@ -2658,24 +2762,53 @@ body {
 /* 响应式调整 */
 @media (max-width: 768px) {
     .event-history-section {
-        flex-direction: column;
+        /* 移除flex-direction: column，保持水平布局与PC端一致 */
         height: 60%;
     }
     
     .event-history {
-        flex: 1;
-        margin-right: 0;
-        margin-bottom: 15px;
-        max-height: 60%;
+        flex: 7; /* 与PC端相同的比例 */
+        margin-right: 15px; /* 与PC端相同的右边距 */
+        margin-bottom: 0; /* 移除底部边距 */
+        max-height: none; /* 移除最大高度限制 */
     }
     
     .character-info {
-        flex: 1;
-        max-height: 40%;
+        flex: 3; /* 与PC端相同的比例 */
+        max-height: none; /* 移除最大高度限制 */
     }
     
     .current-event-section {
         height: 40%;
+    }
+}
+
+/* 针对非常小的屏幕做特殊处理，保持水平布局但调整比例 */
+@media (max-width: 480px) {
+    .event-history-section {
+        /* 仍然保持水平布局 */
+        height: 60%;
+    }
+    
+    .event-history {
+        flex: 6; /* 稍微减小比例 */
+        margin-right: 10px; /* 减小右边距 */
+    }
+    
+    .character-info {
+        flex: 4; /* 稍微增加比例 */
+    }
+}
+
+/* 针对极小屏幕做优化 */
+@media (max-width: 360px) {
+    .event-history {
+        flex: 5;
+        margin-right: 8px;
+    }
+    
+    .character-info {
+        flex: 5;
     }
 }
 
@@ -2730,7 +2863,24 @@ body {
         width: fit-content;
         max-width: 90%; /* 防止过长的标签溢出 */
         word-break: break-word; /* 允许长词换行 */
+        /* 移除特定于移动端的布局，保持与PC端一致 */
     }
+    
+    /* 确保标签容器布局与PC端一致 */
+    .tags-scroll-container .tags-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        max-height: none;
+        /* 确保与PC端相同的布局方式 */
+    }
+    
+    /* 确保移动设备上也应用标签排序 */
+    .tags-container .tag.black { order: 1; }
+    .tags-container .tag.purple { order: 2; }
+    .tags-container .tag.red { order: 3; }
+    .tags-container .tag.pink { order: 4; }
+    .tags-container .tag:not(.black):not(.purple):not(.red):not(.pink) { order: 5; }
     
     /* 特殊颜色标签样式增强 */
     .event-interface .tag.red,
@@ -2755,7 +2905,17 @@ body {
     }
 }
 
-/* 小屏幕移动设备标签样式优化 */
+/* 移除可能导致标签在移动设备上显示与PC端不同的样式 */
+@media (max-width: 768px) {
+    /* 移除之前为移动端设置的标签容器样式 */
+    .tags-container {
+        flex-wrap: wrap;
+        justify-content: flex-start; /* 修改为左对齐，与PC端一致 */
+        gap: 8px;
+    }
+}
+
+/* 小屏幕移动设备标签样式优化 - 只优化外观，保持布局与PC端一致 */
 @media (max-width: 480px) {
     .event-interface .tag {
         font-size: 0.85em;
@@ -2780,12 +2940,12 @@ body {
     }
 }
 
-/* 触摸设备上的标签交互优化 */
+/* 触摸设备上的标签交互优化 - 只改善交互，不改变布局 */
 @media (hover: none) and (pointer: coarse) {
     /* 增大标签点击区域，提高可访问性 */
     .event-interface .tag {
         min-height: 36px; /* 确保最小触摸区域高度 */
-        display: flex;
+        display: inline-flex; /* 改为inline-flex以保持与PC端一致的布局 */
         align-items: center;
     }
     
@@ -2796,8 +2956,40 @@ body {
         opacity: 0.9;
     }
     
-    /* 确保标签间距适合触摸操作 */
+    /* 确保标签间距适合触摸操作，但保持整体布局 */
     .tags-container {
-        gap: 10px;
+        gap: 8px;
     }
+}
+
+/* 标签框样式 */
+.replay-tags-container {
+    margin-bottom: 20px;
+}
+
+.tags-box {
+    background: #f5f7ff;
+    border-radius: 10px;
+    padding: 15px;
+    border: 1px solid #e6e9f5;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+/* 标签盒子中的标签样式优化 */
+.tags-box .tag {
+    margin: 5px;
+    transition: all 0.3s ease;
+}
+
+.tags-box .tag:hover {
+    transform: scale(1.05);
+}
+
+@keyframes tagAppear {
+    from { transform: scale(0); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
 }

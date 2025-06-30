@@ -694,7 +694,17 @@ class LifeSimulatorGame {
         }
         
         if (result.remove_tags && result.remove_tags.length > 0) {
+            // 从玩家标签中移除
             this.player.tags = this.player.tags.filter(tag => !result.remove_tags.includes(tag));
+            
+            // 如果移除的是黑色标签，也从persistentTags中移除
+            if (this.persistentTags && this.persistentTags.length > 0) {
+                for (const tag of result.remove_tags) {
+                    if (this.isBlackTag(tag) && this.persistentTags.includes(tag)) {
+                        this.persistentTags = this.persistentTags.filter(t => t !== tag);
+                    }
+                }
+            }
             
             // 更新标签显示
             this.updateTagsDisplay();
@@ -1080,12 +1090,18 @@ class LifeSimulatorGame {
      * 保存持久标签（黑色标签）
      */
     savePersistentTags() {
-        // 筛选所有黑色标签
+        // 先清除localStorage中的旧黑色标签
+        localStorage.removeItem('persistentBlackTags');
+        
+        // 筛选当前人生结束时仍然存在的黑色标签
         const blackTags = this.player.tags.filter(tag => this.isBlackTag(tag));
         
         if (blackTags.length > 0) {
             localStorage.setItem('persistentBlackTags', JSON.stringify(blackTags));
             this.persistentTags = blackTags;
+        } else {
+            // 如果没有黑色标签，确保persistentTags为空数组
+            this.persistentTags = [];
         }
     }
     
@@ -1093,15 +1109,25 @@ class LifeSimulatorGame {
      * 加载持久标签
      */
     loadPersistentTags() {
-        const savedTags = localStorage.getItem('persistentBlackTags');
-        if (savedTags) {
-            try {
-                this.persistentTags = JSON.parse(savedTags);
-            } catch (e) {
-                console.error("加载持久标签失败", e);
+        try {
+            const savedTags = localStorage.getItem('persistentBlackTags');
+            if (savedTags) {
+                const parsedTags = JSON.parse(savedTags);
+                
+                // 确保解析出的数据是数组
+                if (Array.isArray(parsedTags)) {
+                    // 过滤确保只有黑色标签被加载
+                    this.persistentTags = parsedTags.filter(tag => this.isBlackTag(tag));
+                    console.log(`已加载${this.persistentTags.length}个黑色标签`);
+                } else {
+                    console.error("加载的持久标签格式不正确，应为数组");
+                    this.persistentTags = [];
+                }
+            } else {
                 this.persistentTags = [];
             }
-        } else {
+        } catch (e) {
+            console.error("加载持久标签失败", e);
             this.persistentTags = [];
         }
     }

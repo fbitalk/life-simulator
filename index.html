@@ -37,11 +37,11 @@
                 <button class="menu-btn" onclick="showAchievements()">
                     <span class="icon">🏆</span>成就系统
                 </button>
-                <button class="menu-btn" onclick="confirmResetGame()">
-                    <span class="icon">🔄</span>重置游戏
-                </button>
                 <button class="menu-btn" onclick="clearPersistentTags()">
                     <span class="icon">🧼</span>清除记忆
+                </button>
+                <button class="menu-btn" onclick="confirmResetGame()">
+                    <span class="icon">🔄</span>重置游戏
                 </button>
             </div>
         </div>
@@ -179,11 +179,14 @@
                 <p><strong>终年:</strong> <span id="replayModalAge"></span></p>
                 <p><strong>背景:</strong> <span id="replayModalBackground"></span></p>
                 <p><strong>死因:</strong> <span id="replayModalDeathReason"></span></p>
-                <div style="margin-top: 10px;">
-                    <strong>最终标签:</strong>
-                    <div class="tags-container" id="replayModalTags" style="margin-top: 5px;"></div>
-                </div>
             </div>
+            
+            <!-- 修改标签显示为独立框架 -->
+            <div class="replay-tags-container">
+                <h3 style="margin-bottom: 10px; color: #667eea; text-align: center;">人生标签</h3>
+                <div class="tags-box" id="replayModalTags"></div>
+            </div>
+            
             <div id="replayModalHistoryContainer" class="history-container">
                 <h3 style="margin-bottom: 10px; color: #667eea; text-align: center;">人生事件</h3>
                 <div id="replayModalHistoryList"></div>
