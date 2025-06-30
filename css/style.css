@@ -2786,6 +2786,8 @@ body {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
     padding: 15px; /* 从20px减小到15px */
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 /* 标签排序样式 - 按颜色排序：黑色、紫色、红色、粉色、普通色 */
@@ -2826,6 +2828,8 @@ body {
     .current-event-section {
         height: 50%; /* 从40%增加到50% */
         padding: 12px; /* 减小内边距 */
+        display: flex;
+        flex-direction: column;
     }
     
     .event-title-container {
@@ -2844,12 +2848,9 @@ body {
     
     .event-options {
         gap: 10px;
-        margin: 12px 0;
-    }
-    
-    .option-btn {
-        padding: 10px 15px; /* 移动端更小的按钮内边距 */
-        font-size: 0.95em;
+        margin: 12px 0 5px 0; /* 减小底部边距 */
+        margin-top: auto; /* 将选项推到底部 */
+        padding-bottom: 5px; /* 减小底部内边距 */
     }
     
     /* 历史事件样式调整 */
@@ -2889,6 +2890,8 @@ body {
     .current-event-section {
         height: 55%; /* 增加高度 */
         padding: 10px; /* 进一步减小内边距 */
+        display: flex;
+        flex-direction: column;
     }
     
     .event-title-container {
@@ -2939,6 +2942,8 @@ body {
     .current-event-section {
         height: 60%; /* 进一步增加高度 */
         padding: 8px; /* 最小内边距 */
+        display: flex;
+        flex-direction: column;
     }
     
     .event-title-container {
@@ -2957,6 +2962,9 @@ body {
     .event-options {
         gap: 8px;
         margin: 8px 0;
+        margin-top: auto; /* 将选项推到底部 */
+        margin-bottom: 2px; /* 最小的底部边距 */
+        padding-bottom: 2px;
     }
     
     .option-btn {
@@ -3211,6 +3219,7 @@ body {
         gap: 10px;
         margin: 10px 0;
         padding-bottom: 5px;
+        margin-top: auto; /* 将选项推到底部 */
     }
     
     .option-btn {
@@ -3314,6 +3323,8 @@ body {
         padding: 12px;
         width: 100%; /* 确保宽度占满 */
         margin-bottom: 0; /* 移除底部间距 */
+        display: flex;
+        flex-direction: column;
     }
     
     /* 事件卡片样式优化 */
@@ -3322,6 +3333,8 @@ body {
         margin-top: 0; /* 移除顶部边距 */
         border-radius: 12px; /* 减小圆角 */
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06); /* 更轻的阴影 */
+        display: flex;
+        flex-direction: column;
     }
     
     .event-title-container {
@@ -3354,6 +3367,7 @@ body {
         gap: 10px;
         margin: 10px 0;
         padding-bottom: 5px;
+        margin-top: auto; /* 将选项推到底部 */
     }
     
     .option-btn {
@@ -3409,12 +3423,16 @@ body {
     .current-event-section {
         height: 65%; /* 进一步增加下半部分高度 */
         padding: 8px; /* 减小内边距 */
+        display: flex;
+        flex-direction: column;
     }
     
     /* 小屏幕事件卡片进一步优化 */
     .event-card {
         border-radius: 10px;
         border-top-width: 3px; /* 更细的顶部边框 */
+        display: flex;
+        flex-direction: column;
     }
     
     .event-title-container {
@@ -3471,6 +3489,8 @@ body {
     .current-event-section {
         height: 70%; /* 最大化下半部分 */
         padding: 6px;
+        display: flex;
+        flex-direction: column;
     }
     
     .event-title-container {
