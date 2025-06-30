@@ -110,19 +110,30 @@
 
         <!-- 游戏界面 -->
         <div class="game-screen" id="gameScreen">
-            <div class="status-bar">
-                <div class="status-info">
-                    <div class="player-info">
-                        <div class="player-name" id="playerNameDisplay">玩家</div>
-                        <div class="age-display" id="ageDisplay">0岁</div>
+            <div class="event-interface">
+                <!-- 上半部分 -->
+                <div class="event-history-section">
+                    <!-- 左侧显示事件历史记录 -->
+                    <div class="event-history" id="eventHistory">
+                        <!-- 事件结果会在这里动态显示 -->
                     </div>
-                    <div class="background-display" id="backgroundDisplay">普通人家</div>
+                    
+                    <!-- 右侧显示个人信息和标签 -->
+                    <div class="character-info">
+                        <div class="character-header">
+                            <div class="player-name" id="playerNameDisplay">玩家</div>
+                            <div class="age-display" id="ageDisplay">0岁</div>
+                        </div>
+                        <div class="tags-scroll-container">
+                            <div class="tags-container" id="tagsContainer"></div>
+                        </div>
+                    </div>
                 </div>
-                <div class="tags-container" id="tagsContainer"></div>
-            </div>
-
-            <div id="eventContainer">
-                <!-- 事件卡片或结果会动态插入这里 -->
+                
+                <!-- 下半部分：当前事件 -->
+                <div class="current-event-section" id="eventContainer">
+                    <!-- 事件卡片或结果会动态插入这里 -->
+                </div>
             </div>
         </div>
 

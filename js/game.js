@@ -125,6 +125,12 @@ class LifeSimulatorGame {
         document.getElementById('characterCreation').style.display = 'none';
         document.getElementById('gameScreen').style.display = 'block';
         
+        // 清空事件历史区域
+        const eventHistory = document.getElementById('eventHistory');
+        if (eventHistory) {
+            eventHistory.innerHTML = '';
+        }
+        
         // 更新UI
         this.updatePlayerInfo();
         
@@ -168,25 +174,61 @@ class LifeSimulatorGame {
         const tagsContainer = document.getElementById('tagsContainer');
         tagsContainer.innerHTML = '';
         
-        // 为每个标签创建元素
-        this.player.tags.forEach(tag => {
+        // 创建一个标签对象数组，包含标签类型和添加时间信息
+        const tagObjects = this.player.tags.map((tag, index) => {
+            let type = 'normal';
+            if (this.isBlackTag(tag)) {
+                type = 'black';
+            } else if (this.isPurpleTag(tag)) {
+                type = 'purple';
+            } else if (this.isRedTag(tag)) {
+                type = 'red';
+            } else if (this.isPinkTag(tag)) {
+                type = 'pink';
+            } else if (this.isGoldenTag(tag)) {
+                type = 'golden';
+            }
+            
+            return {
+                text: tag,
+                type: type,
+                // 使用随机数来作为同种颜色内的排序依据
+                random: Math.random()
+            };
+        });
+        
+        // 按照颜色排序（黑、紫、红、粉、普通），同种颜色内部随机排序
+        tagObjects.sort((a, b) => {
+            // 首先按颜色类型排序
+            const typeOrder = {
+                'black': 1,
+                'purple': 2,
+                'red': 3,
+                'pink': 4,
+                'golden': 5,
+                'normal': 6
+            };
+            
+            // 不同颜色按照顺序排
+            if (typeOrder[a.type] !== typeOrder[b.type]) {
+                return typeOrder[a.type] - typeOrder[b.type];
+            }
+            
+            // 同种颜色随机排序
+            return a.random - b.random;
+        });
+        
+        // 为每个排序后的标签创建元素
+        tagObjects.forEach(tagObj => {
             const tagEl = document.createElement('div');
             tagEl.className = 'tag';
             
-            // 根据标签类型设置样式
-            if (this.isBlackTag(tag)) {
-                tagEl.classList.add('black');
-            } else if (this.isRedTag(tag)) {
-                tagEl.classList.add('red');
-            } else if (this.isPurpleTag(tag)) {
-                tagEl.classList.add('purple');
-            } else if (this.isPinkTag(tag)) {
-                tagEl.classList.add('pink');
-            } else if (this.isGoldenTag(tag)) {
-                tagEl.classList.add('golden');
+            // 设置标签样式类
+            if (tagObj.type !== 'normal') {
+                tagEl.classList.add(tagObj.type);
             }
             
-            tagEl.textContent = tag;
+            tagEl.textContent = tagObj.text;
             tagsContainer.appendChild(tagEl);
         });
     }
@@ -355,6 +397,9 @@ class LifeSimulatorGame {
                     });
                 }
                 
+                // 更新标签显示
+                this.updateTagsDisplay();
+                
                 // 获取并显示后续事件
                 const nextEvent = eventManager.getContinuationEvent(event.continue_event);
                 if (nextEvent) {
@@ -518,47 +563,56 @@ class LifeSimulatorGame {
     }
     
     /**
-     * 显示选项结果
+     * 显示事件结果
      * @param {Object} result - 结果对象
      */
     displayResult(result) {
-
-        const eventContainer = document.getElementById('eventContainer');
-        eventContainer.innerHTML = '';
+        // 创建结果并添加到事件历史中
+        const resultText = result.result ? result.result.replace(/{user}/g, this.player.name) : "无结果描述";
+        this.addEventToHistory(resultText);
         
-        // 创建结果卡片
-        const resultCard = document.createElement('div');
-        resultCard.className = 'result-card';
-        
-        // 结果文本
-        const resultText = document.createElement('p');
-        resultText.className = 'result-text';
-        // 替换结果中的{user}为玩家名字，添加错误处理
-        if (result.result) {
-            resultText.textContent = result.result.replace(/{user}/g, this.player.name);
-        } else {
-            resultText.textContent = "无结果描述";
-            console.warn("结果缺少描述：", result);
-        }
-        resultCard.appendChild(resultText);
-        
-        // 添加"下一个事件"按钮
-        const nextButton = document.createElement('button');
-        nextButton.className = 'next-event-btn';
-        nextButton.textContent = '下一个事件';
-        nextButton.addEventListener('click', () => {
-            // 检查是否有连续事件
-            if (result.continue_event) {
-                const nextEvent = eventManager.getContinuationEvent(result.continue_event);
+        // 检查是否有后续事件
+        if (result.continue_event) {
+            const nextEvent = eventManager.getContinuationEvent(result.continue_event);
+            if (nextEvent) {
                 this.currentEvent = nextEvent;
                 this.displayEvent(nextEvent);
             } else {
+                console.error(`无法找到后续事件: ${result.continue_event}`);
                 this.progressToNextYear();
             }
-        });
-        resultCard.appendChild(nextButton);
+        } else {
+            this.progressToNextYear();
+        }
+    }
+    
+    /**
+     * 添加事件到历史记录区
+     * @param {String} resultText - 结果文本
+     */
+    addEventToHistory(resultText) {
+        const historyContainer = document.getElementById('eventHistory');
         
-        eventContainer.appendChild(resultCard);
+        // 创建新的历史事件元素
+        const historyEvent = document.createElement('div');
+        historyEvent.className = 'history-event';
+        
+        // 添加年龄标记
+        const ageSpan = document.createElement('span');
+        ageSpan.className = 'history-age';
+        ageSpan.textContent = `${this.player.age}岁: `;
+        
+        const eventSpan = document.createElement('span');
+        eventSpan.textContent = resultText;
+        
+        historyEvent.appendChild(ageSpan);
+        historyEvent.appendChild(eventSpan);
+        
+        // 添加到历史容器的底部（这样最新的在底部）
+        historyContainer.appendChild(historyEvent);
+        
+        // 滚动到底部以显示最新事件
+        historyContainer.scrollTop = historyContainer.scrollHeight;
     }
     
     /**
@@ -574,10 +628,15 @@ class LifeSimulatorGame {
         if (option.death_flag) {
             // 如果选项有指定的死亡原因，使用它；否则使用结果文本
             const deathReason = option.death_reason || result.result.replace(/{user}/g, this.player.name);
-            this.handleDeath(deathReason, "risk");
+            
+            // 添加结果到事件历史
+            this.addEventToHistory(result.result.replace(/{user}/g, this.player.name));
             
             // 记录历史
             this.recordHistory(this.currentEvent, optionIndex, result);
+            
+            // 处理死亡
+            this.handleDeath(deathReason, "risk");
             return;
         }
         
@@ -585,10 +644,15 @@ class LifeSimulatorGame {
         if (option.risk && Math.random() < option.risk) {
             // 如果选项有指定的死亡原因，使用它；否则使用结果文本
             const deathReason = option.death_reason || result.result.replace(/{user}/g, this.player.name);
-            this.handleDeath(deathReason, "risk");
+            
+            // 添加结果到事件历史
+            this.addEventToHistory(result.result.replace(/{user}/g, this.player.name));
             
             // 记录历史
             this.recordHistory(this.currentEvent, optionIndex, result);
+            
+            // 处理死亡
+            this.handleDeath(deathReason, "risk");
             return;
         }
         
@@ -618,17 +682,26 @@ class LifeSimulatorGame {
                     }
                 }
             });
+            
+            // 更新标签显示
+            this.updateTagsDisplay();
+            
+            // 获得新标签时，滚动到顶部
+            const tagsScrollContainer = document.querySelector('.tags-scroll-container');
+            if (tagsScrollContainer) {
+                tagsScrollContainer.scrollTop = 0;
+            }
         }
         
         if (result.remove_tags && result.remove_tags.length > 0) {
             this.player.tags = this.player.tags.filter(tag => !result.remove_tags.includes(tag));
+            
+            // 更新标签显示
+            this.updateTagsDisplay();
         }
         
         // 记录历史
         this.recordHistory(this.currentEvent, optionIndex, result);
-        
-        // 更新标签显示
-        this.updateTagsDisplay();
         
         // 显示结果
         this.displayResult(result);

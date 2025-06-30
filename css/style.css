@@ -597,20 +597,26 @@ body {
 
 .tags-container {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column; /* 改为纵向排列 */
     gap: 8px;
     margin-top: 10px;
+    align-items: flex-start; /* 让标签左对齐 */
 }
 
 .tag {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(25, 50, 150, 0.9); /* 改为深蓝色背景 */
     padding: 5px 12px;
     border-radius: 20px;
     font-size: 0.9em;
     backdrop-filter: blur(10px);
     animation: tagAppear 0.3s ease-out;
-    display: inline-block; /* Ensures proper layout with other tags */
-    margin: 2px; /* Add small margin for better spacing */
+    color: white; /* 统一字体颜色为白色 */
+    display: block; /* 使每个标签占一行 */
+    margin-bottom: 5px;
+    text-align: left; /* 文本左对齐 */
+    width: fit-content; /* 使宽度适应内容 */
+    min-width: 60px; /* 设置最小宽度 */
+    max-width: 100%; /* 确保不会超出容器 */
 }
 
 #replayModalTags .tag { /* Styles for tags specifically in the replay modal */
@@ -1267,7 +1273,7 @@ body {
     color: white;
     font-weight: bold;
     animation: redPulse 2s ease-in-out infinite;
-    border: 2px solid #ff0000;
+    border: none; /* 移除边框 */
 }
 
 @keyframes redPulse {
@@ -1287,7 +1293,7 @@ body {
     color: white;
     font-weight: bold;
     animation: pinkPulse 2s ease-in-out infinite;
-    border: 2px solid #ff4d94;
+    border: none; /* 移除边框 */
 }
 
 @keyframes pinkPulse {
@@ -1307,7 +1313,7 @@ body {
     color: white;
     font-weight: bold;
     animation: purplePulse 2s ease-in-out infinite;
-    border: 2px solid #800080;
+    border: none; /* 移除边框 */
 }
 
 @keyframes purplePulse {
@@ -1327,7 +1333,7 @@ body {
     color: white;
     font-weight: bold;
     animation: blackPulse 2s ease-in-out infinite;
-    border: 2px solid #000000;
+    border: none; /* 移除边框 */
 }
 
 @keyframes blackPulse {
@@ -2548,4 +2554,164 @@ body {
         padding-top: max(20px, env(safe-area-inset-top));
         padding-bottom: max(20px, env(safe-area-inset-bottom));
     }
-} 
+}
+
+/* 新的事件界面样式 */
+.event-interface {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* 上半部分：事件历史和角色信息 */
+.event-history-section {
+    display: flex;
+    height: 50%;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+/* 事件历史记录区域 */
+.event-history {
+    flex: 7;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    padding: 15px;
+    overflow-y: auto;
+    margin-right: 15px;
+    display: flex;
+    flex-direction: column; /* 改为从上到下排列，最新的在底部 */
+}
+
+/* 事件结果样式 */
+.history-event {
+    background: rgba(102, 126, 234, 0.05);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 10px;
+    animation: fadeIn 0.3s ease-out;
+    border-left: 3px solid #667eea;
+}
+
+/* 历史事件年龄样式 */
+.history-age {
+    font-weight: bold;
+    color: #667eea;
+    margin-right: 5px;
+}
+
+/* 角色信息区域 */
+.character-info {
+    flex: 3;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* 角色信息头部 */
+.character-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* 标签容器滚动区域 */
+.tags-scroll-container {
+    padding: 15px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* 标签容器样式覆盖 */
+.tags-scroll-container .tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-height: none;
+}
+
+/* 下半部分：当前事件 */
+.current-event-section {
+    height: 50%;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    padding: 20px;
+    overflow-y: auto;
+}
+
+/* 标签排序样式 - 按颜色排序：黑色、紫色、红色、粉色、普通色 */
+.tags-container .tag.black { order: 1; }
+.tags-container .tag.purple { order: 2; }
+.tags-container .tag.red { order: 3; }
+.tags-container .tag.pink { order: 4; }
+.tags-container .tag:not(.black):not(.purple):not(.red):not(.pink) { order: 5; }
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .event-history-section {
+        flex-direction: column;
+        height: 60%;
+    }
+    
+    .event-history {
+        flex: 1;
+        margin-right: 0;
+        margin-bottom: 15px;
+        max-height: 60%;
+    }
+    
+    .character-info {
+        flex: 1;
+        max-height: 40%;
+    }
+    
+    .current-event-section {
+        height: 40%;
+    }
+}
+
+/* 确保标签在新样式下保持美观 */
+.event-interface .tag {
+    background: rgba(25, 50, 150, 0.9); /* 使用与普通标签相同的深蓝色背景 */
+    color: white;
+}
+
+/* 确保特定颜色的标签不被覆盖 */
+.event-interface .tag.red {
+    background: linear-gradient(135deg, #ff4444, #cc0000);
+    color: white;
+    width: fit-content; /* 使宽度适应内容 */
+}
+
+.event-interface .tag.pink {
+    background: linear-gradient(135deg, #ff6b9e, #ff0066);
+    color: white;
+    width: fit-content; /* 使宽度适应内容 */
+}
+
+.event-interface .tag.purple {
+    background: linear-gradient(135deg, #9c27b0, #673ab7);
+    color: white;
+    width: fit-content; /* 使宽度适应内容 */
+}
+
+.event-interface .tag.black {
+    background: linear-gradient(135deg, #333333, #000000);
+    color: white;
+    width: fit-content; /* 使宽度适应内容 */
+}
+
+.event-interface .tag.golden {
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    color: #333;
+    width: fit-content; /* 使宽度适应内容 */
+}
