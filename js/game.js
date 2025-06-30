@@ -1353,122 +1353,135 @@ function renderSavedLives() {
         viewButton.className = 'btn';
         viewButton.textContent = '查看详情';
         
-        // 添加点击事件监听器
+        // 改进按钮点击处理，添加事件阻止和调试信息
         viewButton.addEventListener('click', function(e) {
-            e.preventDefault(); // 阻止默认行为
-            e.stopPropagation(); // 阻止事件冒泡
-            showLifeDetails(life);
-        });
-        
-        // 添加触摸事件监听器，解决移动端问题
-        viewButton.addEventListener('touchstart', function(e) {
-            e.preventDefault(); // 阻止默认行为
-            e.stopPropagation(); // 阻止事件冒泡
-            showLifeDetails(life);
-        }, { passive: false });
-        
-        // 整个卡片也可点击
-        card.addEventListener('click', function(e) {
+            // 阻止默认行为和冒泡
             e.preventDefault();
+            e.stopPropagation();
+            
+            console.log('查看详情按钮被点击');
+            
+            // 显式调用showLifeDetails函数
             showLifeDetails(life);
+            
+            // 确保点击后页面正确显示
+            setTimeout(function() {
+                console.log('检查页面显示状态:', 
+                    document.getElementById('replayScreen').style.display,
+                    document.getElementById('lifeDetailsScreen').style.display);
+            }, 100);
+            
+            return false;
         });
-        
-        // 整个卡片添加触摸事件
-        card.addEventListener('touchstart', function(e) {
-            e.preventDefault();
-            showLifeDetails(life);
-        }, { passive: false });
         
         card.appendChild(header);
         card.appendChild(date);
         card.appendChild(viewButton);
+        
+        // 让整个卡片也可点击，提高移动端体验
+        card.addEventListener('click', function(e) {
+            // 如果点击的是按钮或其子元素，不重复触发
+            if(e.target === viewButton || viewButton.contains(e.target)) return;
+            
+            console.log('卡片被点击');
+            showLifeDetails(life);
+        });
+        
         container.appendChild(card);
     });
 }
 
 function showLifeDetails(life) {
-    // 显示人生详情页面
-    document.getElementById('replayScreen').style.display = 'none';
-    document.getElementById('lifeDetailsScreen').style.display = 'block';
+    console.log('showLifeDetails函数被调用', life.name);
     
-    // 填充数据
-    document.getElementById('lifeDetailsName').textContent = life.name;
-    document.getElementById('lifeDetailsGender').textContent = life.gender === 'male' ? '男' : '女';
-    document.getElementById('lifeDetailsAge').textContent = `${life.age}岁`;
-    document.getElementById('lifeDetailsBackground').textContent = life.background || '普通人家';
-    document.getElementById('lifeDetailsDeathReason').textContent = life.deathReason;
-    
-    // 显示标签
-    const tagsContainer = document.getElementById('lifeDetailsTags');
-    tagsContainer.innerHTML = '';
-    
-    if (life.tags && life.tags.length > 0) {
-        life.tags.forEach(tag => {
-            const tagEl = document.createElement('div');
-            tagEl.className = 'tag';
-            
-            // 尝试使用window.game对象来判断标签类型
-            if (window.game) {
-                if (window.game.isBlackTag(tag)) {
-                    tagEl.classList.add('black');
-                } else if (window.game.isRedTag(tag)) {
-                    tagEl.classList.add('red');
-                } else if (window.game.isPurpleTag(tag)) {
-                    tagEl.classList.add('purple');
-                } else if (window.game.isPinkTag(tag)) {
-                    tagEl.classList.add('pink');
-                } else if (window.game.isGoldenTag(tag)) {
-                    tagEl.classList.add('golden');
+    try {
+        // 显示人生详情页面
+        document.getElementById('replayScreen').style.display = 'none';
+        document.getElementById('lifeDetailsScreen').style.display = 'block';
+        
+        // 填充数据
+        document.getElementById('lifeDetailsName').textContent = life.name;
+        document.getElementById('lifeDetailsGender').textContent = life.gender === 'male' ? '男' : '女';
+        document.getElementById('lifeDetailsAge').textContent = `${life.age}岁`;
+        document.getElementById('lifeDetailsBackground').textContent = life.background || '普通人家';
+        document.getElementById('lifeDetailsDeathReason').textContent = life.deathReason;
+        
+        // 显示标签
+        const tagsContainer = document.getElementById('lifeDetailsTags');
+        tagsContainer.innerHTML = '';
+        
+        if (life.tags && life.tags.length > 0) {
+            life.tags.forEach(tag => {
+                const tagEl = document.createElement('div');
+                tagEl.className = 'tag';
+                
+                // 尝试使用window.game对象来判断标签类型
+                if (window.game) {
+                    if (window.game.isBlackTag(tag)) {
+                        tagEl.classList.add('black');
+                    } else if (window.game.isRedTag(tag)) {
+                        tagEl.classList.add('red');
+                    } else if (window.game.isPurpleTag(tag)) {
+                        tagEl.classList.add('purple');
+                    } else if (window.game.isPinkTag(tag)) {
+                        tagEl.classList.add('pink');
+                    } else if (window.game.isGoldenTag(tag)) {
+                        tagEl.classList.add('golden');
+                    }
                 }
-            }
-            
-            tagEl.textContent = tag;
-            tagsContainer.appendChild(tagEl);
-        });
-    } else {
-        tagsContainer.innerHTML = '<span class="no-tags">无标签</span>';
-    }
-    
-    // 显示历史记录
-    const historyList = document.getElementById('lifeDetailsHistoryList');
-    historyList.innerHTML = '';
-    
-    if (life.history && life.history.length > 0) {
-        life.history.forEach(entry => {
-            const item = document.createElement('div');
-            item.className = 'history-item';
-            
-            // 创建事件头部
-            const eventHeader = document.createElement('div');
-            eventHeader.className = 'history-event-header';
-            
-            // 添加事件标题
-            const titleSpan = document.createElement('div');
-            titleSpan.className = 'history-event-title';
-            titleSpan.textContent = entry.eventTitle;
-            
-            // 添加年龄标记
-            const ageSpan = document.createElement('div');
-            ageSpan.className = 'history-age';
-            ageSpan.textContent = `${entry.age}岁`;
-            
-            // 添加标题和年龄到头部
-            eventHeader.appendChild(titleSpan);
-            eventHeader.appendChild(ageSpan);
-            
-            // 添加事件结果内容
-            const resultContent = document.createElement('div');
-            resultContent.className = 'history-event-content';
-            resultContent.textContent = entry.result;
-            
-            // 组装历史事件
-            item.appendChild(eventHeader);
-            item.appendChild(resultContent);
-            
-            historyList.appendChild(item);
-        });
-    } else {
-        historyList.innerHTML = '<p class="no-history">没有历史记录</p>';
+                
+                tagEl.textContent = tag;
+                tagsContainer.appendChild(tagEl);
+            });
+        } else {
+            tagsContainer.innerHTML = '<span class="no-tags">无标签</span>';
+        }
+        
+        // 显示历史记录
+        const historyList = document.getElementById('lifeDetailsHistoryList');
+        historyList.innerHTML = '';
+        
+        if (life.history && life.history.length > 0) {
+            life.history.forEach(entry => {
+                const item = document.createElement('div');
+                item.className = 'history-item';
+                
+                // 创建事件头部
+                const eventHeader = document.createElement('div');
+                eventHeader.className = 'history-event-header';
+                
+                // 添加事件标题
+                const titleSpan = document.createElement('div');
+                titleSpan.className = 'history-event-title';
+                titleSpan.textContent = entry.eventTitle;
+                
+                // 添加年龄标记
+                const ageSpan = document.createElement('div');
+                ageSpan.className = 'history-age';
+                ageSpan.textContent = `${entry.age}岁`;
+                
+                // 添加标题和年龄到头部
+                eventHeader.appendChild(titleSpan);
+                eventHeader.appendChild(ageSpan);
+                
+                // 添加事件结果内容
+                const resultContent = document.createElement('div');
+                resultContent.className = 'history-event-content';
+                resultContent.textContent = entry.result;
+                
+                // 组装历史事件
+                item.appendChild(eventHeader);
+                item.appendChild(resultContent);
+                
+                historyList.appendChild(item);
+            });
+        } else {
+            historyList.innerHTML = '<p class="no-history">没有历史记录</p>';
+        }
+        
+        console.log('人生详情页面已显示');
+    } catch (error) {
+        console.error('显示人生详情时发生错误:', error);
     }
 }
 

@@ -3653,55 +3653,64 @@ body {
     }
 }
 
-/* 增强移动端交互 */
+/* 提高移动端卡片和按钮的可点击性 */
 .saved-life-card {
-    cursor: pointer;
-    transition: all 0.3s ease;
     position: relative;
-    -webkit-tap-highlight-color: transparent; /* 移除iOS点击高亮 */
-}
-
-.saved-life-card:hover,
-.saved-life-card:active {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+    cursor: pointer;
+    -webkit-tap-highlight-color: rgba(102, 126, 234, 0.2); 
+    touch-action: manipulation; /* 优化触摸操作 */
 }
 
 .saved-life-card .btn {
     position: relative;
-    z-index: 2;
-    width: 100%;
+    z-index: 2; /* 确保按钮在上层 */
+    min-height: 44px; /* 增加触摸区域 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-tap-highlight-color: rgba(102, 126, 234, 0.4);
     margin-top: 15px;
-    -webkit-tap-highlight-color: transparent; /* 移除iOS点击高亮 */
+    width: 100%;
 }
 
-/* 移动端触摸反馈 */
+/* 卡片点击状态效果 */
+.saved-life-card:active {
+    background: rgba(102, 126, 234, 0.1);
+    transform: translateY(-3px) scale(0.99);
+}
+
+/* 增强移动端人生详情页面的滚动 */
+.life-details-screen {
+    -webkit-overflow-scrolling: touch; /* 平滑滚动 */
+    overscroll-behavior: contain; /* 防止滚动影响父元素 */
+}
+
 @media (max-width: 768px) {
     .saved-life-card {
-        padding: 15px;
+        padding: 20px;
         margin-bottom: 15px;
-    }
-    
-    .saved-life-card:active {
-        background-color: rgba(102, 126, 234, 0.05);
     }
     
     .saved-life-card .btn {
         padding: 12px 0;
-        font-size: 1em;
-        min-height: 44px; /* 确保足够大的触摸区域 */
+        font-size: 1.1em;
     }
     
-    .saved-life-card .btn:active {
-        background: #5a6fd9;
+    /* 增加返回按钮的可点击区域 */
+    .life-details-screen .back-btn {
+        width: 60px;
+        height: 60px;
+        font-size: 1.8em;
     }
     
-    /* 增强返回按钮的可点击区域 */
-    .back-btn {
-        width: 50px;
-        height: 50px;
-        min-width: 50px;
-        min-height: 50px;
-        -webkit-tap-highlight-color: transparent;
+    /* 减少卡片之间的间距，增大可点击区域 */
+    .saved-lives-list {
+        gap: 15px;
+    }
+    
+    /* 确保历史记录容器可以正常滚动 */
+    #lifeDetailsHistoryContainer,
+    .tags-box {
+        -webkit-overflow-scrolling: touch;
     }
 }

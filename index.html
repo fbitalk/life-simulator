@@ -93,7 +93,7 @@
 
         <!-- 人生详情页面 -->
         <div class="life-details-screen" id="lifeDetailsScreen">
-            <button class="back-btn" onclick="backToReplayScreen()">←</button>
+            <button class="back-btn" onclick="backToReplayScreen(); event.preventDefault(); return false;">←</button>
             <h2 id="lifeDetailsTitle" style="color: #667eea; margin-bottom: 20px; text-align: center;">人生回顾</h2>
             <div id="lifeDetailsSummary" style="margin-bottom: 20px; line-height: 1.6;">
                 <p><strong>姓名:</strong> <span id="lifeDetailsName"></span></p>
@@ -112,6 +112,11 @@
             <div id="lifeDetailsHistoryContainer" class="history-container">
                 <h3 style="margin-bottom: 10px; color: #667eea; text-align: center;">人生事件</h3>
                 <div id="lifeDetailsHistoryList"></div>
+            </div>
+            
+            <!-- 添加一个底部的返回按钮，便于移动端用户操作 -->
+            <div style="text-align: center; margin-top: 30px; margin-bottom: 20px;">
+                <button class="btn" onclick="backToReplayScreen(); return false;">返回列表</button>
             </div>
         </div>
 
@@ -244,8 +249,15 @@
         }
         
         function backToReplayScreen() {
+            console.log('返回到再现人生页面');
             document.getElementById('replayScreen').style.display = 'block';
             document.getElementById('lifeDetailsScreen').style.display = 'none';
+            
+            // 确保再现人生页面显示正确
+            setTimeout(function() {
+                console.log('页面显示状态: 再现人生=', document.getElementById('replayScreen').style.display, 
+                            '人生详情=', document.getElementById('lifeDetailsScreen').style.display);
+            }, 100);
         }
         
         // 清除永久标签
@@ -271,20 +283,6 @@
             document.getElementById('lifeDetailsScreen').style.display = 'none';
             // 只显示主菜单
             document.getElementById('mainMenu').style.display = 'block';
-            
-            // 为所有返回按钮添加触摸事件监听
-            const backButtons = document.querySelectorAll('.back-btn');
-            backButtons.forEach(button => {
-                // 添加触摸事件监听
-                button.addEventListener('touchstart', function(e) {
-                    e.preventDefault();
-                    // 调用按钮原有的onclick函数
-                    const onclickAttr = this.getAttribute('onclick');
-                    if (onclickAttr) {
-                        eval(onclickAttr);
-                    }
-                }, { passive: false });
-            });
         });
     </script>
 </body>
