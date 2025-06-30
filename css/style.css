@@ -722,7 +722,7 @@ body {
 .event-card {
     background: white;
     border-radius: 20px;
-    padding: 25px;
+    padding: 0; /* 移除内边距，由子元素控制 */
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     margin-top: 20px;
     animation: slideUp 0.5s ease-out;
@@ -731,6 +731,9 @@ body {
     border-image-slice: 1;
     position: relative;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 20px); /* 减去margin-top的高度 */
 }
 
 .event-card::before {
@@ -750,13 +753,20 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
+.event-title-container {
+    padding: 15px 20px 10px 20px; /* 从25px 25px 15px 25px减小 */
+    border-bottom: 1px solid #edf2f7;
+    z-index: 2;
+    background: white;
+}
+
 .event-title {
     color: #4a5568;
-    font-size: 1.8em;
-    margin-bottom: 15px;
+    font-size: 1.5em; /* 从1.8em减小到1.5em */
     position: relative;
     display: inline-block;
     z-index: 1;
+    margin: 0;
 }
 
 .event-title::after {
@@ -770,14 +780,22 @@ body {
     border-radius: 3px;
 }
 
+.event-content-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 20px; /* 从0 25px减小到0 20px */
+    display: flex;
+    flex-direction: column;
+}
+
 .event-description {
     color: #718096;
-    line-height: 1.7;
-    margin-bottom: 20px;
-    font-size: 1.1em;
+    line-height: 1.6; /* 从1.7减小到1.6 */
+    margin: 12px 0 15px 0; /* 从15px 0 20px 0减小 */
+    font-size: 1em; /* 从1.1em减小到1em */
     position: relative;
     z-index: 1;
-    padding: 10px 0;
+    padding: 8px 0; /* 从10px 0减小到8px 0 */
     border-bottom: 1px solid #edf2f7;
 }
 
@@ -785,22 +803,23 @@ body {
 .event-options {
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    margin-top: 25px;
+    gap: 12px; /* 从15px减小到12px */
+    margin: 15px 0; /* 从25px 0减小到15px 0 */
+    padding-bottom: 10px; /* 从15px减小到10px */
 }
 
 /* 选项按钮 */
 .option-btn {
     background: linear-gradient(to right, #f8f9fa, #f1f3f9);
     border: 2px solid #e0e6ed;
-    padding: 18px 25px;
+    padding: 14px 20px; /* 从18px 25px减小到14px 20px */
     border-radius: 15px;
     text-align: left;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     position: relative;
     overflow: hidden;
-    font-size: 1.05em;
+    font-size: 1em; /* 从1.05em减小到1em */
     color: #4a5568;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     display: flex;
@@ -988,6 +1007,61 @@ body {
     border-radius: 15px;
     padding: 20px;
     margin: 20px 0;
+}
+
+/* 确保游戏结束界面的标签盒子样式与再现人生界面一致 */
+#finalTags.tags-box {
+    background: #f5f7ff;
+    border-radius: 10px;
+    padding: 15px;
+    border: 1px solid #e6e9f5;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+/* 确保游戏结束界面中的标签样式一致 */
+#finalTags .tag {
+    display: inline-block;
+    margin: 5px;
+    background: rgba(102, 126, 234, 0.15);
+    color: #333;
+    backdrop-filter: none;
+    animation: none;
+}
+
+#finalTags .tag.black, 
+#finalTags .tag.red,
+#finalTags .tag.purple,
+#finalTags .tag.pink,
+#finalTags .tag.golden {
+    color: white;
+    font-weight: bold;
+    animation: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+#finalTags .tag.black {
+    background: linear-gradient(135deg, #333333, #000000, #333333);
+}
+
+#finalTags .tag.red {
+    background: linear-gradient(135deg, #ff4444, #cc0000, #ff4444);
+}
+
+#finalTags .tag.purple {
+    background: linear-gradient(135deg, #9c27b0, #673ab7, #9c27b0);
+}
+
+#finalTags .tag.pink {
+    background: linear-gradient(135deg, #ff6b9e, #ff0066, #ff6b9e);
+}
+
+#finalTags .tag.golden {
+    background: linear-gradient(135deg, #ffd700, #ffed4e, #ffd700);
+    color: #333;
 }
 
 .history-container {
@@ -2671,9 +2745,9 @@ body {
 /* 上半部分：事件历史和角色信息 */
 .event-history-section {
     display: flex;
-    height: 50%;
+    height: 45%; /* 从50%减小到45% */
     width: 100%;
-    margin-bottom: 15px;
+    margin-bottom: 12px; /* 从15px减小到12px */
 }
 
 /* 事件历史记录区域 */
@@ -2699,11 +2773,38 @@ body {
     border-left: 3px solid #667eea;
 }
 
+/* 历史事件头部 */
+.history-event-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed rgba(102, 126, 234, 0.2);
+}
+
+/* 历史事件标题 */
+.history-event-title {
+    font-weight: bold;
+    color: #4a5568;
+    font-size: 1em;
+}
+
 /* 历史事件年龄样式 */
 .history-age {
     font-weight: bold;
     color: #667eea;
-    margin-right: 5px;
+    background: rgba(102, 126, 234, 0.1);
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.85em;
+}
+
+/* 历史事件内容 */
+.history-event-content {
+    color: #718096;
+    font-size: 0.95em;
+    line-height: 1.5;
 }
 
 /* 角色信息区域 */
@@ -2744,11 +2845,11 @@ body {
 
 /* 下半部分：当前事件 */
 .current-event-section {
-    height: 50%;
+    height: 55%; /* 从50%增加到55% */
     background: white;
     border-radius: 15px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-    padding: 20px;
+    padding: 15px; /* 从20px减小到15px */
     overflow-y: auto;
 }
 
@@ -2763,23 +2864,73 @@ body {
 @media (max-width: 768px) {
     .event-history-section {
         /* 移除flex-direction: column，保持水平布局与PC端一致 */
-        height: 60%;
+        height: 50%; /* 从60%减小到50% */
     }
     
     .event-history {
-        flex: 7; /* 与PC端相同的比例 */
+        flex: 8; /* 增大比例，让事件结果框更宽 */
         margin-right: 15px; /* 与PC端相同的右边距 */
         margin-bottom: 0; /* 移除底部边距 */
         max-height: none; /* 移除最大高度限制 */
+        padding: 12px; /* 减小内边距 */
     }
     
     .character-info {
-        flex: 3; /* 与PC端相同的比例 */
+        flex: 2; /* 减小比例，让标签框更窄 */
         max-height: none; /* 移除最大高度限制 */
     }
     
+    .character-header {
+        padding: 10px; /* 减小角色信息头部的内边距 */
+    }
+    
+    .tags-scroll-container {
+        padding: 10px 8px; /* 减小标签容器的内边距 */
+    }
+    
     .current-event-section {
-        height: 40%;
+        height: 50%; /* 从40%增加到50% */
+        padding: 12px; /* 减小内边距 */
+    }
+    
+    .event-title-container {
+        padding: 12px 15px 8px 15px; /* 进一步减小移动端的内边距 */
+    }
+    
+    .event-title {
+        font-size: 1.3em; /* 移动端更小的标题 */
+    }
+    
+    .event-description {
+        font-size: 0.95em;
+        margin: 10px 0 12px 0; /* 减小间距 */
+        padding: 5px 0;
+    }
+    
+    .event-options {
+        gap: 10px;
+        margin: 12px 0;
+    }
+    
+    .option-btn {
+        padding: 10px 15px; /* 移动端更小的按钮内边距 */
+        font-size: 0.95em;
+    }
+    
+    /* 历史事件样式调整 */
+    .history-event {
+        padding: 12px;
+        margin-bottom: 8px;
+    }
+    
+    .history-event-header {
+        margin-bottom: 6px;
+        padding-bottom: 6px;
+    }
+    
+    .history-event-content {
+        font-size: 0.9em;
+        line-height: 1.4;
     }
 }
 
@@ -2787,28 +2938,95 @@ body {
 @media (max-width: 480px) {
     .event-history-section {
         /* 仍然保持水平布局 */
-        height: 60%;
+        height: 45%; /* 减小高度 */
     }
     
     .event-history {
-        flex: 6; /* 稍微减小比例 */
+        flex: 7; /* 稍微减小比例但仍然较大 */
         margin-right: 10px; /* 减小右边距 */
+        padding: 10px; /* 进一步减小内边距 */
     }
     
     .character-info {
-        flex: 4; /* 稍微增加比例 */
+        flex: 3; /* 稍微增加比例但仍然较小 */
+    }
+    
+    .current-event-section {
+        height: 55%; /* 增加高度 */
+        padding: 10px; /* 进一步减小内边距 */
+    }
+    
+    .event-title-container {
+        padding: 10px 12px 6px 12px; /* 更小的内边距 */
+    }
+    
+    .event-title {
+        font-size: 1.2em; /* 更小的标题 */
+    }
+    
+    .event-description {
+        font-size: 0.9em;
+        margin: 8px 0 10px 0;
+        padding: 4px 0;
+    }
+    
+    .option-btn {
+        padding: 8px 12px;
+        font-size: 0.9em;
+    }
+    
+    .option-icon {
+        font-size: 1.2em;
+        margin-right: 6px;
     }
 }
 
 /* 针对极小屏幕做优化 */
 @media (max-width: 360px) {
+    .event-history-section {
+        height: 40%; /* 进一步减小高度 */
+    }
+    
     .event-history {
-        flex: 5;
+        flex: 6;
         margin-right: 8px;
+        padding: 8px; /* 最小内边距 */
     }
     
     .character-info {
-        flex: 5;
+        flex: 4;
+    }
+    
+    .character-header {
+        padding: 8px;
+    }
+    
+    .current-event-section {
+        height: 60%; /* 进一步增加高度 */
+        padding: 8px; /* 最小内边距 */
+    }
+    
+    .event-title-container {
+        padding: 8px 10px 5px 10px;
+    }
+    
+    .event-title {
+        font-size: 1.1em;
+    }
+    
+    .event-description {
+        font-size: 0.85em;
+        margin: 6px 0 8px 0;
+    }
+    
+    .event-options {
+        gap: 8px;
+        margin: 8px 0;
+    }
+    
+    .option-btn {
+        padding: 7px 10px;
+        font-size: 0.85em;
     }
 }
 
@@ -2992,4 +3210,26 @@ body {
 @keyframes tagAppear {
     from { transform: scale(0); opacity: 0; }
     to { transform: scale(1); opacity: 1; }
+}
+
+/* 移动端适配 - 游戏结束界面 */
+@media (max-width: 768px) {
+    /* 游戏结束界面标签框适配 */
+    #finalTags.tags-box {
+        max-height: 120px;
+        padding: 10px;
+    }
+    
+    #finalTags .tag {
+        font-size: 0.85em;
+        padding: 4px 10px;
+    }
+    
+    .final-age {
+        font-size: 3em;
+    }
+    
+    .death-reason {
+        font-size: 1em;
+    }
 }

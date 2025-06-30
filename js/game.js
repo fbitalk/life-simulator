@@ -297,11 +297,20 @@ class LifeSimulatorGame {
         const eventCard = document.createElement('div');
         eventCard.className = 'event-card';
         
+        // 标题容器（固定在顶部）
+        const titleContainer = document.createElement('div');
+        titleContainer.className = 'event-title-container';
+        
         // 事件标题
         const title = document.createElement('h2');
         title.className = 'event-title';
         title.textContent = event.title;
-        eventCard.appendChild(title);
+        titleContainer.appendChild(title);
+        eventCard.appendChild(titleContainer);
+        
+        // 创建可滚动内容区域
+        const contentScroll = document.createElement('div');
+        contentScroll.className = 'event-content-scroll';
         
         // 事件描述
         const description = document.createElement('p');
@@ -312,7 +321,7 @@ class LifeSimulatorGame {
             description.textContent = "没有描述";
             console.warn("事件缺少描述:", event);
         }
-        eventCard.appendChild(description);
+        contentScroll.appendChild(description);
         
         // 事件选项
         const options = document.createElement('div');
@@ -320,28 +329,22 @@ class LifeSimulatorGame {
         
         // 判断是否有选项、是否有连续事件
         const hasOptions = event.options && Array.isArray(event.options) && event.options.length > 0;
-        const hasContinueEvent = !!event.continue_event;
+        const hasContinueEvent = event.continue_event && typeof event.continue_event === 'string';
         
-        // 为每个选项创建按钮
+        // 选项部分的代码保持不变
         if (hasOptions) {
             event.options.forEach((option, index) => {
                 const button = document.createElement('button');
                 button.className = 'option-btn';
                 
-                // 创建选项图标
                 const icon = document.createElement('span');
                 icon.className = 'option-icon';
+                icon.textContent = option.icon || '🔘';
                 
-                // 根据选项内容选择合适的图标
-                const iconText = this.getOptionIcon(option.text);
-                icon.textContent = iconText;
-                
-                // 创建选项内容容器
                 const content = document.createElement('span');
                 content.className = 'option-content';
                 content.textContent = option.text;
                 
-                // 添加图标和内容到按钮
                 button.appendChild(icon);
                 button.appendChild(content);
                 
@@ -432,7 +435,11 @@ class LifeSimulatorGame {
             options.appendChild(button);
         }
         
-        eventCard.appendChild(options);
+        // 将选项添加到可滚动内容区域
+        contentScroll.appendChild(options);
+        
+        // 将可滚动内容添加到卡片
+        eventCard.appendChild(contentScroll);
         eventContainer.appendChild(eventCard);
     }
     
@@ -592,21 +599,38 @@ class LifeSimulatorGame {
      */
     addEventToHistory(resultText) {
         const historyContainer = document.getElementById('eventHistory');
+        const currentEvent = this.currentEvent;
         
         // 创建新的历史事件元素
         const historyEvent = document.createElement('div');
         historyEvent.className = 'history-event';
         
+        // 创建事件头部（包含标题和年龄）
+        const eventHeader = document.createElement('div');
+        eventHeader.className = 'history-event-header';
+        
+        // 添加事件标题
+        const titleSpan = document.createElement('div');
+        titleSpan.className = 'history-event-title';
+        titleSpan.textContent = currentEvent ? currentEvent.title : '事件';
+        
         // 添加年龄标记
-        const ageSpan = document.createElement('span');
+        const ageSpan = document.createElement('div');
         ageSpan.className = 'history-age';
-        ageSpan.textContent = `${this.player.age}岁: `;
+        ageSpan.textContent = `${this.player.age}岁`;
         
-        const eventSpan = document.createElement('span');
-        eventSpan.textContent = resultText;
+        // 添加标题和年龄到头部
+        eventHeader.appendChild(titleSpan);
+        eventHeader.appendChild(ageSpan);
         
-        historyEvent.appendChild(ageSpan);
-        historyEvent.appendChild(eventSpan);
+        // 添加事件结果文本
+        const resultContent = document.createElement('div');
+        resultContent.className = 'history-event-content';
+        resultContent.textContent = resultText;
+        
+        // 组装历史事件
+        historyEvent.appendChild(eventHeader);
+        historyEvent.appendChild(resultContent);
         
         // 添加到历史容器的底部（这样最新的在底部）
         historyContainer.appendChild(historyEvent);
@@ -1018,23 +1042,60 @@ class LifeSimulatorGame {
         const finalTagsContainer = document.getElementById('finalTags');
         finalTagsContainer.innerHTML = '';
         
-        this.player.tags.forEach(tag => {
+        // 创建标签对象数组，按照颜色排序（黑、紫、红、粉、金、普通）
+        const tagObjects = this.player.tags.map((tag, index) => {
+            let type = 'normal';
+            if (this.isBlackTag(tag)) {
+                type = 'black';
+            } else if (this.isPurpleTag(tag)) {
+                type = 'purple';
+            } else if (this.isRedTag(tag)) {
+                type = 'red';
+            } else if (this.isPinkTag(tag)) {
+                type = 'pink';
+            } else if (this.isGoldenTag(tag)) {
+                type = 'golden';
+            }
+            
+            return {
+                text: tag,
+                type: type,
+                // 使用随机数来作为同种颜色内的排序依据
+                random: Math.random()
+            };
+        });
+        
+        // 按照颜色排序
+        tagObjects.sort((a, b) => {
+            // 首先按颜色类型排序
+            const typeOrder = {
+                'black': 1,
+                'purple': 2,
+                'red': 3,
+                'pink': 4,
+                'golden': 5,
+                'normal': 6
+            };
+            
+            // 不同颜色按照顺序排
+            if (typeOrder[a.type] !== typeOrder[b.type]) {
+                return typeOrder[a.type] - typeOrder[b.type];
+            }
+            
+            // 同种颜色随机排序
+            return a.random - b.random;
+        });
+        
+        // 添加标签到容器
+        tagObjects.forEach(tagObj => {
             const tagEl = document.createElement('div');
             tagEl.className = 'tag';
             
-            if (this.isBlackTag(tag)) {
-                tagEl.classList.add('black');
-            } else if (this.isRedTag(tag)) {
-                tagEl.classList.add('red');
-            } else if (this.isPurpleTag(tag)) {
-                tagEl.classList.add('purple');
-            } else if (this.isPinkTag(tag)) {
-                tagEl.classList.add('pink');
-            } else if (this.isGoldenTag(tag)) {
-                tagEl.classList.add('golden');
+            if (tagObj.type !== 'normal') {
+                tagEl.classList.add(tagObj.type);
             }
             
-            tagEl.textContent = tag;
+            tagEl.textContent = tagObj.text;
             finalTagsContainer.appendChild(tagEl);
         });
         
@@ -1057,15 +1118,33 @@ class LifeSimulatorGame {
             const historyItem = document.createElement('div');
             historyItem.className = 'history-item';
             
-            const ageSpan = document.createElement('span');
+            // 创建事件头部
+            const eventHeader = document.createElement('div');
+            eventHeader.className = 'history-event-header';
+            
+            // 添加事件标题
+            const titleSpan = document.createElement('div');
+            titleSpan.className = 'history-event-title';
+            titleSpan.textContent = entry.eventTitle;
+            
+            // 添加年龄标记
+            const ageSpan = document.createElement('div');
             ageSpan.className = 'history-age';
-            ageSpan.textContent = `${entry.age}岁：`;
+            ageSpan.textContent = `${entry.age}岁`;
             
-            const eventSpan = document.createElement('span');
-            eventSpan.textContent = `${entry.eventTitle} - ${entry.result}`;
+            // 添加标题和年龄到头部
+            eventHeader.appendChild(titleSpan);
+            eventHeader.appendChild(ageSpan);
             
-            historyItem.appendChild(ageSpan);
-            historyItem.appendChild(eventSpan);
+            // 添加事件结果内容
+            const resultContent = document.createElement('div');
+            resultContent.className = 'history-event-content';
+            resultContent.textContent = entry.result;
+            
+            // 组装历史事件
+            historyItem.appendChild(eventHeader);
+            historyItem.appendChild(resultContent);
+            
             historyList.appendChild(historyItem);
         });
     }
@@ -1334,15 +1413,33 @@ function showLifeDetails(life) {
             const item = document.createElement('div');
             item.className = 'history-item';
             
-            const ageSpan = document.createElement('span');
+            // 创建事件头部
+            const eventHeader = document.createElement('div');
+            eventHeader.className = 'history-event-header';
+            
+            // 添加事件标题
+            const titleSpan = document.createElement('div');
+            titleSpan.className = 'history-event-title';
+            titleSpan.textContent = entry.eventTitle;
+            
+            // 添加年龄标记
+            const ageSpan = document.createElement('div');
             ageSpan.className = 'history-age';
-            ageSpan.textContent = `${entry.age}岁：`;
+            ageSpan.textContent = `${entry.age}岁`;
             
-            const contentSpan = document.createElement('span');
-            contentSpan.textContent = `${entry.eventTitle} - ${entry.result}`;
+            // 添加标题和年龄到头部
+            eventHeader.appendChild(titleSpan);
+            eventHeader.appendChild(ageSpan);
             
-            item.appendChild(ageSpan);
-            item.appendChild(contentSpan);
+            // 添加事件结果内容
+            const resultContent = document.createElement('div');
+            resultContent.className = 'history-event-content';
+            resultContent.textContent = entry.result;
+            
+            // 组装历史事件
+            item.appendChild(eventHeader);
+            item.appendChild(resultContent);
+            
             historyList.appendChild(item);
         });
     } else {
