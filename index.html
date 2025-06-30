@@ -91,6 +91,30 @@
             </div>
         </div>
 
+        <!-- 人生详情页面 -->
+        <div class="life-details-screen" id="lifeDetailsScreen">
+            <button class="back-btn" onclick="backToReplayScreen()">←</button>
+            <h2 id="lifeDetailsTitle" style="color: #667eea; margin-bottom: 20px; text-align: center;">人生回顾</h2>
+            <div id="lifeDetailsSummary" style="margin-bottom: 20px; line-height: 1.6;">
+                <p><strong>姓名:</strong> <span id="lifeDetailsName"></span></p>
+                <p><strong>性别:</strong> <span id="lifeDetailsGender"></span></p>
+                <p><strong>终年:</strong> <span id="lifeDetailsAge"></span></p>
+                <p><strong>背景:</strong> <span id="lifeDetailsBackground"></span></p>
+                <p><strong>死因:</strong> <span id="lifeDetailsDeathReason"></span></p>
+            </div>
+            
+            <!-- 标签显示为独立框架 -->
+            <div class="replay-tags-container">
+                <h3 style="margin-bottom: 10px; color: #667eea; text-align: center;">人生标签</h3>
+                <div class="tags-box" id="lifeDetailsTags"></div>
+            </div>
+            
+            <div id="lifeDetailsHistoryContainer" class="history-container">
+                <h3 style="margin-bottom: 10px; color: #667eea; text-align: center;">人生事件</h3>
+                <div id="lifeDetailsHistoryList"></div>
+            </div>
+        </div>
+
         <!-- 开始界面 (旧的，现在隐藏) -->
         <div class="start-screen" id="startScreen">
             <h1 class="game-title">人生模拟器</h1>
@@ -168,32 +192,6 @@
     <!-- 金色成就特效容器 -->
     <div id="goldenAchievementEffect"></div>
 
-    <!-- Replay Details Modal -->
-    <div id="replayDetailsModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="hideLifeDetailsModal()">&times;</span>
-            <h2 id="replayModalTitle" style="color: #667eea; margin-bottom: 20px; text-align: center;">人生回顾</h2>
-            <div id="replayModalSummary" style="margin-bottom: 20px; line-height: 1.6;">
-                <p><strong>姓名:</strong> <span id="replayModalName"></span></p>
-                <p><strong>性别:</strong> <span id="replayModalGender"></span></p>
-                <p><strong>终年:</strong> <span id="replayModalAge"></span></p>
-                <p><strong>背景:</strong> <span id="replayModalBackground"></span></p>
-                <p><strong>死因:</strong> <span id="replayModalDeathReason"></span></p>
-            </div>
-            
-            <!-- 修改标签显示为独立框架 -->
-            <div class="replay-tags-container">
-                <h3 style="margin-bottom: 10px; color: #667eea; text-align: center;">人生标签</h3>
-                <div class="tags-box" id="replayModalTags"></div>
-            </div>
-            
-            <div id="replayModalHistoryContainer" class="history-container">
-                <h3 style="margin-bottom: 10px; color: #667eea; text-align: center;">人生事件</h3>
-                <div id="replayModalHistoryList"></div>
-            </div>
-        </div>
-    </div>
-
     <!-- 引入脚本文件 -->
     <script src="js/modules/constants.js"></script>
     <script src="js/events/startEvents.js"></script>
@@ -221,6 +219,7 @@
         function showReplayScreen() {
             document.getElementById('mainMenu').style.display = 'none';
             document.getElementById('replayScreen').style.display = 'block';
+            document.getElementById('lifeDetailsScreen').style.display = 'none';
             if (typeof renderSavedLives === 'function') {
                 renderSavedLives();
             }
@@ -241,6 +240,12 @@
             document.getElementById('characterCreation').style.display = 'none';
             document.getElementById('replayScreen').style.display = 'none';
             document.getElementById('achievementsScreen').style.display = 'none';
+            document.getElementById('lifeDetailsScreen').style.display = 'none';
+        }
+        
+        function backToReplayScreen() {
+            document.getElementById('replayScreen').style.display = 'block';
+            document.getElementById('lifeDetailsScreen').style.display = 'none';
         }
         
         // 清除永久标签
@@ -263,18 +268,9 @@
             document.getElementById('startScreen').style.display = 'none';
             document.getElementById('gameScreen').style.display = 'none';
             document.getElementById('gameoverScreen').style.display = 'none';
+            document.getElementById('lifeDetailsScreen').style.display = 'none';
             // 只显示主菜单
             document.getElementById('mainMenu').style.display = 'block';
-        });
-
-        // 点击模态框外部关闭
-        window.addEventListener('click', (event) => {
-            const modal = document.getElementById('replayDetailsModal');
-            if (event.target === modal) {
-                if (typeof hideLifeDetailsModal === 'function') {
-                    hideLifeDetailsModal();
-                }
-            }
         });
     </script>
 </body>

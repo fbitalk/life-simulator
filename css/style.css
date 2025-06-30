@@ -648,20 +648,20 @@ body {
     align-items: flex-start; /* 让标签左对齐 */
 }
 
+/* 统一标签样式 */
 .tag {
-    background: rgba(25, 50, 150, 0.9); /* 改为深蓝色背景 */
+    background: rgba(25, 50, 150, 0.9);
     padding: 5px 12px;
     border-radius: 20px;
     font-size: 0.9em;
-    backdrop-filter: blur(10px);
+    color: white;
+    display: inline-block;
+    margin: 5px;
+    text-align: left;
+    width: fit-content;
+    min-width: 60px;
+    max-width: 100%;
     animation: tagAppear 0.3s ease-out;
-    color: white; /* 统一字体颜色为白色 */
-    display: block; /* 使每个标签占一行 */
-    margin-bottom: 5px;
-    text-align: left; /* 文本左对齐 */
-    width: fit-content; /* 使宽度适应内容 */
-    min-width: 60px; /* 设置最小宽度 */
-    max-width: 100%; /* 确保不会超出容器 */
 }
 
 #replayModalTags .tag { /* Styles for tags specifically in the replay modal */
@@ -1091,13 +1091,6 @@ body {
 
 /* 移动设备适配 - 增强版 */
 @media (max-width: 768px) {
-    .game-container {
-        width: 95%;
-        padding: 20px;
-        height: 95vh;
-        max-height: none;
-    }
-    
     .game-title {
         font-size: 1.8em;
         margin-bottom: 15px;
@@ -1155,33 +1148,6 @@ body {
         margin: 2px;
     }
     
-    /* 事件卡片调整 */
-    .event-card {
-        padding: 15px;
-    }
-    
-    .event-title {
-        font-size: 1.3em;
-        margin-bottom: 10px;
-    }
-    
-    .event-description {
-        font-size: 0.95em;
-    }
-    
-    .event-options {
-        gap: 10px;
-    }
-    
-    .option-btn {
-        padding: 12px;
-    }
-    
-    .option-icon {
-        font-size: 1.5em;
-        margin-right: 8px;
-    }
-    
     /* 弹窗调整 */
     .modal-content {
         width: 95%;
@@ -1215,11 +1181,11 @@ body {
     
     /* 游戏结束界面调整 */
     .final-age {
-        font-size: 2.5em;
+        font-size: 3em;
     }
     
     .death-reason {
-        font-size: 1.1em;
+        font-size: 1em;
     }
     
     .history-item {
@@ -1259,33 +1225,10 @@ body {
     .floating-shape {
         opacity: 0.4;
     }
-    
-    /* 横屏模式优化 */
-    @media (orientation: landscape) {
-        .game-container {
-            height: 90vh;
-        }
-        
-        .gender-selection {
-            flex-direction: row;
-        }
-        
-        .achievement-card {
-            min-height: 100px;
-        }
-        
-        .status-bar {
-            flex-direction: row;
-        }
-    }
 }
 
 /* 小屏移动设备 */
 @media (max-width: 480px) {
-    .game-container {
-        padding: 15px;
-    }
-    
     .game-title {
         font-size: 1.5em;
     }
@@ -1307,14 +1250,6 @@ body {
     .name-input {
         width: 90%;
         padding: 12px;
-    }
-    
-    .event-title {
-        font-size: 1.2em;
-    }
-    
-    .event-description {
-        font-size: 0.9em;
     }
 }
 
@@ -3201,6 +3136,10 @@ body {
 .tags-box .tag {
     margin: 5px;
     transition: all 0.3s ease;
+    background: rgba(102, 126, 234, 0.15);
+    color: #333;
+    backdrop-filter: none;
+    animation: none;
 }
 
 .tags-box .tag:hover {
@@ -3231,5 +3170,485 @@ body {
     
     .death-reason {
         font-size: 1em;
+    }
+}
+
+@media (max-width: 768px) {
+    /* 事件卡片样式优化 */
+    .event-card {
+        height: 100%; /* 确保卡片占满整个区域 */
+        margin-top: 0; /* 移除顶部边距 */
+        border-radius: 12px; /* 减小圆角 */
+    }
+    
+    .event-title-container {
+        padding: 10px 15px 8px 15px; /* 减小内边距 */
+        border-bottom: 1px solid rgba(102, 126, 234, 0.2); /* 更轻的边框 */
+    }
+    
+    .event-title {
+        font-size: 1.3em;
+    }
+    
+    .event-title::after {
+        width: 30px; /* 更短的装饰线 */
+        height: 2px; /* 更细的装饰线 */
+    }
+    
+    .event-content-scroll {
+        padding: 0 15px; /* 减小水平内边距 */
+    }
+    
+    .event-description {
+        font-size: 0.95em;
+        margin: 10px 0 12px 0;
+        padding: 5px 0;
+        border-bottom: 1px solid rgba(102, 126, 234, 0.1); /* 更轻的边框 */
+    }
+    
+    /* 选项样式优化 */
+    .event-options {
+        gap: 10px;
+        margin: 10px 0;
+        padding-bottom: 5px;
+    }
+    
+    .option-btn {
+        padding: 10px 15px;
+        font-size: 0.95em;
+        border-width: 1px; /* 更细的边框 */
+        border-radius: 12px; /* 减小圆角 */
+    }
+    
+    .option-btn::before {
+        width: 3px; /* 更细的左侧装饰条 */
+    }
+    
+    .option-icon {
+        margin-right: 10px;
+        font-size: 1.1em;
+        min-width: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    /* 小屏幕事件卡片进一步优化 */
+    .event-card {
+        border-radius: 10px;
+        border-top-width: 3px; /* 更细的顶部边框 */
+    }
+    
+    .event-title-container {
+        padding: 8px 12px 6px 12px;
+    }
+    
+    .event-title {
+        font-size: 1.2em;
+    }
+    
+    .event-content-scroll {
+        padding: 0 12px;
+    }
+    
+    .event-description {
+        font-size: 0.9em;
+        margin: 8px 0 10px 0;
+        padding: 4px 0;
+    }
+    
+    .option-btn {
+        padding: 8px 12px;
+        font-size: 0.9em;
+        border-radius: 10px;
+    }
+    
+    .option-icon {
+        font-size: 1.1em;
+        margin-right: 8px;
+        min-width: 18px;
+    }
+}
+
+/* 响应式调整 - 整合移动端样式 */
+@media (max-width: 768px) {
+    .game-container {
+        width: 98%; /* 增加宽度，几乎占满屏幕 */
+        padding: 12px; /* 减小内边距以增加可用空间 */
+        height: 98vh; /* 增加高度，几乎占满整个视口 */
+        max-height: none;
+        border-radius: 15px; /* 减小圆角 */
+    }
+    
+    /* 事件界面布局调整 */
+    .event-interface {
+        height: 100%; /* 确保占满整个容器 */
+    }
+    
+    .event-history-section {
+        height: 40%; /* 减小上半部分高度 */
+        margin-bottom: 10px; /* 减小间距 */
+    }
+    
+    .event-history {
+        flex: 7;
+        margin-right: 10px;
+        padding: 10px;
+        max-height: none;
+    }
+    
+    .character-info {
+        flex: 3;
+        max-height: none;
+    }
+    
+    .character-header {
+        padding: 10px; /* 减小角色信息头部的内边距 */
+    }
+    
+    .tags-scroll-container {
+        padding: 8px; /* 减小标签容器的内边距 */
+    }
+    
+    .current-event-section {
+        height: 60%; /* 增加下半部分高度 */
+        padding: 12px;
+        width: 100%; /* 确保宽度占满 */
+        margin-bottom: 0; /* 移除底部间距 */
+    }
+    
+    /* 事件卡片样式优化 */
+    .event-card {
+        height: 100%; /* 确保卡片占满整个区域 */
+        margin-top: 0; /* 移除顶部边距 */
+        border-radius: 12px; /* 减小圆角 */
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06); /* 更轻的阴影 */
+    }
+    
+    .event-title-container {
+        padding: 10px 15px 8px 15px; /* 减小内边距 */
+        border-bottom: 1px solid rgba(102, 126, 234, 0.2); /* 更轻的边框 */
+    }
+    
+    .event-title {
+        font-size: 1.3em;
+    }
+    
+    .event-title::after {
+        width: 30px; /* 更短的装饰线 */
+        height: 2px; /* 更细的装饰线 */
+    }
+    
+    .event-content-scroll {
+        padding: 0 15px; /* 减小水平内边距 */
+    }
+    
+    .event-description {
+        font-size: 0.95em;
+        margin: 10px 0 12px 0;
+        padding: 5px 0;
+        border-bottom: 1px solid rgba(102, 126, 234, 0.1); /* 更轻的边框 */
+    }
+    
+    /* 选项样式优化 */
+    .event-options {
+        gap: 10px;
+        margin: 10px 0;
+        padding-bottom: 5px;
+    }
+    
+    .option-btn {
+        padding: 10px 15px;
+        font-size: 0.95em;
+        border-width: 1px; /* 更细的边框 */
+        border-radius: 12px; /* 减小圆角 */
+    }
+    
+    .option-btn::before {
+        width: 3px; /* 更细的左侧装饰条 */
+    }
+    
+    .option-icon {
+        margin-right: 10px;
+        font-size: 1.1em;
+        min-width: 20px;
+    }
+    
+    /* 历史事件样式调整 */
+    .history-event {
+        padding: 12px;
+        margin-bottom: 8px;
+    }
+    
+    .history-event-header {
+        margin-bottom: 6px;
+        padding-bottom: 6px;
+    }
+    
+    .history-event-content {
+        font-size: 0.9em;
+        line-height: 1.4;
+    }
+}
+
+/* 小屏幕设备进一步优化 */
+@media (max-width: 480px) {
+    .game-container {
+        width: 99%; /* 最大化宽度 */
+        padding: 8px; /* 进一步减小内边距 */
+        border-radius: 12px; /* 更小的圆角 */
+    }
+    
+    .event-history-section {
+        height: 35%; /* 进一步减小上半部分高度 */
+    }
+    
+    .event-history {
+        padding: 8px;
+    }
+    
+    .current-event-section {
+        height: 65%; /* 进一步增加下半部分高度 */
+        padding: 8px; /* 减小内边距 */
+    }
+    
+    /* 小屏幕事件卡片进一步优化 */
+    .event-card {
+        border-radius: 10px;
+        border-top-width: 3px; /* 更细的顶部边框 */
+    }
+    
+    .event-title-container {
+        padding: 8px 12px 6px 12px;
+    }
+    
+    .event-title {
+        font-size: 1.2em;
+    }
+    
+    .event-content-scroll {
+        padding: 0 10px;
+    }
+    
+    .event-description {
+        font-size: 0.9em;
+        margin: 8px 0 10px 0;
+        padding: 4px 0;
+    }
+    
+    .option-btn {
+        padding: 8px 12px;
+        font-size: 0.9em;
+        border-radius: 10px;
+    }
+    
+    .option-icon {
+        font-size: 1.1em;
+        margin-right: 8px;
+        min-width: 18px;
+    }
+}
+
+/* 极小屏幕设备的特殊优化 */
+@media (max-width: 360px) {
+    .game-container {
+        padding: 6px;
+        border-radius: 10px;
+    }
+    
+    .event-history-section {
+        height: 30%; /* 最小化上半部分 */
+        margin-bottom: 6px;
+    }
+    
+    .event-history {
+        padding: 6px;
+    }
+    
+    .character-header {
+        padding: 6px;
+    }
+    
+    .current-event-section {
+        height: 70%; /* 最大化下半部分 */
+        padding: 6px;
+    }
+    
+    .event-title-container {
+        padding: 6px 8px 4px 8px;
+    }
+    
+    .event-title {
+        font-size: 1.1em;
+    }
+    
+    .event-description {
+        font-size: 0.85em;
+        margin: 6px 0 8px 0;
+        padding: 3px 0;
+    }
+    
+    .option-btn {
+        padding: 7px 10px;
+        font-size: 0.85em;
+        border-radius: 8px;
+    }
+    
+    .option-icon {
+        margin-right: 6px;
+        min-width: 16px;
+    }
+}
+
+/* 横屏模式优化 */
+@media (max-width: 768px) and (orientation: landscape) {
+    .game-container {
+        height: 90vh;
+    }
+    
+    .event-history-section {
+        height: 45%; /* 调整高度比例 */
+    }
+    
+    .current-event-section {
+        height: 55%;
+    }
+    
+    .status-bar {
+        flex-direction: row;
+    }
+    
+    .gender-selection {
+        flex-direction: row;
+    }
+    
+    .achievement-card {
+        min-height: 100px;
+    }
+    
+    /* 确保横屏模式下标签框和事件结果框的比例更合理 */
+    .event-history {
+        flex: 8;
+    }
+    
+    .character-info {
+        flex: 2;
+    }
+}
+
+/* 移动端事件界面进一步优化 */
+@media (max-width: 768px) {
+    /* 增加事件卡片的高度和宽度，充分利用屏幕空间 */
+    .current-event-section {
+        width: 100%;
+        margin: 0;
+        border-radius: 12px;
+    }
+    
+    .event-card {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
+    }
+    
+    /* 确保事件内容可以充分展示 */
+    .event-content-scroll {
+        flex: 1;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* 确保标题固定，内容可滚动 */
+    .event-title-container {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: white;
+    }
+    
+    /* 优化选项按钮的触摸体验 */
+    .option-btn {
+        min-height: 44px;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    /* 优化事件历史区域 */
+    .event-history {
+        border-radius: 12px;
+    }
+    
+    .character-info {
+        border-radius: 12px;
+    }
+}
+
+/* 人生详情页面样式 */
+.life-details-screen {
+    display: none;
+    animation: fadeIn 0.5s ease-out;
+    height: 100%;
+    position: relative;
+    overflow-y: auto;
+    padding: 20px 0;
+}
+
+.life-details-screen h2 {
+    font-size: 2em;
+    color: #667eea;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#lifeDetailsSummary {
+    background: rgba(102, 126, 234, 0.05);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    line-height: 1.7;
+}
+
+#lifeDetailsSummary p {
+    margin: 10px 0;
+}
+
+#lifeDetailsSummary strong {
+    color: #667eea;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.replay-tags-container {
+    margin-bottom: 25px;
+}
+
+#lifeDetailsHistoryContainer {
+    max-height: none;
+    overflow-y: visible;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .life-details-screen {
+        padding: 15px 0;
+    }
+    
+    .life-details-screen h2 {
+        font-size: 1.6em;
+        margin-bottom: 15px;
+    }
+    
+    #lifeDetailsSummary {
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .replay-tags-container {
+        margin-bottom: 20px;
+    }
+    
+    #lifeDetailsHistoryContainer {
+        padding: 15px;
     }
 }

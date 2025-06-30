@@ -1362,19 +1362,19 @@ function renderSavedLives() {
 }
 
 function showLifeDetails(life) {
-    // 显示模态框
-    const modal = document.getElementById('replayDetailsModal');
-    modal.style.display = 'block';
+    // 显示人生详情页面
+    document.getElementById('replayScreen').style.display = 'none';
+    document.getElementById('lifeDetailsScreen').style.display = 'block';
     
     // 填充数据
-    document.getElementById('replayModalName').textContent = life.name;
-    document.getElementById('replayModalGender').textContent = life.gender === 'male' ? '男' : '女';
-    document.getElementById('replayModalAge').textContent = `${life.age}岁`;
-    document.getElementById('replayModalBackground').textContent = life.background || '普通人家';
-    document.getElementById('replayModalDeathReason').textContent = life.deathReason;
+    document.getElementById('lifeDetailsName').textContent = life.name;
+    document.getElementById('lifeDetailsGender').textContent = life.gender === 'male' ? '男' : '女';
+    document.getElementById('lifeDetailsAge').textContent = `${life.age}岁`;
+    document.getElementById('lifeDetailsBackground').textContent = life.background || '普通人家';
+    document.getElementById('lifeDetailsDeathReason').textContent = life.deathReason;
     
     // 显示标签
-    const tagsContainer = document.getElementById('replayModalTags');
+    const tagsContainer = document.getElementById('lifeDetailsTags');
     tagsContainer.innerHTML = '';
     
     if (life.tags && life.tags.length > 0) {
@@ -1405,7 +1405,7 @@ function showLifeDetails(life) {
     }
     
     // 显示历史记录
-    const historyList = document.getElementById('replayModalHistoryList');
+    const historyList = document.getElementById('lifeDetailsHistoryList');
     historyList.innerHTML = '';
     
     if (life.history && life.history.length > 0) {
@@ -1448,8 +1448,8 @@ function showLifeDetails(life) {
 }
 
 function hideLifeDetailsModal() {
-    const modal = document.getElementById('replayDetailsModal');
-    modal.style.display = 'none';
+    // 这个函数不再需要，但保留它以防其他地方调用
+    backToReplayScreen();
 }
 
 function confirmResetGame() {
@@ -1458,12 +1458,4 @@ function confirmResetGame() {
         alert("游戏已重置！");
         location.reload();
     }
-}
-
-// 点击模态框外部关闭
-window.addEventListener('click', (event) => {
-    const modal = document.getElementById('replayDetailsModal');
-    if (event.target === modal) {
-        hideLifeDetailsModal();
-    }
-}); 
+} 
