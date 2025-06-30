@@ -348,15 +348,7 @@ class LifeSimulatorGame {
                 button.appendChild(icon);
                 button.appendChild(content);
                 
-                // 添加点击事件
                 button.addEventListener('click', () => this.handleOptionSelect(option, index));
-                
-                // 添加触摸事件，解决移动端问题
-                button.addEventListener('touchstart', (e) => {
-                    e.preventDefault();
-                    this.handleOptionSelect(option, index);
-                }, { passive: false });
-                
                 options.appendChild(button);
             });
         } else if (hasContinueEvent) {
@@ -375,8 +367,7 @@ class LifeSimulatorGame {
             button.appendChild(icon);
             button.appendChild(content);
             
-            // 添加点击和触摸事件
-            const handleContinue = () => {
+            button.addEventListener('click', () => {
                 // 记录历史
                 const autoResult = {
                     result: event.description ? event.description.replace(/{user}/g, this.player.name) : "",
@@ -421,14 +412,7 @@ class LifeSimulatorGame {
                     console.error(`无法找到后续事件: ${event.continue_event}`);
                     this.progressToNextYear();
                 }
-            };
-            
-            button.addEventListener('click', handleContinue);
-            button.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                handleContinue();
-            }, { passive: false });
-            
+            });
             options.appendChild(button);
         } else {
             console.warn("事件既没有选项也没有后续事件:", event);
@@ -447,14 +431,7 @@ class LifeSimulatorGame {
             button.appendChild(icon);
             button.appendChild(content);
             
-            // 添加点击和触摸事件
-            const handleDefaultContinue = () => this.progressToNextYear();
-            button.addEventListener('click', handleDefaultContinue);
-            button.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                handleDefaultContinue();
-            }, { passive: false });
-            
+            button.addEventListener('click', () => this.progressToNextYear());
             options.appendChild(button);
         }
         
@@ -464,12 +441,6 @@ class LifeSimulatorGame {
         // 将可滚动内容添加到卡片
         eventCard.appendChild(contentScroll);
         eventContainer.appendChild(eventCard);
-        
-        // 检测是否为移动设备，如果是则添加特定的移动端样式
-        if (window.innerWidth <= 768) {
-            // 移动端优化：确保选项区域贴近底部
-            options.style.marginTop = 'auto';
-        }
     }
     
     /**
