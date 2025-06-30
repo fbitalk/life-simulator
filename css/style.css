@@ -2715,3 +2715,89 @@ body {
     color: #333;
     width: fit-content; /* 使宽度适应内容 */
 }
+
+/* 移动设备上的标签样式增强 */
+@media (max-width: 768px) {
+    /* 确保移动设备上的标签更加美观 */
+    .event-interface .tag {
+        background: rgba(25, 50, 150, 0.95); /* 增加不透明度 */
+        color: white;
+        font-size: 0.9em;
+        padding: 6px 12px;
+        margin-bottom: 6px;
+        border-radius: 15px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* 添加阴影增强立体感 */
+        width: fit-content;
+        max-width: 90%; /* 防止过长的标签溢出 */
+        word-break: break-word; /* 允许长词换行 */
+    }
+    
+    /* 特殊颜色标签样式增强 */
+    .event-interface .tag.red,
+    .event-interface .tag.pink,
+    .event-interface .tag.purple,
+    .event-interface .tag.black,
+    .event-interface .tag.golden {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); /* 更强的阴影 */
+        font-weight: bold;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* 文字阴影增强可读性 */
+    }
+    
+    /* 标签容器在移动端的优化 */
+    .tags-scroll-container {
+        padding: 10px;
+        -webkit-overflow-scrolling: touch; /* 平滑滚动 */
+    }
+    
+    /* 标签动画在移动端优化 */
+    .tag {
+        animation-duration: 0.2s; /* 更快的动画速度 */
+    }
+}
+
+/* 小屏幕移动设备标签样式优化 */
+@media (max-width: 480px) {
+    .event-interface .tag {
+        font-size: 0.85em;
+        padding: 5px 10px;
+        margin-bottom: 5px;
+        border-radius: 12px;
+    }
+    
+    /* 标签容器在小屏幕设备上的优化 */
+    .tags-scroll-container {
+        padding: 8px;
+    }
+    
+    /* 确保标签在小屏幕上的可读性 */
+    .event-interface .tag.red,
+    .event-interface .tag.pink,
+    .event-interface .tag.purple,
+    .event-interface .tag.black,
+    .event-interface .tag.golden {
+        font-size: 0.85em;
+        padding: 5px 10px;
+    }
+}
+
+/* 触摸设备上的标签交互优化 */
+@media (hover: none) and (pointer: coarse) {
+    /* 增大标签点击区域，提高可访问性 */
+    .event-interface .tag {
+        min-height: 36px; /* 确保最小触摸区域高度 */
+        display: flex;
+        align-items: center;
+    }
+    
+    /* 触摸反馈效果 */
+    .event-interface .tag:active {
+        transform: scale(0.97);
+        transition: transform 0.1s;
+        opacity: 0.9;
+    }
+    
+    /* 确保标签间距适合触摸操作 */
+    .tags-container {
+        gap: 10px;
+    }
+}
