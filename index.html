@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -9,13 +10,24 @@
     <title>人生模拟器</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
     <!-- 背景动画 -->
     <div class="bg-animation">
         <div class="floating-shape" style="width: 200px; height: 200px; top: 10%; left: 10%;"></div>
-        <div class="floating-shape" style="width: 150px; height: 150px; top: 60%; right: 10%; animation-delay: -5s;"></div>
-        <div class="floating-shape" style="width: 100px; height: 100px; bottom: 10%; left: 50%; animation-delay: -10s;"></div>
-        <div class="floating-shape" style="width: 80px; height: 80px; top: 40%; right: 30%; animation-delay: -15s;"></div>
+        <div class="floating-shape" style="width: 150px; height: 150px; top: 60%; right: 10%; animation-delay: -5s;">
+        </div>
+        <div class="floating-shape" style="width: 100px; height: 100px; bottom: 10%; left: 50%; animation-delay: -10s;">
+        </div>
+        <div class="floating-shape" style="width: 80px; height: 80px; top: 40%; right: 30%; animation-delay: -15s;">
+        </div>
+    </div>
+
+    <!-- Theme Selector -->
+    <div class="theme-selector">
+        <div class="theme-toggle" id="themeToggle" title="切换主题">
+            <span id="themeIcon">🌓</span>
+        </div>
     </div>
 
     <!-- 游戏容器 -->
@@ -28,19 +40,19 @@
                 书写属于你的独特人生故事！
             </p>
             <div class="menu-buttons">
-                <button class="menu-btn" onclick="showCharacterCreation()">
+                <button class="menu-btn" id="btnNewLife">
                     <span class="icon">🎭</span>新的人生
                 </button>
-                <button class="menu-btn" onclick="showReplayScreen()">
+                <button class="menu-btn" id="btnReplay">
                     <span class="icon">📖</span>再现人生
                 </button>
-                <button class="menu-btn" onclick="showAchievements()">
+                <button class="menu-btn" id="btnAchievements">
                     <span class="icon">🏆</span>成就系统
                 </button>
-                <button class="menu-btn" onclick="clearPersistentTags()">
+                <button class="menu-btn" id="btnClearTags">
                     <span class="icon">🧼</span>清除记忆
                 </button>
-                <button class="menu-btn" onclick="confirmResetGame()">
+                <button class="menu-btn" id="btnResetGame">
                     <span class="icon">🔄</span>重置游戏
                 </button>
             </div>
@@ -48,9 +60,9 @@
 
         <!-- 角色创建界面 -->
         <div class="character-creation" id="characterCreation">
-            <button class="back-btn" onclick="backToMainMenu()">←</button>
+            <button class="back-btn" id="btnBackFromCreation">←</button>
             <h2 class="creation-title">创建新的人生</h2>
-            
+
             <div class="gender-selection">
                 <div class="gender-card" data-gender="male">
                     <div class="gender-icon">👦</div>
@@ -67,13 +79,13 @@
             </div>
 
             <div style="text-align: center;">
-                <button class="btn" onclick="startNewLife()" id="startLifeBtn" disabled>开始人生</button>
+                <button class="btn" id="startLifeBtn" disabled>开始人生</button>
             </div>
         </div>
 
         <!-- 成就界面 -->
         <div class="achievements-screen" id="achievementsScreen" style="display: none;">
-            <button class="back-btn" onclick="backToMainMenu()">←</button>
+            <button class="back-btn" id="btnBackFromAchievements">←</button>
             <h2 style="text-align: center; color: #667eea; margin-bottom: 10px;">成就系统</h2>
             <div class="achievements-container">
                 <div class="achievements-grid" id="achievementsGrid">
@@ -84,7 +96,7 @@
 
         <!-- 再现人生界面 -->
         <div class="replay-screen" id="replayScreen">
-            <button class="back-btn" onclick="backToMainMenu()">←</button>
+            <button class="back-btn" id="btnBackFromReplay">←</button>
             <h2 style="text-align: center; color: #667eea; margin-bottom: 20px;">再现人生</h2>
             <div class="saved-lives-list" id="savedLivesList">
                 <!-- 保存的人生记录将在这里显示 -->
@@ -93,7 +105,7 @@
 
         <!-- 人生详情页面 -->
         <div class="life-details-screen" id="lifeDetailsScreen">
-            <button class="back-btn" onclick="backToReplayScreen(); event.preventDefault(); return false;">←</button>
+            <button class="back-btn" id="btnBackFromDetails">←</button>
             <h2 id="lifeDetailsTitle" style="color: #667eea; margin-bottom: 20px; text-align: center;">人生回顾</h2>
             <div id="lifeDetailsSummary" style="margin-bottom: 20px; line-height: 1.6;">
                 <p><strong>姓名:</strong> <span id="lifeDetailsName"></span></p>
@@ -102,21 +114,21 @@
                 <p><strong>背景:</strong> <span id="lifeDetailsBackground"></span></p>
                 <p><strong>死因:</strong> <span id="lifeDetailsDeathReason"></span></p>
             </div>
-            
+
             <!-- 标签显示为独立框架 -->
             <div class="replay-tags-container">
                 <h3 style="margin-bottom: 10px; color: #667eea; text-align: center;">人生标签</h3>
                 <div class="tags-box" id="lifeDetailsTags"></div>
             </div>
-            
+
             <div id="lifeDetailsHistoryContainer" class="history-container">
                 <h3 style="margin-bottom: 10px; color: #667eea; text-align: center;">人生事件</h3>
                 <div id="lifeDetailsHistoryList"></div>
             </div>
-            
+
             <!-- 添加一个底部的返回按钮，便于移动端用户操作 -->
             <div style="text-align: center; margin-top: 30px; margin-bottom: 20px;">
-                <button class="btn" onclick="backToReplayScreen(); return false;">返回列表</button>
+                <button class="btn" id="btnBackFromDetailsBottom">返回列表</button>
             </div>
         </div>
 
@@ -134,7 +146,7 @@
                 <div class="feature-item">🔗 连续事件系统，选择影响深远</div>
                 <div class="feature-item">⚠️ 风险与机遇并存的人生抉择</div>
             </div>
-            <button class="btn" onclick="startGame()">开始新的人生</button>
+            <button class="btn" id="btnStartGame">开始新的人生</button>
         </div>
 
         <!-- 游戏界面 -->
@@ -146,7 +158,7 @@
                     <div class="event-history" id="eventHistory">
                         <!-- 事件结果会在这里动态显示 -->
                     </div>
-                    
+
                     <!-- 右侧显示个人信息和标签 -->
                     <div class="character-info">
                         <div class="character-header">
@@ -158,7 +170,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- 下半部分：当前事件 -->
                 <div class="current-event-section" id="eventContainer">
                     <!-- 事件卡片或结果会动态插入这里 -->
@@ -171,7 +183,7 @@
             <h2 style="color: #667eea; margin-bottom: 20px;">游戏结束</h2>
             <div class="final-age" id="finalAge">0岁</div>
             <div class="death-reason" id="deathReason"></div>
-            
+
             <div class="final-tags">
                 <h3 style="margin-bottom: 15px; color: #667eea;">人生标签</h3>
                 <div class="tags-box" id="finalTags"></div>
@@ -183,8 +195,8 @@
             </div>
 
             <div class="gameover-buttons">
-                <button class="btn" onclick="restartGame()">重新开始</button>
-                <button class="btn" onclick="saveLife()">保存人生</button>
+                <button class="btn" id="btnRestart">重新开始</button>
+                <button class="btn" id="btnSaveLife">保存人生</button>
             </div>
         </div>
 
@@ -213,66 +225,13 @@
     <script src="js/eventManager.js"></script>
     <script src="js/game.js"></script>
     <script src="js/ui-effects.js"></script>
-    
-    <script>
-        // UI navigation functions
-        function showCharacterCreation() {
-            document.getElementById('mainMenu').style.display = 'none';
-            document.getElementById('characterCreation').style.display = 'block';
-        }
-        
-        function showReplayScreen() {
-            document.getElementById('mainMenu').style.display = 'none';
-            document.getElementById('replayScreen').style.display = 'block';
-            document.getElementById('lifeDetailsScreen').style.display = 'none';
-            if (typeof renderSavedLives === 'function') {
-                renderSavedLives();
-            }
-        }
-        
-        function showAchievements() {
-            document.getElementById('mainMenu').style.display = 'none';
-            const achievementsScreen = document.getElementById('achievementsScreen');
-            achievementsScreen.style.display = 'flex';
-            if (typeof achievementManager !== 'undefined' && 
-                typeof achievementManager.renderAchievements === 'function') {
-                achievementManager.renderAchievements();
-            }
-        }
-        
-        function backToMainMenu() {
-            document.getElementById('mainMenu').style.display = 'block';
-            document.getElementById('characterCreation').style.display = 'none';
-            document.getElementById('replayScreen').style.display = 'none';
-            document.getElementById('achievementsScreen').style.display = 'none';
-            document.getElementById('lifeDetailsScreen').style.display = 'none';
-        }
-        
-        function backToReplayScreen() {
-            console.log('返回到再现人生页面');
-            document.getElementById('replayScreen').style.display = 'block';
-            document.getElementById('lifeDetailsScreen').style.display = 'none';
-            
-            // 确保再现人生页面显示正确
-            setTimeout(function() {
-                console.log('页面显示状态: 再现人生=', document.getElementById('replayScreen').style.display, 
-                            '人生详情=', document.getElementById('lifeDetailsScreen').style.display);
-            }, 100);
-        }
-        
-        // 清除永久标签
-        function clearPersistentTags() {
-            if (confirm("你确定要清除所有累积的黑色记忆吗？这将重置你的轮回优势。")) {
-                localStorage.removeItem('persistentBlackTags');
-                alert("所有黑色记忆已清除。");
-            }
-        }
 
+    <script>
         // 添加DOM加载完成后的初始化
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // 初始化游戏实例
             window.game = new LifeSimulatorGame();
-            
+
             // 初始化时隐藏所有界面
             document.getElementById('characterCreation').style.display = 'none';
             document.getElementById('achievementsScreen').style.display = 'none';
@@ -286,4 +245,5 @@
         });
     </script>
 </body>
-</html> 
+
+</html>

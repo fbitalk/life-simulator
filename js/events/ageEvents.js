@@ -504,7 +504,213 @@ const ageEvents = {
 
     // 少年期 (6-12岁)
     "少年": {
-
+        "giant_husky_encounter": {
+            "title": "巨型哈士奇遭遇",
+            "description": "{user}在路上遇到了一个几百斤重的巨型哈士奇，这哈士奇看起来好像饿极了，两只小眼睛盯着{user}一动不动。空气中弥漫着紧张的气氛。",
+            "trigger_conditions": {
+                "age_range": [8, 8],
+                "excluded_tags": ["体弱多病"] // 排除体弱者，避免选择过于危险
+            },
+            "options": [
+                {
+                    "text": "哈士奇好可爱，我要去摸摸",
+                    "conditional_results": [
+                        {
+                            "conditions": { "min_attributes": { "luck": 80 } },
+                            "result": "奇迹般地，这只巨型哈士奇竟然很温顺！它让你摸了摸，还舔了舔你的手。原来它只是想要一些关爱。",
+                            "effects": { "social": 10, "luck": 5 },
+                            "add_tags": ["动物朋友", "勇敢者"]
+                        },
+                        {
+                            "conditions": { "min_attributes": { "luck": 50 } },
+                            "result": "哈士奇被你的善意打动了，但它还是很饿。它轻轻推了推你，示意你给它找些食物。",
+                            "effects": { "social": 5, "money": -10 },
+                            "add_tags": ["善良"]
+                        },
+                        {
+                            "conditions": { "default": true },
+                            "result": "哈士奇误解了你的意图，一口咬向了你！幸好只是轻伤，但你被吓得不轻。",
+                            "effects": { "health": -20, "san": -10 }
+                        }
+                    ]
+                },
+                {
+                    "text": "为避免被袭击，躺地上装死",
+                    "conditional_results": [
+                        {
+                            "conditions": { "min_attributes": { "intelligence": 70 } },
+                            "result": "你的策略很聪明！哈士奇闻了闻你，发现你'没有威胁'后就失去了兴趣，转身离开了。",
+                            "effects": { "san": 5 },
+                            "add_tags": ["机智应对"]
+                        },
+                        {
+                            "conditions": { "default": true },
+                            "result": "你装死的技术还需要提高...哈士奇用鼻子蹭了蹭你，然后开始舔你的脸。虽然没有危险，但场面很尴尬。",
+                            "effects": { "social": -5, "san": -5 }
+                        }
+                    ]
+                },
+                {
+                    "text": "拔腿就跑",
+                    "conditional_results": [
+                        {
+                            "conditions": { "min_attributes": { "health": 70 } },
+                            "result": "你的身体素质不错！成功跑过了笨重的巨型哈士奇，安全脱险。",
+                            "effects": { "health": 5 },
+                            "add_tags": ["逃跑高手"]
+                        },
+                        {
+                            "conditions": { "default": true },
+                            "result": "你跑得气喘吁吁，但还是被哈士奇追上了。幸好它只是想和你玩耍，不过你已经筋疲力尽了。",
+                            "effects": { "health": -10, "social": 5 }
+                        }
+                    ]
+                },
+                {
+                    "text": "无视，继续前行",
+                    "result": "你表现出了令人敬佩的冷静。哈士奇看到你毫不在意，反而对你失去了兴趣，自己走开了。",
+                    "effects": { "san": 10 },
+                    "add_tags": ["淡定"]
+                },
+                {
+                    "text": "喷火！",
+                    "conditional_results": [
+                        {
+                            "conditions": { "required_tags": ["神秘体质"] },
+                            "result": "不可思议！你真的喷出了火焰！哈士奇被吓跑了，而你发现了自己隐藏的超能力。",
+                            "effects": { "mystery": 20, "san": -5 },
+                            "add_tags": ["火焰掌控者", "超能力者"]
+                        },
+                        {
+                            "conditions": { "default": true },
+                            "result": "你张大嘴巴试图喷火，但什么也没发生。哈士奇歪着头看着你做出奇怪的表情，场面十分尴尬。",
+                            "effects": { "san": -10, "social": -5 }
+                        }
+                    ]
+                },
+                {
+                    "text": "隐身逃跑",
+                    "conditional_results": [
+                        {
+                            "conditions": { "min_attributes": { "mystery": 80 } },
+                            "result": "你的身影逐渐变得透明！哈士奇困惑地四处嗅探，最终放弃寻找。你成功隐身脱险！",
+                            "effects": { "mystery": 10, "luck": 10 },
+                            "add_tags": ["隐身术师", "神秘存在"]
+                        },
+                        {
+                            "conditions": { "default": true },
+                            "result": "你闭上眼睛，心想'我隐身了'，但哈士奇依然能清楚地看到你。它甚至用爪子戳了戳你。",
+                            "effects": { "san": -5, "social": -5 }
+                        }
+                    ]
+                },
+                {
+                    "text": "使用风火轮逃跑",
+                    "conditional_results": [
+                        {
+                            "conditions": { "min_attributes": { "mystery": 60, "luck": 70 } },
+                            "result": "脚下突然出现了燃烧的轮子！你像哪吒一样踩着风火轮飞速逃离，哈士奇只能望着你的背影发呆。",
+                            "effects": { "mystery": 15, "social": 20 },
+                            "add_tags": ["风火轮使者", "传说中的存在"]
+                        },
+                        {
+                            "conditions": { "default": true },
+                            "result": "你在原地蹦跳，试图召唤风火轮，但只是踩到了一块石头差点摔倒。哈士奇看起来很困惑。",
+                            "effects": { "health": -5, "san": -5 }
+                        }
+                    ]
+                },
+                {
+                    "text": "飞行逃跑",
+                    "conditional_results": [
+                        {
+                            "conditions": { "min_attributes": { "mystery": 90 } },
+                            "result": "你的身体轻盈地飞上了天空！从空中俯视，那只巨型哈士奇变得如蚂蚁般渺小。",
+                            "effects": { "mystery": 20, "san": 5 },
+                            "add_tags": ["飞行能力者", "天空的主人"]
+                        },
+                        {
+                            "conditions": { "default": true },
+                            "result": "你拼命挥舞手臂想要飞起来，但重力无情地把你拉向地面。哈士奇觉得你的动作很有趣。",
+                            "effects": { "health": -5, "social": -10 }
+                        }
+                    ]
+                },
+                {
+                    "text": "与其对话",
+                    "conditional_results": [
+                        {
+                            "conditions": { "min_attributes": { "mystery": 50, "social": 70 } },
+                            "result": "令人惊讶的是，哈士奇竟然回应了你！它用低沉的声音说：'人类，我只是在寻找回家的路。'你们进行了一场奇妙的对话。",
+                            "effects": { "mystery": 15, "social": 15, "san": -5 },
+                            "add_tags": ["动物语言者", "奇遇体验者"]
+                        },
+                        {
+                            "conditions": { "min_attributes": { "social": 60 } },
+                            "result": "虽然哈士奇不会说话，但你温和的语调似乎安抚了它。它渐渐放松下来，甚至允许你接近。",
+                            "effects": { "social": 10 },
+                            "add_tags": ["动物沟通师"]
+                        },
+                        {
+                            "conditions": { "default": true },
+                            "result": "你试图和哈士奇交流，但它只是歪着头看着你，然后打了个大哈欠。看来对话失败了。",
+                            "effects": { "san": -5 }
+                        }
+                    ]
+                }
+            ]
+        },
+        "truth_belief_choice": {
+            "title": "真理的信奉",
+            "description": "在人生的某个重要时刻，{user}需要选择一个作为自己人生信条的真理。这个选择将深刻影响你的世界观和人生道路。",
+            "trigger_conditions": {
+                "age_range": [16, 16],
+                "min_attributes": { "intelligence": 40 }
+            },
+            "options": [
+                {
+                    "text": "站得越高，看得越远",
+                    "result": "你选择了这个充满哲理的真理。从此你更加注重提升自己的高度和视野，无论是知识层面还是社会地位。",
+                    "effects": { "intelligence": 10, "social": 10 },
+                    "add_tags": ["高瞻远瞩", "哲学思考者"]
+                },
+                {
+                    "text": "婚姻是爱情的坟墓",
+                    "result": "你对婚姻制度产生了深深的怀疑。这种观念让你在感情问题上更加谨慎，但也可能让你错过一些美好的感情。",
+                    "effects": { "intelligence": 5, "social": -10, "san": -5 },
+                    "add_tags": ["感情怀疑论者", "独身主义者"]
+                },
+                {
+                    "text": "人是会思考的芦苇",
+                    "result": "你被帕斯卡的这句名言深深打动。你认识到人类虽然渺小脆弱，但思考的能力让人类拥有了独特的尊严和价值。",
+                    "effects": { "intelligence": 15, "san": 10 },
+                    "add_tags": ["人文主义者", "深度思考者"]
+                },
+                {
+                    "text": "上海自来水来自海上",
+                    "result": "你选择了这个有趣的回文句作为人生真理。虽然别人觉得奇怪，但你从中领悟到了循环和对称的美学原理。",
+                    "effects": { "luck": 10, "social": -5, "mystery": 5 },
+                    "add_tags": ["语言艺术家", "独特品味"]
+                },
+                {
+                    "text": "Allah Akbar (真主至大)",
+                    "conditional_results": [
+                        {
+                            "conditions": { "min_attributes": { "san": 70 } },
+                            "result": "你选择了伊斯兰教的这句颂词作为信条。这给了你内心的平静和精神支撑，你开始更加虔诚地生活。",
+                            "effects": { "san": 15, "social": 5 },
+                            "add_tags": ["宗教信仰者", "虔诚之人"]
+                        },
+                        {
+                            "conditions": { "default": true },
+                            "result": "你选择了这句话，但对其深层含义理解不够深刻。不过这仍然给了你一些精神慰藉。",
+                            "effects": { "san": 10 },
+                            "add_tags": ["精神寻求者"]
+                        }
+                    ]
+                }
+            ]
+        },
         "childhood_hobby": {
             "title": "儿时爱好",
             "description": "你对某项活动产生了浓厚的兴趣。",
