@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}编辑成就 - {{ achievement.name }}{% endblock %}
+
+{% block breadcrumb %}
+<span class="breadcrumb-sep">/</span>
+<a href="{{ url_for('achievements_list') }}">成就管理</a>
+<span class="breadcrumb-sep">/</span>
+<span>{{ achievement.name }}</span>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>{{ achievement.icon }} 编辑成就</h1>
+    <p class="subtitle">{{ achievement.name }}</p>
+</div>
+
+<form class="event-form" method="post">
+    <div class="form-section">
+        <h2>基本信息</h2>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="id">成就ID *</label>
+                <input type="text" id="id" name="id" value="{{ achievement.id }}" required>
+                <p class="form-hint">唯一标识符，英文字母加下划线</p>
+            </div>
+            <div class="form-group">
+                <label for="icon">图标 (Emoji)</label>
+                <input type="text" id="icon" name="icon" value="{{ achievement.icon }}" style="font-size: 1.5rem;">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="name">成就名称 *</label>
+            <input type="text" id="name" name="name" value="{{ achievement.name }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="description">成就描述</label>
+            <textarea id="description" name="description" rows="2">{{ achievement.description }}</textarea>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="stars">星级</label>
+                <input type="number" id="stars" name="stars" value="{{ achievement.stars|default(1) }}" min="1" max="5">
+            </div>
+            <div class="form-group form-checkbox">
+                <label>
+                    <input type="checkbox" name="golden" {% if achievement.golden %}checked{% endif %}>
+                    金色成就
+                </label>
+                <p class="form-hint">金色成就会在UI中特殊显示</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-section">
+        <h2>触发条件</h2>
+
+        <div class="form-group">
+            <label for="tag">关联标签 (tag)</label>
+            <input type="text" id="tag" name="tag" value="{{ achievement.tag }}" placeholder="获得此标签时解锁成就">
+            <p class="form-hint">当玩家获得指定标签时，自动解锁此成就</p>
+        </div>
+
+        <div class="form-group">
+            <label for="condition">特殊条件 (condition)</label>
+            <input type="text" id="condition" name="condition"
+                value="{{ achievement.condition if achievement.condition else '' }}" placeholder="如: age_100">
+            <p class="form-hint">特殊解锁条件，如 age_100 表示活到100岁</p>
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary btn-large">💾 保存成就</button>
+        <a href="{{ url_for('achievements_list') }}" class="btn btn-secondary">取消</a>
+    </div>
+</form>
+
+<details class="raw-data-section">
+    <summary>📋 原始数据 (JSON)</summary>
+    <pre class="raw-json">{{ achievement|tojson(indent=2) }}</pre>
+</details>
+{% endblock %}

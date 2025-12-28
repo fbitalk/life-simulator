@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}成就管理{% endblock %}
+
+{% block breadcrumb %}
+<span class="breadcrumb-sep">/</span>
+<span>成就管理</span>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>🏆 成就管理</h1>
+    <p class="subtitle">管理游戏成就系统</p>
+</div>
+
+<div class="toolbar">
+    <form action="{{ url_for('achievement_add') }}" method="post" class="inline-form">
+        <button type="submit" class="btn btn-primary">+ 添加新成就</button>
+    </form>
+    <a href="{{ url_for('index') }}" class="btn btn-secondary">返回首页</a>
+</div>
+
+<div class="achievements-list">
+    {% if achievements %}
+    {% for ach in achievements %}
+    <div class="achievement-item {% if ach.golden %}achievement-golden{% endif %}">
+        <a href="{{ url_for('achievement_edit', achievement_id=ach.id) }}" class="achievement-link">
+            <span class="achievement-icon">{{ ach.icon }}</span>
+            <div class="achievement-content">
+                <div class="achievement-header">
+                    <span class="achievement-name">{{ ach.name }}</span>
+                    {% if ach.golden %}
+                    <span class="achievement-badge badge-golden">金色</span>
+                    {% endif %}
+                    <span class="achievement-stars">
+                        {% for _ in range(ach.stars|default(1)) %}⭐{% endfor %}
+                    </span>
+                </div>
+                <div class="achievement-desc">{{ ach.description }}</div>
+                <div class="achievement-meta">
+                    <span class="achievement-id">{{ ach.id }}</span>
+                    {% if ach.tag %}
+                    <span class="achievement-tag">标签: {{ ach.tag }}</span>
+                    {% endif %}
+                    {% if ach.condition %}
+                    <span class="achievement-condition">条件: {{ ach.condition }}</span>
+                    {% endif %}
+                </div>
+            </div>
+        </a>
+        <form action="{{ url_for('achievement_delete', achievement_id=ach.id) }}" method="post"
+            class="achievement-delete-form" onsubmit="return confirm('确定删除成就「{{ ach.name }}」？')">
+            <button type="submit" class="btn btn-danger btn-small">删除</button>
+        </form>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="empty-state">
+        <p>还没有成就</p>
+        <p class="hint">点击"添加新成就"创建第一个成就</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

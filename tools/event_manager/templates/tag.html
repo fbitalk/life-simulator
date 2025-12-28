@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block title %}{{ tag_name }} - {{ display_name }}{% endblock %}
+
+{% block breadcrumb %}
+<span class="breadcrumb-sep">/</span>
+<a href="{{ url_for('category', filename=filename) }}">{{ display_name }}</a>
+<span class="breadcrumb-sep">/</span>
+<a href="{{ url_for('tag_events', filename=filename, tag_name=tag_name) }}">{{ tag_name }}</a>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>📝 {{ tag_name }}</h1>
+    <p class="subtitle">共 {{ events|length }} 个事件</p>
+</div>
+
+<div class="tag-settings card">
+    <h3>⚙️ 标签设置</h3>
+    <form action="{{ url_for('tag_events', filename=filename, tag_name=tag_name) }}" method="post">
+        <div class="form-group">
+            <label>描述:</label>
+            <input type="text" name="description" value="{{ tag_data.description or '' }}" placeholder="标签描述"
+                class="full-width">
+        </div>
+
+        {% if filename in ['purpleEvents.js', 'pinkEvents.js'] %}
+        <div class="form-group">
+            <label>固定属性:</label>
+            <div class="fixed-attrs-grid">
+                <div class="attr-input">
+                    <span>体质:</span>
+                    <input type="number" name="fixed_health"
+                        value="{{ tag_data.get('fixed_attributes', {}).get('health', '') }}">
+                </div>
+                <div class="attr-input">
+                    <span>家境:</span>
+                    <input type="number" name="fixed_money"
+                        value="{{ tag_data.get('fixed_attributes', {}).get('money', '') }}">
+                </div>
+                <div class="attr-input">
+                    <span>快乐:</span>
+                    <input type="number" name="fixed_social"
+                        value="{{ tag_data.get('fixed_attributes', {}).get('social', '') }}">
+                </div>
+                <div class="attr-input">
+                    <span>智力:</span>
+                    <input type="number" name="fixed_intelligence"
+                        value="{{ tag_data.get('fixed_attributes', {}).get('intelligence', '') }}">
+                </div>
+                <div class="attr-input">
+                    <span>运气:</span>
+                    <input type="number" name="fixed_luck"
+                        value="{{ tag_data.get('fixed_attributes', {}).get('luck', '') }}">
+                </div>
+                <div class="attr-input">
+                    <span>心情:</span>
+                    <input type="number" name="fixed_san"
+                        value="{{ tag_data.get('fixed_attributes', {}).get('san', '') }}">
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">保存标签设置</button>
+        </div>
+    </form>
+</div>
+
+<div class="toolbar">
+    <form action="{{ url_for('add_event', filename=filename, tag_name=tag_name) }}" method="post" class="inline-form">
+        <input type="text" name="event_id" placeholder="事件ID (英文)" required pattern="[a-zA-Z0-9_]+">
+        <button type="submit" class="btn btn-primary">+ 添加事件</button>
+    </form>
+</div>
+
+<div class="event-list">
+    {% for event in events %}
+    <div class="event-item {% if event.is_continue %}event-continue{% endif %}">
+        <div class="event-order-controls">
+            {% if not loop.first %}
+            <form
+                action="{{ url_for('move_event', filename=filename, tag_name=tag_name, event_id=event.id, direction='up') }}"
+                method="post" class="move-form">
+                <button type="submit" class="btn btn-small btn-move" title="上移">↑</button>
+            </form>
+            {% else %}
+            <button class="btn btn-small btn-move" disabled>↑</button>
+            {% endif %}
+            {% if not loop.last %}
+            <form
+                action="{{ url_for('move_event', filename=filename, tag_name=tag_name, event_id=event.id, direction='down') }}"
+                method="post" class="move-form">
+                <button type="submit" class="btn btn-small btn-move" title="下移">↓</button>
+            </form>
+            {% else %}
+            <button class="btn btn-small btn-move" disabled>↓</button>
+            {% endif %}
+        </div>
+        <a href="{{ url_for('event_edit', filename=filename, tag_name=tag_name, event_id=event.id) }}"
+            class="event-link">
+            <div class="event-header">
+                <span class="event-id">{{ event.id }}</span>
+                <span class="event-badge badge-age">🎂 {{ event.age_range[0] }} - {{ event.age_range[1] }} 岁</span>
+                {% if event.priority > 0 %}
+                <span class="event-priority priority-high">优先级: {{ event.priority }}</span>
+                {% endif %}
+                {% if event.is_continue %}
+                <span class="event-badge badge-continue">连续事件</span>
+                {% endif %}
+                {% if event.allow_repeat %}
+                <span class="event-badge badge-repeat">可重复</span>
+                {% endif %}
+            </div>
+            <h3 class="event-title">{{ event.title }}</h3>
+            <p class="event-desc">{{ event.description }}</p>
+        </a>
+        <form action="{{ url_for('delete_event', filename=filename, tag_name=tag_name, event_id=event.id) }}"
+            method="post" class="event-delete-form" onsubmit="return confirm('确定要删除事件 「{{ event.title }}」 吗？');">
+            <button type="submit" class="btn btn-danger btn-small">删除</button>
+        </form>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <p>暂无事件</p>
+        <p class="hint">使用上方表单添加第一个事件</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,4164 @@
+:root {
+    /* Light Theme Colors */
+    --primary-color: #667eea;
+    --primary-rgb: 102, 126, 234;
+    --secondary-color: #764ba2;
+    --bg-gradient-start: var(--primary-color);
+    --bg-gradient-end: var(--secondary-color);
+    --text-color: #333;
+    --text-secondary: #666;
+    --bg-color: #f5f7fa;
+    --card-bg: rgba(255, 255, 255, 0.95);
+    --card-shadow: rgba(0, 0, 0, 0.3);
+    --border-color: #e0e0e0;
+    --input-bg: #fff;
+    --tag-bg: rgba(25, 50, 150, 0.9);
+    --tag-text: #fff;
+}
+
+[data-theme="dark"] {
+    /* Dark Theme Colors */
+    --primary-color: #8ba1ff;
+    --primary-rgb: 139, 161, 255;
+    --secondary-color: #a078d6;
+    --bg-gradient-start: #1a1c29;
+    --bg-gradient-end: #2d3436;
+    --text-color: var(--border-color);
+    --text-secondary: #a0a0a0;
+    --bg-color: #121212;
+    --card-bg: rgba(30, 30, 40, 0.95);
+    --card-shadow: rgba(0, 0, 0, 0.6);
+    --border-color: #444;
+    --input-bg: #2d2d2d;
+    --tag-bg: rgba(60, 80, 180, 0.9);
+    --tag-text: #fff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-color);
+    overflow: hidden;
+    transition: background 0.5s ease;
+}
+
+/* 背景动画 */
+.bg-animation {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    opacity: 0.3;
+}
+
+.floating-shape {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    animation: float 20s infinite ease-in-out;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0) translateX(0) scale(1);
+    }
+
+    33% {
+        transform: translateY(-100px) translateX(50px) scale(1.1);
+    }
+
+    66% {
+        transform: translateY(50px) translateX(-50px) scale(0.9);
+    }
+}
+
+/* 主容器 */
+.game-container {
+    background: var(--card-bg);
+    border-radius: 20px;
+    box-shadow: 0 20px 60px var(--card-shadow);
+    width: 90%;
+    max-width: 800px;
+    height: 90vh;
+    max-height: 800px;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+    animation: fadeIn 0.5s ease-out;
+    display: flex;
+    flex-direction: column;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 主菜单界面 */
+.main-menu {
+    text-align: center;
+    animation: slideIn 0.6s ease-out;
+}
+
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.menu-btn {
+    background: white;
+    border: 2px solid var(--primary-color);
+    padding: 20px 30px;
+    border-radius: 15px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.menu-btn:hover {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+}
+
+.menu-btn .icon {
+    font-size: 1.5em;
+    margin-right: 10px;
+}
+
+/* 角色创建界面 */
+.character-creation {
+    display: none;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.creation-title {
+    text-align: center;
+    font-size: 2em;
+    color: var(--primary-color);
+    margin-bottom: 30px;
+}
+
+.gender-selection {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.gender-card {
+    background: white;
+    border: 3px solid var(--border-color);
+    border-radius: 15px;
+    padding: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    width: 150px;
+}
+
+.gender-card:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+}
+
+.gender-card.selected {
+    border-color: var(--primary-color);
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.gender-icon {
+    font-size: 3em;
+    margin-bottom: 10px;
+}
+
+.name-input-container {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.name-input {
+    padding: 15px 25px;
+    font-size: 1.1em;
+    border: 2px solid var(--border-color);
+    border-radius: 50px;
+    width: 300px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.name-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+/* 成就界面 */
+.achievements-screen {
+    display: none;
+    animation: fadeIn 0.5s ease-out;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.achievements-container {
+    position: absolute;
+    top: 80px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto;
+    padding: 0 10px 30px 10px;
+    -webkit-overflow-scrolling: touch;
+}
+
+.achievements-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-bottom: 20px;
+}
+
+.achievement-card {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    position: relative;
+    transition: all 0.3s ease;
+    border: 2px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    min-height: 150px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.achievement-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.achievement-card.unlocked {
+    border-color: #ffd700;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 223, 0, 0.05));
+    box-shadow: 0 6px 12px rgba(255, 215, 0, 0.2);
+}
+
+.achievement-card.unlocked:hover {
+    box-shadow: 0 8px 20px rgba(255, 215, 0, 0.3);
+}
+
+.achievement-card.locked {
+    opacity: 0.5;
+    filter: grayscale(1);
+}
+
+.achievement-content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.achievement-header {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.achievement-icon {
+    font-size: 2.5em;
+    margin-right: 15px;
+    background: rgba(102, 126, 234, 0.1);
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.achievement-card.unlocked .achievement-icon {
+    background: rgba(255, 215, 0, 0.2);
+}
+
+.achievement-name {
+    font-size: 1.4em;
+    font-weight: bold;
+    color: #4a5568;
+}
+
+.achievement-description {
+    font-size: 1em;
+    color: #718096;
+    margin-top: 10px;
+    line-height: 1.5;
+    padding-left: 75px;
+}
+
+.achievement-stars {
+    color: #ffd700;
+    font-size: 1.1em;
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    letter-spacing: -1px;
+    text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+}
+
+.achievement-lock {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    font-size: 1.5em;
+    opacity: 0.8;
+    z-index: 2;
+}
+
+.achievement-card.golden {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 223, 0, 0.1));
+    border-color: #ffd700;
+    position: relative;
+    overflow: hidden;
+}
+
+.achievement-card.golden::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.4) 50%, transparent 70%);
+    animation: goldShimmer 3s infinite;
+    pointer-events: none;
+}
+
+/* 再现人生界面 */
+.replay-screen {
+    display: none;
+    animation: fadeIn 0.5s ease-out;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.saved-lives-list {
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    max-height: calc(100% - 100px);
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.saved-life-card {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.saved-life-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 5px;
+    height: 100%;
+    background: linear-gradient(to bottom, var(--primary-color) 0%, var(--secondary-color) 100%);
+}
+
+.saved-life-card:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+}
+
+.saved-life-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.saved-life-name {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.saved-life-age {
+    font-size: 1.1em;
+    color: var(--text-secondary);
+    background: rgba(102, 126, 234, 0.1);
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+.saved-life-date {
+    color: #888;
+    font-size: 0.9em;
+    margin-bottom: 15px;
+}
+
+.saved-life-tags {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.no-saves {
+    text-align: center;
+    color: #888;
+    font-size: 1.1em;
+    margin-top: 50px;
+}
+
+/* 金色标签样式 */
+.tag.golden {
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    color: var(--text-color);
+    font-weight: bold;
+    animation: goldShine 2s ease-in-out infinite;
+    position: relative;
+    overflow: hidden;
+}
+
+.tag.golden::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.5) 50%, transparent 70%);
+    animation: goldShimmer 3s infinite;
+}
+
+@keyframes goldShine {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+@keyframes goldShimmer {
+    0% {
+        transform: rotate(0deg) translateX(-100%);
+    }
+
+    100% {
+        transform: rotate(0deg) translateX(100%);
+    }
+}
+
+/* 金色标签获得特效 */
+.golden-achievement-effect {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    pointer-events: none;
+    animation: goldenPop 1s ease-out forwards;
+}
+
+.golden-achievement-content {
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    padding: 30px 50px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(255, 215, 0, 0.5);
+}
+
+.golden-achievement-title {
+    font-size: 2em;
+    color: var(--text-color);
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.golden-achievement-desc {
+    font-size: 1.2em;
+    color: var(--text-secondary);
+}
+
+@keyframes goldenPop {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.2);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+/* 返回按钮 */
+.back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: white;
+    border: 2px solid var(--primary-color);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.5em;
+}
+
+.back-btn:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: scale(1.1);
+}
+
+/* 开始界面 */
+.start-screen {
+    display: none;
+    text-align: center;
+    animation: slideIn 0.6s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(-30px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.game-title {
+    font-size: 3em;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 20px;
+    font-weight: bold;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.game-description {
+    color: var(--text-secondary);
+    font-size: 1.1em;
+    line-height: 1.8;
+    margin-bottom: 30px;
+}
+
+.features {
+    text-align: left;
+    background: rgba(102, 126, 234, 0.05);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.feature-item {
+    margin: 10px 0;
+    opacity: 0;
+    animation: fadeInUp 0.5s ease-out forwards;
+}
+
+.feature-item:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.feature-item:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.feature-item:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.feature-item:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+.feature-item:nth-child(5) {
+    animation-delay: 0.5s;
+}
+
+@keyframes fadeInUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* 按钮样式 */
+.btn {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 50px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    font-weight: 600;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* 游戏界面 */
+.game-screen {
+    display: none;
+    animation: fadeIn 0.5s ease-out;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* 状态栏 */
+.status-bar {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+}
+
+.status-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.player-info {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.player-name {
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+.age-display {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.background-display {
+    font-size: 1.1em;
+    opacity: 0.9;
+}
+
+.tags-container {
+    display: flex;
+    flex-direction: column;
+    /* 改为纵向排列 */
+    gap: 8px;
+    margin-top: 10px;
+    align-items: flex-start;
+    /* 让标签左对齐 */
+}
+
+/* 统一标签样式 */
+.tag {
+    background: rgba(25, 50, 150, 0.9);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    color: white;
+    display: inline-block;
+    margin: 5px;
+    text-align: left;
+    width: fit-content;
+    min-width: 60px;
+    max-width: 100%;
+    animation: tagAppear 0.3s ease-out;
+}
+
+#replayModalTags .tag {
+    /* Styles for tags specifically in the replay modal */
+    background: rgba(102, 126, 234, 0.15);
+    color: var(--text-color);
+    backdrop-filter: none;
+    display: inline-block;
+    margin: 5px;
+    animation: none;
+    /* 移除在模态框内的默认动画 */
+}
+
+#replayModalTags .tag.red {
+    background: linear-gradient(135deg, #ff4444, #cc0000, #ff4444);
+    color: white;
+    font-weight: bold;
+    animation: none;
+    /* 移除在模态框内的默认脉冲动画 */
+    box-shadow: 0 2px 5px rgba(255, 0, 0, 0.3);
+}
+
+#replayModalTags .tag.purple {
+    background: linear-gradient(135deg, #9c27b0, #673ab7, #9c27b0);
+    color: white;
+    font-weight: bold;
+    animation: none;
+    box-shadow: 0 2px 5px rgba(128, 0, 128, 0.3);
+}
+
+#replayModalTags .tag.pink {
+    background: linear-gradient(135deg, #ff6b9e, #ff0066, #ff6b9e);
+    color: white;
+    font-weight: bold;
+    animation: none;
+    box-shadow: 0 2px 5px rgba(255, 77, 148, 0.3);
+}
+
+#replayModalTags .tag.black {
+    background: linear-gradient(135deg, #333333, #000000, #333333);
+    color: white;
+    font-weight: bold;
+    animation: none;
+    box-shadow: 0 2px 5px var(--card-shadow);
+}
+
+#replayModalTags .tag.golden {
+    background: linear-gradient(135deg, #ffd700, #ffed4e, #ffd700);
+    color: var(--text-color);
+    font-weight: bold;
+    animation: none;
+    box-shadow: 0 2px 5px rgba(255, 215, 0, 0.3);
+}
+
+@keyframes tagAppear {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* 事件卡片 */
+.event-card {
+    background: white;
+    border-radius: 20px;
+    padding: 0;
+    /* 移除内边距，由子元素控制 */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    margin-top: 20px;
+    animation: slideUp 0.5s ease-out;
+    border-top: 5px solid transparent;
+    border-image: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+    border-image-slice: 1;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 20px);
+    /* 减去margin-top的高度 */
+}
+
+.event-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 150px;
+    height: 150px;
+    background: linear-gradient(135deg, transparent 70%, rgba(102, 126, 234, 0.1));
+    border-radius: 0 0 0 100%;
+    z-index: 0;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.event-title-container {
+    padding: 15px 20px 10px 20px;
+    /* 从25px 25px 15px 25px减小 */
+    border-bottom: 1px solid #edf2f7;
+    z-index: 2;
+    background: white;
+}
+
+.event-title {
+    color: #4a5568;
+    font-size: 1.5em;
+    /* 从1.8em减小到1.5em */
+    position: relative;
+    display: inline-block;
+    z-index: 1;
+    margin: 0;
+}
+
+.event-title::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 40px;
+    height: 3px;
+    background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+    border-radius: 3px;
+}
+
+.event-content-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 20px;
+    /* 从0 25px减小到0 20px */
+    display: flex;
+    flex-direction: column;
+}
+
+.event-description {
+    color: #718096;
+    line-height: 1.6;
+    /* 从1.7减小到1.6 */
+    margin: 12px 0 15px 0;
+    /* 从15px 0 20px 0减小 */
+    font-size: 1em;
+    /* 从1.1em减小到1em */
+    position: relative;
+    z-index: 1;
+    padding: 8px 0;
+    /* 从10px 0减小到8px 0 */
+    border-bottom: 1px solid #edf2f7;
+}
+
+/* 事件选项容器 */
+.event-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    /* 从15px减小到12px */
+    margin: 15px 0;
+    /* 从25px 0减小到15px 0 */
+    padding-bottom: 10px;
+    /* 从15px减小到10px */
+}
+
+/* 选项按钮 */
+.option-btn {
+    background: linear-gradient(to right, #f8f9fa, #f1f3f9);
+    border: 2px solid #e0e6ed;
+    padding: 14px 20px;
+    /* 从18px 25px减小到14px 20px */
+    border-radius: 15px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: hidden;
+    font-size: 1em;
+    /* 从1.05em减小到1em */
+    color: #4a5568;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+}
+
+.option-btn::before {
+    content: '';
+    position: absolute;
+    left: -5px;
+    top: 0;
+    height: 100%;
+    width: 5px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    transition: all 0.3s ease;
+}
+
+.option-btn:hover {
+    border-color: var(--primary-color);
+    background: linear-gradient(to right, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.03));
+    transform: translateX(5px) translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+    color: #2d3748;
+}
+
+.option-btn:hover::before {
+    left: 0;
+}
+
+.option-btn:active {
+    transform: translateX(5px) translateY(0);
+    box-shadow: 0 2px 5px rgba(102, 126, 234, 0.2);
+}
+
+/* 选项图标 */
+.option-icon {
+    margin-right: 15px;
+    font-size: 1.2em;
+    opacity: 0.8;
+    min-width: 24px;
+    text-align: center;
+}
+
+/* 选项内容 */
+.option-content {
+    flex-grow: 1;
+}
+
+/* 选项按钮悬停效果 */
+@keyframes optionPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4);
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px rgba(102, 126, 234, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(102, 126, 234, 0);
+    }
+}
+
+.option-btn:hover {
+    animation: optionPulse 1.5s infinite;
+}
+
+/* 结果展示 */
+.result-card {
+    background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+    border-radius: 18px;
+    padding: 30px;
+    margin: 20px 0;
+    animation: resultFadeIn 0.5s ease-out;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+    border-left: 5px solid var(--primary-color);
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+}
+
+.result-card::after {
+    content: '✨';
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    font-size: 1.8em;
+    opacity: 0.2;
+    color: var(--primary-color);
+}
+
+@keyframes resultFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.result-text {
+    font-size: 1.2em;
+    line-height: 1.7;
+    color: #4a5568;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.7);
+}
+
+/* 效果显示 */
+.effects-display {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px dashed #e2e8f0;
+}
+
+.effect-item {
+    background: #f7fafc;
+    padding: 8px 15px;
+    border-radius: 50px;
+    font-size: 0.95em;
+    display: inline-flex;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.effect-item.positive {
+    color: #38a169;
+    background: #f0fff4;
+    border-left: 3px solid #38a169;
+}
+
+.effect-item.negative {
+    color: #e53e3e;
+    background: #fff5f5;
+    border-left: 3px solid #e53e3e;
+}
+
+.effect-item::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 8px;
+    background-color: #cbd5e0;
+}
+
+.effect-item.positive::before {
+    background-color: #38a169;
+}
+
+.effect-item.negative::before {
+    background-color: #e53e3e;
+}
+
+.continue-btn {
+    margin-top: 20px;
+    width: 100%;
+}
+
+/* 游戏结束界面 */
+.gameover-screen {
+    display: none;
+    text-align: center;
+    animation: fadeIn 0.8s ease-out;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.final-age {
+    font-size: 4em;
+    color: var(--primary-color);
+    margin: 20px 0;
+    font-weight: bold;
+    animation: countUp 1s ease-out;
+}
+
+@keyframes countUp {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.death-reason {
+    font-size: 1.2em;
+    color: var(--text-secondary);
+    margin-bottom: 30px;
+    font-style: italic;
+}
+
+.final-tags {
+    background: rgba(102, 126, 234, 0.05);
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+/* 确保游戏结束界面的标签盒子样式与再现人生界面一致 */
+#finalTags.tags-box {
+    background: #f5f7ff;
+    border-radius: 10px;
+    padding: 15px;
+    border: 1px solid #e6e9f5;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+/* 确保游戏结束界面中的标签样式一致 */
+#finalTags .tag {
+    display: inline-block;
+    margin: 5px;
+    background: rgba(102, 126, 234, 0.15);
+    color: var(--text-color);
+    backdrop-filter: none;
+    animation: none;
+}
+
+#finalTags .tag.black,
+#finalTags .tag.red,
+#finalTags .tag.purple,
+#finalTags .tag.pink,
+#finalTags .tag.golden {
+    color: white;
+    font-weight: bold;
+    animation: none;
+    box-shadow: 0 2px 5px var(--card-shadow);
+}
+
+#finalTags .tag.black {
+    background: linear-gradient(135deg, #333333, #000000, #333333);
+}
+
+#finalTags .tag.red {
+    background: linear-gradient(135deg, #ff4444, #cc0000, #ff4444);
+}
+
+#finalTags .tag.purple {
+    background: linear-gradient(135deg, #9c27b0, #673ab7, #9c27b0);
+}
+
+#finalTags .tag.pink {
+    background: linear-gradient(135deg, #ff6b9e, #ff0066, #ff6b9e);
+}
+
+#finalTags .tag.golden {
+    background: linear-gradient(135deg, #ffd700, #ffed4e, #ffd700);
+    color: var(--text-color);
+}
+
+.history-container {
+    max-height: 200px;
+    overflow-y: auto;
+    text-align: left;
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.gameover-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.history-item {
+    margin: 10px 0;
+    padding: 10px;
+    background: white;
+    border-radius: 8px;
+    border-left: 3px solid var(--primary-color);
+}
+
+/* 移动设备适配 - 增强版 */
+@media (max-width: 768px) {
+    .game-title {
+        font-size: 1.8em;
+        margin-bottom: 15px;
+    }
+
+    .game-description {
+        font-size: 0.9em;
+        margin-bottom: 20px;
+    }
+
+    /* 主菜单按钮调整 */
+    .menu-buttons {
+        gap: 12px;
+    }
+
+    .menu-btn {
+        padding: 14px 20px;
+        font-size: 1em;
+    }
+
+    /* 性别选择调整 */
+    .gender-selection {
+        flex-direction: row;
+        gap: 15px;
+    }
+
+    .gender-card {
+        padding: 15px;
+        width: 120px;
+    }
+
+    /* 状态栏和标签容器调整 */
+    .status-bar {
+        flex-direction: column;
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .status-info {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .tags-container {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .tag {
+        font-size: 0.8em;
+        padding: 5px 10px;
+        margin: 2px;
+    }
+
+    /* 弹窗调整 */
+    .modal-content {
+        width: 95%;
+        padding: 15px;
+    }
+
+    /* 回放界面调整 */
+    #replayModalHistoryContainer {
+        max-height: 200px;
+    }
+
+    /* 成就界面调整 */
+    .achievements-container {
+        top: 60px;
+    }
+
+    .achievement-card {
+        padding: 15px;
+        min-height: 120px;
+    }
+
+    .achievement-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1.8em;
+    }
+
+    .achievement-name {
+        font-size: 1.1em;
+    }
+
+    /* 游戏结束界面调整 */
+    .final-age {
+        font-size: 3em;
+    }
+
+    .death-reason {
+        font-size: 1em;
+    }
+
+    .history-item {
+        padding: 10px;
+        font-size: 0.9em;
+    }
+
+    .gameover-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    /* 导航按钮调整 */
+    .back-btn {
+        font-size: 1.5em;
+        top: 15px;
+        left: 15px;
+    }
+
+    /* 控制元素调整 */
+    .theme-selector,
+    .sound-control {
+        transform: scale(0.8);
+        top: 5px;
+    }
+
+    .theme-selector {
+        right: 5px;
+    }
+
+    .sound-control {
+        left: auto;
+        right: 60px;
+    }
+
+    /* 动画效果调整，让移动端更流畅 */
+    .floating-shape {
+        opacity: 0.4;
+    }
+}
+
+/* 小屏移动设备 */
+@media (max-width: 480px) {
+    .game-title {
+        font-size: 1.5em;
+    }
+
+    .menu-btn {
+        padding: 12px 15px;
+        font-size: 0.9em;
+    }
+
+    .gender-card {
+        padding: 12px;
+        width: 100px;
+    }
+
+    .gender-icon {
+        font-size: 2em;
+    }
+
+    .name-input {
+        width: 90%;
+        padding: 12px;
+    }
+}
+
+/* 加载动画 */
+.loading {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba(102, 126, 234, 0.3);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* 滚动条美化 */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary-color);
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1001;
+    /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.6);
+    /* Black w/ opacity */
+    /* display: flex; will be set by JavaScript when showing the modal */
+    /* justify-content: center; */
+    /* align-items: center; */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    padding: 30px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 700px;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px var(--card-shadow);
+    position: relative;
+    animation: modalOpen 0.4s ease-out;
+}
+
+@keyframes modalOpen {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.close-btn {
+    color: #aaa;
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    font-size: 32px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+#replayModalHistoryContainer {
+    max-height: 300px;
+    /* Ensure scrollability */
+    overflow-y: auto;
+    background: #f0f0f0;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+#replayModalHistoryContainer .history-item {
+    margin: 8px 0;
+    padding: 8px;
+    background: white;
+    border-radius: 6px;
+    border-left: 3px solid var(--secondary-color);
+    font-size: 0.95em;
+}
+
+/* 红色标签样式 */
+.tag.red {
+    background: linear-gradient(135deg, #ff4444, #cc0000);
+    color: white;
+    font-weight: bold;
+    animation: redPulse 2s ease-in-out infinite;
+    border: none;
+    /* 移除边框 */
+}
+
+@keyframes redPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+    }
+
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+    }
+}
+
+/* 粉色标签样式 */
+.tag.pink {
+    background: linear-gradient(135deg, #ff6b9e, #ff0066);
+    color: white;
+    font-weight: bold;
+    animation: pinkPulse 2s ease-in-out infinite;
+    border: none;
+    /* 移除边框 */
+}
+
+@keyframes pinkPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 10px rgba(255, 77, 148, 0.5);
+    }
+
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 20px rgba(255, 77, 148, 0.8);
+    }
+}
+
+/* 紫色标签样式 */
+.tag.purple {
+    background: linear-gradient(135deg, #9c27b0, #673ab7);
+    color: white;
+    font-weight: bold;
+    animation: purplePulse 2s ease-in-out infinite;
+    border: none;
+    /* 移除边框 */
+}
+
+@keyframes purplePulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 10px rgba(128, 0, 128, 0.5);
+    }
+
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 20px rgba(128, 0, 128, 0.8);
+    }
+}
+
+/* 黑色标签样式 */
+.tag.black {
+    background: linear-gradient(135deg, #333333, #000000);
+    color: white;
+    font-weight: bold;
+    animation: blackPulse 2s ease-in-out infinite;
+    border: none;
+    /* 移除边框 */
+}
+
+@keyframes blackPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+    }
+}
+
+/* 红色标签获得特效 */
+.red-tag-effect {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    pointer-events: none;
+    animation: redTagAppear 1.5s ease-out forwards;
+}
+
+.red-tag-content {
+    background: linear-gradient(135deg, #ff4444, #cc0000);
+    padding: 30px 50px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(255, 0, 0, 0.6);
+    color: white;
+}
+
+@keyframes redTagAppear {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0) rotate(-180deg);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.2) rotate(0deg);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    }
+}
+
+/* 黑色标签获得特效 */
+.black-tag-effect {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    pointer-events: none;
+    animation: blackTagAppear 1.5s ease-out forwards;
+}
+
+.black-tag-content {
+    background: linear-gradient(135deg, #333333, #000000);
+    padding: 30px 50px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+    color: white;
+}
+
+@keyframes blackTagAppear {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0) rotate(-180deg);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.2) rotate(0deg);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    }
+}
+
+/* 紫色标签获得特效 */
+.purple-tag-effect {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    pointer-events: none;
+    animation: purpleTagAppear 1.5s ease-out forwards;
+}
+
+.purple-tag-content {
+    background: linear-gradient(135deg, #9c27b0, #673ab7);
+    padding: 30px 50px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(128, 0, 128, 0.6);
+    color: white;
+}
+
+@keyframes purpleTagAppear {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0) rotate(-180deg);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.2) rotate(0deg);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    }
+}
+
+/* 粉色标签获得特效 */
+.pink-tag-effect {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    pointer-events: none;
+    animation: pinkTagAppear 1.5s ease-out forwards;
+}
+
+.pink-tag-content {
+    background: linear-gradient(135deg, #ff6b9e, #ff0066);
+    padding: 30px 50px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(255, 77, 148, 0.6);
+    color: white;
+}
+
+@keyframes pinkTagAppear {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0) rotate(-180deg);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.2) rotate(0deg);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    }
+}
+
+/* 修改事件容器样式 */
+#eventContainer {
+    max-height: calc(100vh - 400px);
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+/* 添加新的主题和动画 */
+
+/* 主题相关样式 */
+.theme-selector {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+}
+
+.theme-toggle {
+    background: rgba(255, 255, 255, 0.8);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+    transform: rotate(30deg);
+    box-shadow: 0 5px 15px var(--card-shadow);
+}
+
+.theme-options {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px var(--card-shadow);
+    padding: 10px 0;
+    width: 150px;
+    display: none;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+}
+
+.theme-options.show {
+    display: block;
+    transform: translateY(0);
+    animation: fadeInDown 0.3s ease;
+}
+
+.theme-option {
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.theme-option:hover {
+    background: rgba(102, 126, 234, 0.1);
+    padding-left: 20px;
+}
+
+/* 音效控制 */
+.sound-control {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 100;
+}
+
+.sound-toggle {
+    background: rgba(255, 255, 255, 0.8);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.sound-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 5px 15px var(--card-shadow);
+}
+
+/* 屏幕转换动画 */
+.screen-enter {
+    animation: screenEnter 0.5s ease-out;
+}
+
+@keyframes screenEnter {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 标签动画 */
+.tag-animate {
+    animation: tagPop 0.5s ease forwards;
+}
+
+@keyframes tagPop {
+    0% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+
+    70% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* 选项选择动画 */
+.option-selected {
+    border-color: var(--primary-color) !important;
+    background: linear-gradient(to right, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.05)) !important;
+    transform: translateX(5px) !important;
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3) !important;
+    position: relative;
+    z-index: 2;
+}
+
+.option-disabled {
+    opacity: 0.5;
+    cursor: default !important;
+    transform: none !important;
+    animation: none !important;
+}
+
+/* 选择闪光效果 */
+.selection-flash {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
+    animation: flash 0.7s ease-out;
+    pointer-events: none;
+    border-radius: inherit;
+}
+
+@keyframes flash {
+    0% {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+}
+
+/* 选择粒子效果 */
+.selection-particle {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0.8;
+    transform: scale(0);
+    animation: particleFade 1s ease-out forwards;
+    z-index: 1;
+}
+
+@keyframes particleFade {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+
+    100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+/* 成就通知 */
+.achievement-notification {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    background: linear-gradient(135deg, #ffd700 0%, #ffcc00 100%);
+    border-radius: 10px;
+    box-shadow: 0 5px 20px var(--card-shadow);
+    padding: 15px;
+    z-index: 1000;
+    animation: slideInRight 0.5s ease forwards;
+    transition: all 0.5s ease;
+}
+
+.achievement-notification-hide {
+    animation: slideOutRight 0.5s ease forwards;
+}
+
+.achievement-notification-content {
+    display: flex;
+    align-items: center;
+}
+
+.achievement-notification-icon {
+    font-size: 2em;
+    margin-right: 15px;
+    animation: bounce 1s infinite alternate;
+}
+
+.achievement-notification-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: var(--text-color);
+}
+
+.achievement-notification-name {
+    color: var(--text-color);
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+@keyframes bounce {
+    from {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(-5px);
+    }
+}
+
+/* 游戏结束动画 */
+.gameover-animation {
+    animation: gameoverEffect 1.5s ease;
+}
+
+@keyframes gameoverEffect {
+    0% {
+        filter: blur(0);
+        transform: scale(1);
+    }
+
+    10% {
+        filter: blur(2px);
+        transform: scale(1.02);
+    }
+
+    20% {
+        filter: blur(0);
+        transform: scale(1);
+    }
+
+    100% {
+        filter: blur(0);
+    }
+}
+
+/* 主题定义 */
+/* 默认主题 - 已经在原CSS中定义 */
+
+/* 暗黑模式 */
+.theme-dark {
+    background: #121212;
+}
+
+.theme-dark .game-container {
+    background: rgba(30, 30, 30, 0.95);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    color: var(--border-color);
+}
+
+.theme-dark .game-title,
+.theme-dark h2,
+.theme-dark h3 {
+    color: #bb86fc;
+}
+
+.theme-dark .menu-btn {
+    background: #2d2d2d;
+    border: 2px solid #bb86fc;
+    color: var(--border-color);
+}
+
+.theme-dark .menu-btn:hover {
+    background: #bb86fc;
+    color: #121212;
+}
+
+.theme-dark .gender-card {
+    background: #2d2d2d;
+    border: 3px solid #4d4d4d;
+    color: var(--border-color);
+}
+
+.theme-dark .gender-card.selected {
+    border-color: #bb86fc;
+    background: rgba(187, 134, 252, 0.2);
+}
+
+.theme-dark .gender-card:hover {
+    border-color: #bb86fc;
+}
+
+.theme-dark .name-input {
+    background: #2d2d2d;
+    border: 2px solid #4d4d4d;
+    color: var(--border-color);
+}
+
+.theme-dark .name-input:focus {
+    border-color: #bb86fc;
+}
+
+.theme-dark .btn {
+    background: #2d2d2d;
+    color: var(--border-color);
+    border: 2px solid #bb86fc;
+}
+
+.theme-dark .btn:hover {
+    background: #bb86fc;
+    color: #121212;
+}
+
+.theme-dark .tag {
+    background: #2d2d2d;
+    color: var(--border-color);
+}
+
+.theme-dark .event-card,
+.theme-dark .achievement-card,
+.theme-dark .saved-life-item,
+.theme-dark .modal-content {
+    background: #2d2d2d;
+    border: 1px solid #4d4d4d;
+    color: var(--border-color);
+}
+
+.theme-dark .option-btn {
+    background: #333;
+    color: var(--border-color);
+    border: 1px solid #4d4d4d;
+}
+
+.theme-dark .option-btn:hover {
+    background: #bb86fc;
+    color: #121212;
+}
+
+/* 明亮模式 */
+.theme-light {
+    background: #f8f9fa;
+}
+
+.theme-light .game-container {
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+}
+
+.theme-light .game-title,
+.theme-light h2,
+.theme-light h3 {
+    color: #0066cc;
+}
+
+.theme-light .menu-btn {
+    background: white;
+    border: 2px solid #0066cc;
+    color: var(--text-color);
+}
+
+.theme-light .menu-btn:hover {
+    background: #0066cc;
+    color: white;
+}
+
+.theme-light .btn {
+    background: #0066cc;
+    color: white;
+}
+
+.theme-light .btn:hover {
+    background: #0055aa;
+}
+
+.theme-light .tag {
+    background: #e9f2ff;
+    color: #0066cc;
+}
+
+.theme-light .event-card {
+    border: 1px solid var(--border-color);
+}
+
+/* 复古风格 */
+.theme-retro {
+    background: #ffe6cc;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.theme-retro .game-container {
+    background: #fff5e6;
+    box-shadow: 0 15px 40px rgba(160, 82, 45, 0.3);
+    border: 3px solid #a0522d;
+}
+
+.theme-retro .game-title,
+.theme-retro h2,
+.theme-retro h3 {
+    color: #8b4513;
+    text-shadow: 1px 1px 0 #f5deb3;
+}
+
+.theme-retro .menu-btn {
+    background: #f5deb3;
+    border: 2px solid #8b4513;
+    color: #8b4513;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.theme-retro .menu-btn:hover {
+    background: #8b4513;
+    color: #f5deb3;
+}
+
+.theme-retro .btn {
+    background: #8b4513;
+    color: #f5deb3;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.theme-retro .btn:hover {
+    background: #704214;
+}
+
+.theme-retro .tag {
+    background: #f5deb3;
+    color: #8b4513;
+    border: 1px dashed #8b4513;
+}
+
+.theme-retro .event-card {
+    border: 2px solid #8b4513;
+    background: #fff5e6;
+}
+
+.theme-retro .option-btn {
+    background: #f5deb3;
+    color: #8b4513;
+    border: 1px solid #8b4513;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.theme-retro .option-btn:hover {
+    background: #8b4513;
+    color: #f5deb3;
+}
+
+/* 未来科技 */
+.theme-future {
+    background: linear-gradient(135deg, #000428 0%, #004e92 100%);
+}
+
+.theme-future .game-container {
+    background: rgba(10, 25, 47, 0.95);
+    box-shadow: 0 20px 60px rgba(0, 74, 146, 0.5);
+    border: 1px solid #00ccff;
+    color: #e0f7ff;
+}
+
+.theme-future .game-title,
+.theme-future h2,
+.theme-future h3 {
+    color: #00ccff;
+    text-shadow: 0 0 10px rgba(0, 204, 255, 0.5);
+}
+
+.theme-future .menu-btn {
+    background: rgba(0, 20, 40, 0.6);
+    border: 2px solid #00ccff;
+    color: #00ccff;
+    box-shadow: 0 0 10px rgba(0, 204, 255, 0.3);
+}
+
+.theme-future .menu-btn:hover {
+    background: rgba(0, 204, 255, 0.3);
+    box-shadow: 0 0 20px rgba(0, 204, 255, 0.5);
+}
+
+.theme-future .btn {
+    background: rgba(0, 20, 40, 0.6);
+    color: #00ccff;
+    border: 1px solid #00ccff;
+    box-shadow: 0 0 10px rgba(0, 204, 255, 0.3);
+}
+
+.theme-future .btn:hover {
+    background: rgba(0, 204, 255, 0.3);
+    box-shadow: 0 0 20px rgba(0, 204, 255, 0.5);
+}
+
+.theme-future .tag {
+    background: rgba(0, 20, 40, 0.6);
+    color: #00ccff;
+    border: 1px solid #00ccff;
+    box-shadow: 0 0 5px rgba(0, 204, 255, 0.3);
+}
+
+.theme-future .event-card {
+    background: rgba(0, 20, 40, 0.6);
+    border: 1px solid #00ccff;
+    box-shadow: 0 0 10px rgba(0, 204, 255, 0.3);
+}
+
+.theme-future .option-btn {
+    background: rgba(0, 20, 40, 0.8);
+    color: #00ccff;
+    border: 1px solid #00ccff;
+}
+
+.theme-future .option-btn:hover {
+    background: rgba(0, 204, 255, 0.3);
+    box-shadow: 0 0 10px rgba(0, 204, 255, 0.5);
+}
+
+/* 移动设备适配 */
+@media (max-width: 768px) {
+
+    .theme-selector,
+    .sound-control {
+        transform: scale(0.8);
+    }
+
+    .theme-selector {
+        top: 10px;
+        right: 10px;
+    }
+
+    .sound-control {
+        top: 10px;
+        left: 10px;
+    }
+
+    .achievement-notification {
+        width: 90%;
+        right: 5%;
+        left: 5%;
+        padding: 10px;
+    }
+}
+
+/* 添加新的过渡动画效果 */
+@keyframes fadeInScale {
+    0% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes slideInBottom {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes rotateIn {
+    0% {
+        opacity: 0;
+        transform: rotateY(-90deg);
+    }
+
+    100% {
+        opacity: 1;
+        transform: rotateY(0);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -100% 0;
+    }
+
+    100% {
+        background-position: 100% 0;
+    }
+}
+
+/* 增强按钮点击效果 */
+.menu-btn:active,
+.btn:active,
+.option-btn:active {
+    transform: scale(0.95);
+    transition: transform 0.1s;
+}
+
+/* 增强标签动画 */
+.tag {
+    animation: tagAppear 0.5s ease forwards;
+    transition: all 0.3s ease;
+}
+
+.tag:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* 增强事件卡片动画 */
+.event-card {
+    animation: fadeInScale 0.5s ease-out;
+    transition: all 0.3s ease;
+}
+
+/* 增强选项按钮悬停效果 */
+.option-btn {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.option-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(255, 255, 255, 0.2),
+            transparent);
+    transition: all 0.5s ease;
+}
+
+.option-btn:hover::after {
+    left: 100%;
+}
+
+/* 增强页面转换动画 */
+.main-menu,
+.character-creation,
+.game-screen,
+.gameover-screen,
+.achievements-screen,
+.replay-screen {
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.page-exit {
+    opacity: 0;
+    transform: translateX(-30px);
+}
+
+.page-enter {
+    opacity: 0;
+    transform: translateX(30px);
+}
+
+/* 增强结果显示动画 */
+.result-display {
+    animation: resultFadeIn 0.6s ease-out;
+}
+
+/* 添加波纹效果 */
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: scale(0);
+    animation: ripple 0.6s linear;
+    pointer-events: none;
+}
+
+@keyframes ripple {
+    to {
+        transform: scale(2.5);
+        opacity: 0;
+    }
+}
+
+/* 增强游戏结束屏幕动画 */
+.gameover-screen .final-age,
+.gameover-screen .death-reason,
+.gameover-screen .final-tags,
+.gameover-screen .history-container {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideInBottom 0.5s ease forwards;
+}
+
+.gameover-screen .final-age {
+    animation-delay: 0.3s;
+}
+
+.gameover-screen .death-reason {
+    animation-delay: 0.6s;
+}
+
+.gameover-screen .final-tags {
+    animation-delay: 0.9s;
+}
+
+.gameover-screen .history-container {
+    animation-delay: 1.2s;
+}
+
+/* 添加奖励动画效果 */
+.reward-effect {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+.reward-particle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: gold;
+    pointer-events: none;
+}
+
+@keyframes moveParticle {
+    0% {
+        transform: translate(0, 0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translate(var(--x), var(--y));
+        opacity: 0;
+    }
+}
+
+/* 增强滚动条样式 */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(102, 126, 234, 0.5);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(118, 75, 162, 0.7);
+}
+
+/* 下一个事件按钮 */
+.next-event-btn {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 50px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    font-weight: 600;
+    margin-top: 25px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+}
+
+.next-event-btn::after {
+    content: '→';
+    position: absolute;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2em;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.next-event-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+    padding-right: 50px;
+}
+
+.next-event-btn:hover::after {
+    opacity: 1;
+    right: 20px;
+}
+
+.next-event-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+}
+
+/* 下一个事件按钮波纹效果 */
+.next-event-ripple {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0) 70%);
+    border-radius: inherit;
+    transform: scale(0);
+    animation: nextEventRipple 0.8s ease-out;
+    pointer-events: none;
+}
+
+@keyframes nextEventRipple {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+/* 下一个事件箭头动画 */
+.next-arrow-animation {
+    position: fixed;
+    font-size: 2em;
+    color: var(--primary-color);
+    transform: translateY(-50%);
+    pointer-events: none;
+    animation: arrowFly 0.8s ease-out;
+    z-index: 1000;
+}
+
+@keyframes arrowFly {
+    0% {
+        opacity: 1;
+        transform: translateY(-50%) translateX(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-50%) translateX(100px);
+    }
+}
+
+/* 结果卡片淡出动画 */
+.fade-out {
+    animation: resultFadeOut 0.5s ease-out;
+}
+
+@keyframes resultFadeOut {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    100% {
+        opacity: 0.5;
+        transform: scale(0.95);
+    }
+}
+
+/* 触摸设备优化 */
+@media (hover: none) and (pointer: coarse) {
+
+    /* 增大可点击区域 */
+    .menu-btn,
+    .option-btn,
+    .btn,
+    .gender-card,
+    .back-btn,
+    .continue-btn,
+    .next-event-btn,
+    .close-btn {
+        min-height: 44px;
+        /* 苹果推荐的最小触摸目标尺寸 */
+    }
+
+    /* 取消悬停效果，改为active效果 */
+    .menu-btn:hover,
+    .option-btn:hover,
+    .btn:hover {
+        transform: none;
+        box-shadow: none;
+    }
+
+    .menu-btn:active,
+    .option-btn:active,
+    .btn:active {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    /* 滚动优化 */
+    .achievements-container,
+    .saved-lives-list,
+    #replayModalHistoryContainer,
+    .history-container {
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+    }
+
+    /* 防止iOS点击闪烁 */
+    * {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    /* 让滑动更流畅 */
+    .game-container {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* 禁用某些悬停动画以提高性能 */
+    .achievement-card:hover,
+    .event-card:hover,
+    .tag:hover {
+        transform: none;
+    }
+}
+
+/* 设备方向变化时的平滑过渡 */
+@media screen and (orientation: portrait),
+screen and (orientation: landscape) {
+    body {
+        transition: all 0.3s ease;
+    }
+}
+
+/* 性能优化 - 减少移动设备上的动画复杂度 */
+@media (max-width: 768px) {
+
+    /* 使用硬件加速 */
+    .game-container,
+    .event-card,
+    .option-btn,
+    .menu-btn,
+    .btn {
+        transform: translateZ(0);
+        backface-visibility: hidden;
+        perspective: 1000px;
+    }
+
+    /* 简化一些复杂动画 */
+    .floating-shape {
+        display: none;
+        /* 移动端隐藏背景动画 */
+    }
+
+    .golden-achievement-effect,
+    .reward-effect {
+        opacity: 0.7;
+        /* 降低特效强度 */
+    }
+}
+
+/* 移动设备特定样式 */
+.mobile-device .game-container {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* 移动设备横屏/竖屏特定样式 */
+.mobile-device.portrait .game-container {
+    width: 95%;
+    height: 95vh;
+}
+
+.mobile-device.landscape .game-container {
+    width: 95%;
+    height: 85vh;
+}
+
+/* 触摸活跃状态 */
+.touch-active {
+    transform: scale(0.97) !important;
+    transition: transform 0.1s !important;
+}
+
+/* 移动设备上隐藏某些复杂效果 */
+.mobile-device .floating-shape {
+    opacity: 0.2;
+}
+
+/* 移动设备上使用更大的按钮和更大的字体 */
+.mobile-device .menu-btn,
+.mobile-device .btn,
+.mobile-device .option-btn {
+    font-size: 1.05em;
+}
+
+/* 移动端滑动组件优化 */
+.mobile-device .tags-container,
+.mobile-device .achievements-container,
+.mobile-device .saved-lives-list,
+.mobile-device #replayModalHistoryContainer,
+.mobile-device .history-container {
+    scrollbar-width: thin;
+    -ms-overflow-style: none;
+}
+
+.mobile-device .tags-container::-webkit-scrollbar,
+.mobile-device .achievements-container::-webkit-scrollbar,
+.mobile-device .saved-lives-list::-webkit-scrollbar,
+.mobile-device #replayModalHistoryContainer::-webkit-scrollbar,
+.mobile-device .history-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* 调整触摸目标大小 */
+.mobile-device .tag {
+    margin: 3px;
+    padding: 6px 12px;
+}
+
+/* 竖屏/横屏适配 */
+@media screen and (orientation: portrait) {
+    .mobile-device .status-bar {
+        flex-direction: column;
+    }
+}
+
+@media screen and (orientation: landscape) {
+    .mobile-device .status-bar {
+        flex-direction: row;
+    }
+
+    .mobile-device .gender-selection {
+        display: flex;
+        flex-direction: row;
+    }
+
+    /* 确保移动设备横屏时事件界面布局与PC端一致 */
+    .mobile-device.landscape .event-history-section {
+        display: flex;
+        flex-direction: row;
+        height: 55%;
+        /* 调整高度比例 */
+    }
+
+    .mobile-device.landscape .event-history {
+        flex: 7;
+        margin-right: 15px;
+        margin-bottom: 0;
+    }
+
+    .mobile-device.landscape .character-info {
+        flex: 3;
+    }
+
+    .mobile-device.landscape .current-event-section {
+        height: 45%;
+    }
+}
+
+/* 移动端滑动和滚动动画 */
+.mobile-device {
+    overscroll-behavior: contain;
+    /* 防止页面弹跳 */
+}
+
+.mobile-device .achievements-container,
+.mobile-device .saved-lives-list,
+.mobile-device #replayModalHistoryContainer,
+.mobile-device .history-container {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+}
+
+/* 高DPI设备优化 */
+@media screen and (min-resolution: 2dppx) {
+    .mobile-device .game-container {
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .mobile-device .tag,
+    .mobile-device .btn,
+    .mobile-device .option-btn {
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+}
+
+/* 安全区域适配(针对全面屏手机) */
+@supports (padding: max(0px)) {
+    .mobile-device .game-container {
+        padding-left: max(20px, env(safe-area-inset-left));
+        padding-right: max(20px, env(safe-area-inset-right));
+        padding-top: max(20px, env(safe-area-inset-top));
+        padding-bottom: max(20px, env(safe-area-inset-bottom));
+    }
+}
+
+/* 新的事件界面样式 */
+.event-interface {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* 上半部分：事件历史和角色信息 */
+.event-history-section {
+    display: flex;
+    height: 45%;
+    /* 从50%减小到45% */
+    width: 100%;
+    margin-bottom: 12px;
+    /* 从15px减小到12px */
+}
+
+/* 事件历史记录区域 */
+.event-history {
+    flex: 7;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    padding: 15px;
+    overflow-y: auto;
+    margin-right: 15px;
+    display: flex;
+    flex-direction: column;
+    /* 改为从上到下排列，最新的在底部 */
+}
+
+/* 事件结果样式 */
+.history-event {
+    background: rgba(102, 126, 234, 0.05);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 10px;
+    animation: fadeIn 0.3s ease-out;
+    border-left: 3px solid var(--primary-color);
+}
+
+/* 历史事件头部 */
+.history-event-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed rgba(102, 126, 234, 0.2);
+}
+
+/* 历史事件标题 */
+.history-event-title {
+    font-weight: bold;
+    color: #4a5568;
+    font-size: 1em;
+}
+
+/* 历史事件年龄样式 */
+.history-age {
+    font-weight: bold;
+    color: var(--primary-color);
+    background: rgba(102, 126, 234, 0.1);
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.85em;
+}
+
+/* 历史事件内容 */
+.history-event-content {
+    color: #718096;
+    font-size: 0.95em;
+    line-height: 1.5;
+}
+
+/* 角色信息区域 */
+.character-info {
+    flex: 3;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* 角色信息头部 */
+.character-header {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* 标签容器滚动区域 */
+.tags-scroll-container {
+    padding: 15px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* 标签容器样式覆盖 */
+.tags-scroll-container .tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-height: none;
+}
+
+/* 下半部分：当前事件 */
+.current-event-section {
+    height: 55%;
+    /* 从50%增加到55% */
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    padding: 15px;
+    /* 从20px减小到15px */
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 标签排序样式 - 按颜色排序：黑色、紫色、红色、粉色、普通色 */
+.tags-container .tag.black {
+    order: 1;
+}
+
+.tags-container .tag.purple {
+    order: 2;
+}
+
+.tags-container .tag.red {
+    order: 3;
+}
+
+.tags-container .tag.pink {
+    order: 4;
+}
+
+.tags-container .tag:not(.black):not(.purple):not(.red):not(.pink) {
+    order: 5;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .event-history-section {
+        /* 移除flex-direction: column，保持水平布局与PC端一致 */
+        height: 50%;
+        /* 从60%减小到50% */
+    }
+
+    .event-history {
+        flex: 8;
+        /* 增大比例，让事件结果框更宽 */
+        margin-right: 15px;
+        /* 与PC端相同的右边距 */
+        margin-bottom: 0;
+        /* 移除底部边距 */
+        max-height: none;
+        /* 移除最大高度限制 */
+        padding: 12px;
+        /* 减小内边距 */
+    }
+
+    .character-info {
+        flex: 2;
+        /* 减小比例，让标签框更窄 */
+        max-height: none;
+        /* 移除最大高度限制 */
+    }
+
+    .character-header {
+        padding: 10px;
+        /* 减小角色信息头部的内边距 */
+    }
+
+    .tags-scroll-container {
+        padding: 10px 8px;
+        /* 减小标签容器的内边距 */
+    }
+
+    .current-event-section {
+        height: 50%;
+        /* 从40%增加到50% */
+        padding: 12px;
+        /* 减小内边距 */
+        display: flex;
+        flex-direction: column;
+    }
+
+    .event-title-container {
+        padding: 12px 15px 8px 15px;
+        /* 进一步减小移动端的内边距 */
+    }
+
+    .event-title {
+        font-size: 1.3em;
+        /* 移动端更小的标题 */
+    }
+
+    .event-description {
+        font-size: 0.95em;
+        margin: 10px 0 12px 0;
+        /* 减小间距 */
+        padding: 5px 0;
+    }
+
+    .event-options {
+        gap: 10px;
+        margin: 12px 0 5px 0;
+        /* 减小底部边距 */
+        margin-top: auto;
+        /* 将选项推到底部 */
+        padding-bottom: 5px;
+        /* 减小底部内边距 */
+    }
+
+    /* 历史事件样式调整 */
+    .history-event {
+        padding: 12px;
+        margin-bottom: 8px;
+    }
+
+    .history-event-header {
+        margin-bottom: 6px;
+        padding-bottom: 6px;
+    }
+
+    .history-event-content {
+        font-size: 0.9em;
+        line-height: 1.4;
+    }
+}
+
+/* 针对非常小的屏幕做特殊处理，保持水平布局但调整比例 */
+@media (max-width: 480px) {
+    .event-history-section {
+        /* 仍然保持水平布局 */
+        height: 45%;
+        /* 减小高度 */
+    }
+
+    .event-history {
+        flex: 7;
+        /* 稍微减小比例但仍然较大 */
+        margin-right: 10px;
+        /* 减小右边距 */
+        padding: 10px;
+        /* 进一步减小内边距 */
+    }
+
+    .character-info {
+        flex: 3;
+        /* 稍微增加比例但仍然较小 */
+    }
+
+    .current-event-section {
+        height: 55%;
+        /* 增加高度 */
+        padding: 10px;
+        /* 进一步减小内边距 */
+        display: flex;
+        flex-direction: column;
+    }
+
+    .event-title-container {
+        padding: 10px 12px 6px 12px;
+        /* 更小的内边距 */
+    }
+
+    .event-title {
+        font-size: 1.2em;
+        /* 更小的标题 */
+    }
+
+    .event-description {
+        font-size: 0.9em;
+        margin: 8px 0 10px 0;
+        padding: 4px 0;
+    }
+
+    .option-btn {
+        padding: 8px 12px;
+        font-size: 0.9em;
+    }
+
+    .option-icon {
+        font-size: 1.2em;
+        margin-right: 6px;
+    }
+}
+
+/* 针对极小屏幕做优化 */
+@media (max-width: 360px) {
+    .event-history-section {
+        height: 40%;
+        /* 进一步减小高度 */
+    }
+
+    .event-history {
+        flex: 6;
+        margin-right: 8px;
+        padding: 8px;
+        /* 最小内边距 */
+    }
+
+    .character-info {
+        flex: 4;
+    }
+
+    .character-header {
+        padding: 8px;
+    }
+
+    .current-event-section {
+        height: 60%;
+        /* 进一步增加高度 */
+        padding: 8px;
+        /* 最小内边距 */
+        display: flex;
+        flex-direction: column;
+    }
+
+    .event-title-container {
+        padding: 8px 10px 5px 10px;
+    }
+
+    .event-title {
+        font-size: 1.1em;
+    }
+
+    .event-description {
+        font-size: 0.85em;
+        margin: 6px 0 8px 0;
+    }
+
+    .event-options {
+        gap: 8px;
+        margin: 8px 0;
+        margin-top: auto;
+        /* 将选项推到底部 */
+        margin-bottom: 2px;
+        /* 最小的底部边距 */
+        padding-bottom: 2px;
+    }
+
+    .option-btn {
+        padding: 7px 10px;
+        font-size: 0.85em;
+    }
+}
+
+/* 确保标签在新样式下保持美观 */
+.event-interface .tag {
+    background: rgba(25, 50, 150, 0.9);
+    /* 使用与普通标签相同的深蓝色背景 */
+    color: white;
+}
+
+/* 确保特定颜色的标签不被覆盖 */
+.event-interface .tag.red {
+    background: linear-gradient(135deg, #ff4444, #cc0000);
+    color: white;
+    width: fit-content;
+    /* 使宽度适应内容 */
+}
+
+.event-interface .tag.pink {
+    background: linear-gradient(135deg, #ff6b9e, #ff0066);
+    color: white;
+    width: fit-content;
+    /* 使宽度适应内容 */
+}
+
+.event-interface .tag.purple {
+    background: linear-gradient(135deg, #9c27b0, #673ab7);
+    color: white;
+    width: fit-content;
+    /* 使宽度适应内容 */
+}
+
+.event-interface .tag.black {
+    background: linear-gradient(135deg, #333333, #000000);
+    color: white;
+    width: fit-content;
+    /* 使宽度适应内容 */
+}
+
+.event-interface .tag.golden {
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    color: var(--text-color);
+    width: fit-content;
+    /* 使宽度适应内容 */
+}
+
+/* 移动设备上的标签样式增强 */
+@media (max-width: 768px) {
+
+    /* 确保移动设备上的标签更加美观 */
+    .event-interface .tag {
+        background: rgba(25, 50, 150, 0.95);
+        /* 增加不透明度 */
+        color: white;
+        font-size: 0.9em;
+        padding: 6px 12px;
+        margin-bottom: 6px;
+        border-radius: 15px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        /* 添加阴影增强立体感 */
+        width: fit-content;
+        max-width: 90%;
+        /* 防止过长的标签溢出 */
+        word-break: break-word;
+        /* 允许长词换行 */
+        /* 移除特定于移动端的布局，保持与PC端一致 */
+    }
+
+    /* 确保标签容器布局与PC端一致 */
+    .tags-scroll-container .tags-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        max-height: none;
+        /* 确保与PC端相同的布局方式 */
+    }
+
+    /* 确保移动设备上也应用标签排序 */
+    .tags-container .tag.black {
+        order: 1;
+    }
+
+    .tags-container .tag.purple {
+        order: 2;
+    }
+
+    .tags-container .tag.red {
+        order: 3;
+    }
+
+    .tags-container .tag.pink {
+        order: 4;
+    }
+
+    .tags-container .tag:not(.black):not(.purple):not(.red):not(.pink) {
+        order: 5;
+    }
+
+    /* 特殊颜色标签样式增强 */
+    .event-interface .tag.red,
+    .event-interface .tag.pink,
+    .event-interface .tag.purple,
+    .event-interface .tag.black,
+    .event-interface .tag.golden {
+        box-shadow: 0 2px 8px var(--card-shadow);
+        /* 更强的阴影 */
+        font-weight: bold;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        /* 文字阴影增强可读性 */
+    }
+
+    /* 标签容器在移动端的优化 */
+    .tags-scroll-container {
+        padding: 10px;
+        -webkit-overflow-scrolling: touch;
+        /* 平滑滚动 */
+    }
+
+    /* 标签动画在移动端优化 */
+    .tag {
+        animation-duration: 0.2s;
+        /* 更快的动画速度 */
+    }
+}
+
+/* 移除可能导致标签在移动设备上显示与PC端不同的样式 */
+@media (max-width: 768px) {
+
+    /* 移除之前为移动端设置的标签容器样式 */
+    .tags-container {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        /* 修改为左对齐，与PC端一致 */
+        gap: 8px;
+    }
+}
+
+/* 小屏幕移动设备标签样式优化 - 只优化外观，保持布局与PC端一致 */
+@media (max-width: 480px) {
+    .event-interface .tag {
+        font-size: 0.85em;
+        padding: 5px 10px;
+        margin-bottom: 5px;
+        border-radius: 12px;
+    }
+
+    /* 标签容器在小屏幕设备上的优化 */
+    .tags-scroll-container {
+        padding: 8px;
+    }
+
+    /* 确保标签在小屏幕上的可读性 */
+    .event-interface .tag.red,
+    .event-interface .tag.pink,
+    .event-interface .tag.purple,
+    .event-interface .tag.black,
+    .event-interface .tag.golden {
+        font-size: 0.85em;
+        padding: 5px 10px;
+    }
+}
+
+/* 触摸设备上的标签交互优化 - 只改善交互，不改变布局 */
+@media (hover: none) and (pointer: coarse) {
+
+    /* 增大标签点击区域，提高可访问性 */
+    .event-interface .tag {
+        min-height: 36px;
+        /* 确保最小触摸区域高度 */
+        display: inline-flex;
+        /* 改为inline-flex以保持与PC端一致的布局 */
+        align-items: center;
+    }
+
+    /* 触摸反馈效果 */
+    .event-interface .tag:active {
+        transform: scale(0.97);
+        transition: transform 0.1s;
+        opacity: 0.9;
+    }
+
+    /* 确保标签间距适合触摸操作，但保持整体布局 */
+    .tags-container {
+        gap: 8px;
+    }
+}
+
+/* 标签框样式 */
+.replay-tags-container {
+    margin-bottom: 20px;
+}
+
+.tags-box {
+    background: #f5f7ff;
+    border-radius: 10px;
+    padding: 15px;
+    border: 1px solid #e6e9f5;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+/* 标签盒子中的标签样式优化 */
+.tags-box .tag {
+    margin: 5px;
+    transition: all 0.3s ease;
+    background: rgba(102, 126, 234, 0.15);
+    color: var(--text-color);
+    backdrop-filter: none;
+    animation: none;
+}
+
+.tags-box .tag:hover {
+    transform: scale(1.05);
+}
+
+@keyframes tagAppear {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* 移动端适配 - 游戏结束界面 */
+@media (max-width: 768px) {
+
+    /* 游戏结束界面标签框适配 */
+    #finalTags.tags-box {
+        max-height: 120px;
+        padding: 10px;
+    }
+
+    #finalTags .tag {
+        font-size: 0.85em;
+        padding: 4px 10px;
+    }
+
+    .final-age {
+        font-size: 3em;
+    }
+
+    .death-reason {
+        font-size: 1em;
+    }
+}
+
+@media (max-width: 768px) {
+
+    /* 事件卡片样式优化 */
+    .event-card {
+        height: 100%;
+        /* 确保卡片占满整个区域 */
+        margin-top: 0;
+        /* 移除顶部边距 */
+        border-radius: 12px;
+        /* 减小圆角 */
+    }
+
+    .event-title-container {
+        padding: 10px 15px 8px 15px;
+        /* 减小内边距 */
+        border-bottom: 1px solid rgba(102, 126, 234, 0.2);
+        /* 更轻的边框 */
+    }
+
+    .event-title {
+        font-size: 1.3em;
+    }
+
+    .event-title::after {
+        width: 30px;
+        /* 更短的装饰线 */
+        height: 2px;
+        /* 更细的装饰线 */
+    }
+
+    .event-content-scroll {
+        padding: 0 15px;
+        /* 减小水平内边距 */
+    }
+
+    .event-description {
+        font-size: 0.95em;
+        margin: 10px 0 12px 0;
+        padding: 5px 0;
+        border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+        /* 更轻的边框 */
+    }
+
+    /* 选项样式优化 */
+    .event-options {
+        gap: 10px;
+        margin: 10px 0;
+        padding-bottom: 5px;
+        margin-top: auto;
+        /* 将选项推到底部 */
+    }
+
+    .option-btn {
+        padding: 10px 15px;
+        font-size: 0.95em;
+        border-width: 1px;
+        /* 更细的边框 */
+        border-radius: 12px;
+        /* 减小圆角 */
+    }
+
+    .option-btn::before {
+        width: 3px;
+        /* 更细的左侧装饰条 */
+    }
+
+    .option-icon {
+        margin-right: 10px;
+        font-size: 1.1em;
+        min-width: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    /* 小屏幕事件卡片进一步优化 */
+    .event-card {
+        border-radius: 10px;
+        border-top-width: 3px;
+        /* 更细的顶部边框 */
+    }
+
+    .event-title-container {
+        padding: 8px 12px 6px 12px;
+    }
+
+    .event-title {
+        font-size: 1.2em;
+    }
+
+    .event-content-scroll {
+        padding: 0 12px;
+    }
+
+    .event-description {
+        font-size: 0.9em;
+        margin: 8px 0 10px 0;
+        padding: 4px 0;
+    }
+
+    .option-btn {
+        padding: 8px 12px;
+        font-size: 0.9em;
+        border-radius: 10px;
+    }
+
+    .option-icon {
+        font-size: 1.1em;
+        margin-right: 8px;
+        min-width: 18px;
+    }
+}
+
+/* 响应式调整 - 整合移动端样式 */
+@media (max-width: 768px) {
+    .game-container {
+        width: 98%;
+        /* 增加宽度，几乎占满屏幕 */
+        padding: 12px;
+        /* 减小内边距以增加可用空间 */
+        height: 98vh;
+        /* 增加高度，几乎占满整个视口 */
+        max-height: none;
+        border-radius: 15px;
+        /* 减小圆角 */
+    }
+
+    /* 事件界面布局调整 */
+    .event-interface {
+        height: 100%;
+        /* 确保占满整个容器 */
+    }
+
+    .event-history-section {
+        height: 40%;
+        /* 减小上半部分高度 */
+        margin-bottom: 10px;
+        /* 减小间距 */
+    }
+
+    .event-history {
+        flex: 7;
+        margin-right: 10px;
+        padding: 10px;
+        max-height: none;
+    }
+
+    .character-info {
+        flex: 3;
+        max-height: none;
+    }
+
+    .character-header {
+        padding: 10px;
+        /* 减小角色信息头部的内边距 */
+    }
+
+    .tags-scroll-container {
+        padding: 8px;
+        /* 减小标签容器的内边距 */
+    }
+
+    .current-event-section {
+        height: 60%;
+        /* 增加下半部分高度 */
+        padding: 12px;
+        width: 100%;
+        /* 确保宽度占满 */
+        margin-bottom: 0;
+        /* 移除底部间距 */
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* 事件卡片样式优化 */
+    .event-card {
+        height: 100%;
+        /* 确保卡片占满整个区域 */
+        margin-top: 0;
+        /* 移除顶部边距 */
+        border-radius: 12px;
+        /* 减小圆角 */
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
+        /* 更轻的阴影 */
+        display: flex;
+        flex-direction: column;
+    }
+
+    .event-title-container {
+        padding: 10px 15px 8px 15px;
+        /* 减小内边距 */
+        border-bottom: 1px solid rgba(102, 126, 234, 0.2);
+        /* 更轻的边框 */
+    }
+
+    .event-title {
+        font-size: 1.3em;
+    }
+
+    .event-title::after {
+        width: 30px;
+        /* 更短的装饰线 */
+        height: 2px;
+        /* 更细的装饰线 */
+    }
+
+    .event-content-scroll {
+        padding: 0 15px;
+        /* 减小水平内边距 */
+    }
+
+    .event-description {
+        font-size: 0.95em;
+        margin: 10px 0 12px 0;
+        padding: 5px 0;
+        border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+        /* 更轻的边框 */
+    }
+
+    /* 选项样式优化 */
+    .event-options {
+        gap: 10px;
+        margin: 10px 0;
+        padding-bottom: 5px;
+        margin-top: auto;
+        /* 将选项推到底部 */
+    }
+
+    .option-btn {
+        padding: 10px 15px;
+        font-size: 0.95em;
+        border-width: 1px;
+        /* 更细的边框 */
+        border-radius: 12px;
+        /* 减小圆角 */
+    }
+
+    .option-btn::before {
+        width: 3px;
+        /* 更细的左侧装饰条 */
+    }
+
+    .option-icon {
+        margin-right: 10px;
+        font-size: 1.1em;
+        min-width: 20px;
+    }
+
+    /* 历史事件样式调整 */
+    .history-event {
+        padding: 12px;
+        margin-bottom: 8px;
+    }
+
+    .history-event-header {
+        margin-bottom: 6px;
+        padding-bottom: 6px;
+    }
+
+    .history-event-content {
+        font-size: 0.9em;
+        line-height: 1.4;
+    }
+}
+
+/* 小屏幕设备进一步优化 */
+@media (max-width: 480px) {
+    .game-container {
+        width: 99%;
+        /* 最大化宽度 */
+        padding: 8px;
+        /* 进一步减小内边距 */
+        border-radius: 12px;
+        /* 更小的圆角 */
+    }
+
+    .event-history-section {
+        height: 35%;
+        /* 进一步减小上半部分高度 */
+    }
+
+    .event-history {
+        padding: 8px;
+    }
+
+    .current-event-section {
+        height: 65%;
+        /* 进一步增加下半部分高度 */
+        padding: 8px;
+        /* 减小内边距 */
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* 小屏幕事件卡片进一步优化 */
+    .event-card {
+        border-radius: 10px;
+        border-top-width: 3px;
+        /* 更细的顶部边框 */
+        display: flex;
+        flex-direction: column;
+    }
+
+    .event-title-container {
+        padding: 8px 12px 6px 12px;
+    }
+
+    .event-title {
+        font-size: 1.2em;
+    }
+
+    .event-content-scroll {
+        padding: 0 10px;
+    }
+
+    .event-description {
+        font-size: 0.9em;
+        margin: 8px 0 10px 0;
+        padding: 4px 0;
+    }
+
+    .option-btn {
+        padding: 8px 12px;
+        font-size: 0.9em;
+        border-radius: 10px;
+    }
+
+    .option-icon {
+        font-size: 1.1em;
+        margin-right: 8px;
+        min-width: 18px;
+    }
+}
+
+/* 极小屏幕设备的特殊优化 */
+@media (max-width: 360px) {
+    .game-container {
+        padding: 6px;
+        border-radius: 10px;
+    }
+
+    .event-history-section {
+        height: 30%;
+        /* 最小化上半部分 */
+        margin-bottom: 6px;
+    }
+
+    .event-history {
+        padding: 6px;
+    }
+
+    .character-header {
+        padding: 6px;
+    }
+
+    .current-event-section {
+        height: 70%;
+        /* 最大化下半部分 */
+        padding: 6px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .event-title-container {
+        padding: 6px 8px 4px 8px;
+    }
+
+    .event-title {
+        font-size: 1.1em;
+    }
+
+    .event-description {
+        font-size: 0.85em;
+        margin: 6px 0 8px 0;
+        padding: 3px 0;
+    }
+
+    .option-btn {
+        padding: 7px 10px;
+        font-size: 0.85em;
+        border-radius: 8px;
+    }
+
+    .option-icon {
+        margin-right: 6px;
+        min-width: 16px;
+    }
+}
+
+/* 横屏模式优化 */
+@media (max-width: 768px) and (orientation: landscape) {
+    .game-container {
+        height: 90vh;
+    }
+
+    .event-history-section {
+        height: 45%;
+        /* 调整高度比例 */
+    }
+
+    .current-event-section {
+        height: 55%;
+    }
+
+    .status-bar {
+        flex-direction: row;
+    }
+
+    .gender-selection {
+        flex-direction: row;
+    }
+
+    .achievement-card {
+        min-height: 100px;
+    }
+
+    /* 确保横屏模式下标签框和事件结果框的比例更合理 */
+    .event-history {
+        flex: 8;
+    }
+
+    .character-info {
+        flex: 2;
+    }
+}
+
+/* 移动端事件界面进一步优化 */
+@media (max-width: 768px) {
+
+    /* 增加事件卡片的高度和宽度，充分利用屏幕空间 */
+    .current-event-section {
+        width: 100%;
+        margin: 0;
+        border-radius: 12px;
+    }
+
+    .event-card {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
+    }
+
+    /* 确保事件内容可以充分展示 */
+    .event-content-scroll {
+        flex: 1;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* 确保标题固定，内容可滚动 */
+    .event-title-container {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: white;
+    }
+
+    /* 优化选项按钮的触摸体验 */
+    .option-btn {
+        min-height: 44px;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    /* 优化事件历史区域 */
+    .event-history {
+        border-radius: 12px;
+    }
+
+    .character-info {
+        border-radius: 12px;
+    }
+}
+
+/* 人生详情页面样式 */
+.life-details-screen {
+    display: none;
+    animation: fadeIn 0.5s ease-out;
+    height: 100%;
+    position: relative;
+    overflow-y: auto;
+    padding: 20px 0;
+}
+
+.life-details-screen h2 {
+    font-size: 2em;
+    color: #667eea;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#lifeDetailsSummary {
+    background: rgba(102, 126, 234, 0.05);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    line-height: 1.7;
+}
+
+#lifeDetailsSummary p {
+    margin: 10px 0;
+}
+
+#lifeDetailsSummary strong {
+    color: #667eea;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.replay-tags-container {
+    margin-bottom: 25px;
+}
+
+#lifeDetailsHistoryContainer {
+    max-height: none;
+    overflow-y: visible;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .life-details-screen {
+        padding: 15px 0;
+    }
+
+    .life-details-screen h2 {
+        font-size: 1.6em;
+        margin-bottom: 15px;
+    }
+
+    #lifeDetailsSummary {
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    .replay-tags-container {
+        margin-bottom: 20px;
+    }
+
+    #lifeDetailsHistoryContainer {
+        padding: 15px;
+    }
+}
+
+/* 提高移动端卡片和按钮的可点击性 */
+.saved-life-card {
+    position: relative;
+    cursor: pointer;
+    -webkit-tap-highlight-color: rgba(102, 126, 234, 0.2);
+    touch-action: manipulation;
+    /* 优化触摸操作 */
+}
+
+.saved-life-card .btn {
+    position: relative;
+    z-index: 2;
+    /* 确保按钮在上层 */
+    min-height: 44px;
+    /* 增加触摸区域 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-tap-highlight-color: rgba(102, 126, 234, 0.4);
+    margin-top: 15px;
+    width: 100%;
+}
+
+/* 卡片点击状态效果 */
+.saved-life-card:active {
+    background: rgba(102, 126, 234, 0.1);
+    transform: translateY(-3px) scale(0.99);
+}
+
+/* 增强移动端人生详情页面的滚动 */
+.life-details-screen {
+    -webkit-overflow-scrolling: touch;
+    /* 平滑滚动 */
+    overscroll-behavior: contain;
+    /* 防止滚动影响父元素 */
+}
+
+@media (max-width: 768px) {
+    .saved-life-card {
+        padding: 20px;
+        margin-bottom: 15px;
+    }
+
+    .saved-life-card .btn {
+        padding: 12px 0;
+        font-size: 1.1em;
+    }
+
+    /* 增加返回按钮的可点击区域 */
+    .life-details-screen .back-btn {
+        width: 60px;
+        height: 60px;
+        font-size: 1.8em;
+    }
+
+    /* 减少卡片之间的间距，增大可点击区域 */
+    .saved-lives-list {
+        gap: 15px;
+    }
+
+    /* 确保历史记录容器可以正常滚动 */
+    #lifeDetailsHistoryContainer,
+    .tags-box {
+        -webkit-overflow-scrolling: touch;
+    }
+}

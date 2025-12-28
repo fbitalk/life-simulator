@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>人生模拟器</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <!-- 背景动画 -->
+    <div class="bg-animation">
+        <div class="floating-shape" style="width: 200px; height: 200px; top: 10%; left: 10%;"></div>
+        <div class="floating-shape" style="width: 150px; height: 150px; top: 60%; right: 10%; animation-delay: -5s;">
+        </div>
+        <div class="floating-shape" style="width: 100px; height: 100px; bottom: 10%; left: 50%; animation-delay: -10s;">
+        </div>
+        <div class="floating-shape" style="width: 80px; height: 80px; top: 40%; right: 30%; animation-delay: -15s;">
+        </div>
+    </div>
+
+    <!-- Theme Selector -->
+    <div class="theme-selector">
+        <div class="theme-toggle" id="themeToggle" title="切换主题">
+            <span id="themeIcon">🌓</span>
+        </div>
+    </div>
+
+    <!-- 游戏容器 -->
+    <div class="game-container">
+        <!-- 主菜单 -->
+        <div class="main-menu" id="mainMenu">
+            <h1 class="game-title">人生模拟器</h1>
+            <p class="game-description">
+                体验不同的人生选择，收集成就标签，<br>
+                书写属于你的独特人生故事！
+            </p>
+            <div class="menu-buttons">
+                <button class="menu-btn" id="btnNewLife">
+                    <span class="icon">🎭</span>新的人生
+                </button>
+                <button class="menu-btn" id="btnReplay">
+                    <span class="icon">🪦</span>墓地
+                </button>
+                <button class="menu-btn" id="btnAchievements">
+                    <span class="icon">🏆</span>成就
+                </button>
+                <button class="menu-btn" id="btnClearTags">
+                    <span class="icon">🧼</span>清除记忆
+                </button>
+                <button class="menu-btn" id="btnResetGame">
+                    <span class="icon">🔄</span>重置游戏
+                </button>
+            </div>
+        </div>
+
+        <!-- 角色创建界面 -->
+        <div class="character-creation" id="characterCreation">
+            <button class="back-btn" id="btnBackFromCreation">←</button>
+            <h2 class="creation-title">创建新的人生</h2>
+
+            <div class="gender-selection">
+                <div class="gender-card" data-gender="male">
+                    <div class="gender-icon">👦</div>
+                    <div>男性</div>
+                </div>
+                <div class="gender-card" data-gender="female">
+                    <div class="gender-icon">👧</div>
+                    <div>女性</div>
+                </div>
+            </div>
+
+            <div class="name-input-container">
+                <input type="text" class="name-input" id="playerName" placeholder="请输入你的名字" maxlength="10">
+            </div>
+
+            <div style="text-align: center;">
+                <button class="btn" id="startLifeBtn" disabled>开始人生</button>
+            </div>
+        </div>
+
+        <!-- 成就界面 -->
+        <div class="achievements-screen" id="achievementsScreen" style="display: none;">
+            <button class="back-btn" id="btnBackFromAchievements">←</button>
+            <h2 style="text-align: center; color: #667eea; margin-bottom: 10px;">成就系统</h2>
+            <div class="achievements-container">
+                <div class="achievements-grid" id="achievementsGrid">
+                    <!-- 成就卡片将在这里动态生成 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 再现人生界面 -->
+        <div class="replay-screen" id="replayScreen">
+            <button class="back-btn" id="btnBackFromReplay">←</button>
+            <h2 style="text-align: center; color: #667eea; margin-bottom: 20px;">墓地 (人生回顾)</h2>
+            <div class="saved-lives-list" id="savedLivesList">
+                <!-- 保存的人生记录将在这里显示 -->
+            </div>
+        </div>
+
+        <!-- 人生详情页面 -->
+        <div class="life-details-screen" id="lifeDetailsScreen">
+            <button class="back-btn" id="btnBackFromDetails">←</button>
+            <h2 id="lifeDetailsTitle" style="color: #667eea; margin-bottom: 20px; text-align: center;">人生回顾</h2>
+            <div id="lifeDetailsSummary" style="margin-bottom: 20px; line-height: 1.6;">
+                <p><strong>姓名:</strong> <span id="lifeDetailsName"></span></p>
+                <p><strong>性别:</strong> <span id="lifeDetailsGender"></span></p>
+                <p><strong>终年:</strong> <span id="lifeDetailsAge"></span></p>
+                <p><strong>背景:</strong> <span id="lifeDetailsBackground"></span></p>
+                <p><strong>死因:</strong> <span id="lifeDetailsDeathReason"></span></p>
+            </div>
+
+            <!-- 标签显示为独立框架 -->
+            <div class="replay-tags-container">
+                <h3 style="margin-bottom: 10px; color: #667eea; text-align: center;">人生标签</h3>
+                <div class="tags-box" id="lifeDetailsTags"></div>
+            </div>
+
+            <div id="lifeDetailsHistoryContainer" class="history-container">
+                <h3 style="margin-bottom: 10px; color: #667eea; text-align: center;">人生事件</h3>
+                <div id="lifeDetailsHistoryList"></div>
+            </div>
+
+            <!-- 添加一个底部的返回按钮，便于移动端用户操作 -->
+            <div style="text-align: center; margin-top: 30px; margin-bottom: 20px;">
+                <button class="btn" id="btnBackFromDetailsBottom">返回列表</button>
+            </div>
+        </div>
+
+        <!-- 开始界面 (旧的，现在隐藏) -->
+        <div class="start-screen" id="startScreen">
+            <h1 class="game-title">人生模拟器</h1>
+            <p class="game-description">
+                体验不同的人生选择，收集各种标签，<br>
+                看看你能活到多少岁！
+            </p>
+            <div class="features">
+                <div class="feature-item">🎲 随机出身背景，每次都有不同的开局</div>
+                <div class="feature-item">🏷️ 丰富的标签系统，展现独特人生</div>
+                <div class="feature-item">📖 基于标签的事件触发机制</div>
+                <div class="feature-item">🔗 连续事件系统，选择影响深远</div>
+                <div class="feature-item">⚠️ 风险与机遇并存的人生抉择</div>
+            </div>
+            <button class="btn" id="btnStartGame">开始新的人生</button>
+        </div>
+
+        <!-- 游戏界面 -->
+        <div class="game-screen" id="gameScreen">
+            <div class="event-interface">
+                <!-- 上半部分 -->
+                <div class="event-history-section">
+                    <!-- 左侧显示事件历史记录 -->
+                    <div class="event-history" id="eventHistory">
+                        <!-- 事件结果会在这里动态显示 -->
+                    </div>
+
+                    <!-- 右侧显示个人信息和标签 -->
+                    <div class="character-info">
+                        <div class="character-header">
+                            <div class="player-name" id="playerNameDisplay">玩家</div>
+                            <div class="age-display" id="ageDisplay">0岁</div>
+                        </div>
+                        <div class="tags-scroll-container">
+                            <div class="tags-container" id="tagsContainer"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 下半部分：当前事件 -->
+                <div class="current-event-section" id="eventContainer">
+                    <!-- 事件卡片或结果会动态插入这里 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 游戏结束界面 -->
+        <div class="gameover-screen" id="gameoverScreen">
+            <h2 style="color: #667eea; margin-bottom: 20px;">游戏结束</h2>
+            <div class="final-age" id="finalAge">0岁</div>
+            <div class="death-reason" id="deathReason"></div>
+
+            <div class="final-tags">
+                <h3 style="margin-bottom: 15px; color: #667eea;">人生标签</h3>
+                <div class="tags-box" id="finalTags"></div>
+            </div>
+
+            <div class="history-container">
+                <h3 style="margin-bottom: 15px; color: #667eea;">人生回顾</h3>
+                <div id="historyList"></div>
+            </div>
+
+            <div class="gameover-buttons">
+                <button class="btn" id="btnReturnToMenu">主菜单</button>
+                <button class="btn" id="btnNewLifeGameOver">新的人生</button>
+                <button class="btn" id="btnBurial">下葬</button>
+            </div>
+        </div>
+
+        <!-- 加载动画 -->
+        <div class="loading" id="loading">
+            <div class="loading-spinner"></div>
+        </div>
+    </div>
+
+    <!-- 金色成就特效容器 -->
+    <div id="goldenAchievementEffect"></div>
+
+    <!-- 引入脚本文件 -->
+    <script src="js/modules/DataManager.js"></script>
+    <script src="js/modules/constants.js"></script>
+    <script src="js/events/startEvents.js"></script>
+    <script src="js/events/commonEvents.js"></script>
+    <script src="js/events/purpleEvents.js"></script>
+    <script src="js/events/blackEvents.js"></script>
+    <script src="js/events/redEvents.js"></script>
+    <script src="js/events/pinkEvents.js"></script>
+    <script src="js/events/goldEvents.js"></script>
+    <script src="js/events/maleEvents.js"></script>
+    <script src="js/events/femaleEvents.js"></script>
+    <script src="js/events/ageEvents.js"></script>
+    <script src="js/achievements.js"></script>
+    <script src="js/eventManager.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/ui-effects.js"></script>
+
+    <script>
+        // 添加DOM加载完成后的初始化
+        document.addEventListener('DOMContentLoaded', function () {
+            // 初始化游戏实例
+            window.game = new LifeSimulatorGame();
+
+            // 初始化时隐藏所有界面
+            document.getElementById('characterCreation').style.display = 'none';
+            document.getElementById('achievementsScreen').style.display = 'none';
+            document.getElementById('replayScreen').style.display = 'none';
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('gameScreen').style.display = 'none';
+            document.getElementById('gameoverScreen').style.display = 'none';
+            document.getElementById('lifeDetailsScreen').style.display = 'none';
+            // 只显示主菜单
+            document.getElementById('mainMenu').style.display = 'block';
+        });
+    </script>
+</body>
+
+</html>

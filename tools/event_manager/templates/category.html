@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}{{ display_name }}{% endblock %}
+
+{% block breadcrumb %}
+<span class="breadcrumb-sep">/</span>
+<a href="{{ url_for('category', filename=filename) }}">{{ display_name }}</a>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>🏷️ {{ display_name }}</h1>
+    <p class="subtitle">共 {{ tags|length }} 个标签</p>
+</div>
+
+<div class="toolbar">
+    <form action="{{ url_for('add_tag', filename=filename) }}" method="post" class="add-tag-form">
+        <div class="form-row">
+            <input type="text" name="tag_name" placeholder="新标签名称" required>
+            <input type="text" name="description" placeholder="标签描述">
+            <button type="submit" class="btn btn-primary">+ 添加标签</button>
+        </div>
+        
+        {% if filename in ['purpleEvents.js', 'pinkEvents.js'] %}
+        <div class="fixed-attrs-row">
+            <span class="label">固定属性:</span>
+            <input type="number" name="fixed_health" placeholder="体质">
+            <input type="number" name="fixed_money" placeholder="家境">
+            <input type="number" name="fixed_social" placeholder="快乐">
+            <input type="number" name="fixed_intelligence" placeholder="智力">
+            <input type="number" name="fixed_luck" placeholder="运气">
+            <input type="number" name="fixed_san" placeholder="心情">
+        </div>
+        {% endif %}
+    </form>
+    <a href="{{ url_for('reload_file', filename=filename) }}" class="btn btn-secondary">🔄 重新加载</a>
+</div>
+
+<div class="tag-list">
+    {% for tag in tags %}
+    <div class="tag-item {% if tag.is_color %}tag-color{% endif %}">
+        <a href="{{ url_for('tag_events', filename=filename, tag_name=tag.name) }}" class="tag-link">
+            <span class="tag-name">{{ tag.name }}</span>
+            <span class="tag-count">{{ tag.event_count }} 个事件</span>
+        </a>
+        <form action="{{ url_for('delete_tag', filename=filename, tag_name=tag.name) }}" method="post"
+            class="tag-delete-form" onsubmit="return confirm('确定要删除标签 「{{ tag.name }}」 及其所有事件吗？');">
+            <button type="submit" class="btn btn-danger btn-small">删除</button>
+        </form>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <p>暂无标签</p>
+        <p class="hint">使用上方表单添加第一个标签</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

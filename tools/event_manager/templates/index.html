@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}事件分类{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>📁 事件文件分类</h1>
+    <p class="subtitle">选择一个事件文件开始编辑</p>
+</div>
+
+<div class="card-grid">
+    <a href="{{ url_for('achievements_list') }}" class="card card-link">
+        <div class="card-icon">🏆</div>
+        <div class="card-content">
+            <h3>成就管理</h3>
+            <p class="card-subtitle">管理游戏成就系统</p>
+        </div>
+        <div class="card-arrow">→</div>
+    </a>
+
+    {% for file in files %}
+    <a href="{{ url_for('category', filename=file.filename) }}" class="card card-link">
+        <div class="card-icon">
+            {% if 'male' in file.filename.lower() %}
+            👨
+            {% elif 'female' in file.filename.lower() %}
+            👩
+            {% elif 'age' in file.filename.lower() %}
+            📅
+            {% elif 'red' in file.filename.lower() %}
+            🔴
+            {% elif 'black' in file.filename.lower() %}
+            ⚫
+            {% elif 'purple' in file.filename.lower() %}
+            🟣
+            {% elif 'pink' in file.filename.lower() %}
+            🩷
+            {% elif 'gold' in file.filename.lower() %}
+            🥇
+            {% elif 'common' in file.filename.lower() %}
+            📋
+            {% else %}
+            📄
+            {% endif %}
+        </div>
+        <div class="card-content">
+            <h3>{{ file.display_name }}</h3>
+            <p class="card-subtitle">{{ file.filename }}</p>
+        </div>
+        <div class="card-arrow">→</div>
+    </a>
+    {% endfor %}
+</div>
+{% endblock %}

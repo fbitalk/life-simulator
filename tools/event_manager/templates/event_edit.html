@@ -1,0 +1,824 @@
+{% extends "base.html" %}
+
+{% block title %}编辑: {{ event.title }}{% endblock %}
+
+{% block breadcrumb %}
+<span class="breadcrumb-sep">/</span>
+<a href="{{ url_for('category', filename=filename) }}">{{ display_name }}</a>
+<span class="breadcrumb-sep">/</span>
+<a href="{{ url_for('tag_events', filename=filename, tag_name=tag_name) }}">{{ tag_name }}</a>
+<span class="breadcrumb-sep">/</span>
+<span>{{ event_id }}</span>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>✏️ 编辑事件</h1>
+    <p class="subtitle">{{ event_id }}</p>
+</div>
+
+<form action="{{ url_for('event_edit', filename=filename, tag_name=tag_name, event_id=event_id) }}" method="post"
+    class="event-form" id="eventForm">
+
+    <div class="form-section">
+        <h2>基本信息</h2>
+
+        <div class="form-group">
+            <label for="title">事件标题 *</label>
+            <input type="text" id="title" name="title" value="{{ event.title }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="description">事件描述 *</label>
+            <textarea id="description" name="description" rows="4" required>{{ event.description }}</textarea>
+            <p class="form-hint">使用 {user} 作为玩家名字的占位符</p>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="priority">优先级</label>
+                <input type="number" id="priority" name="priority" value="{{ event.priority|default(0) }}" min="0">
+                <p class="form-hint">数字越大越优先触发</p>
+            </div>
+
+            <div class="form-group form-checkbox">
+                <label>
+                    <input type="checkbox" name="is_continue" {% if event.is_continue %}checked{% endif %}>
+                    连续事件 (is_continue)
+                </label>
+                <p class="form-hint">勾选后只能通过 continue_event 触发</p>
+            </div>
+
+            <div class="form-group form-checkbox">
+                <label>
+                    <input type="checkbox" name="allow_repeat" {% if event.allow_repeat %}checked{% endif %}>
+                    允许重复触发 (allow_repeat)
+                </label>
+                <p class="form-hint">勾选后该事件可以在同一局游戏中多次触发</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-section">
+        <h2>触发条件</h2>
+        <details>
+            <summary class="section-summary">点击展开/收起触发条件设置</summary>
+            <div class="details-content">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>年龄范围 (age_range)</label>
+                        <div class="range-inputs">
+                            <input type="number" name="age_min" placeholder="最小年龄" min="0" max="666"
+                                value="{{ event.trigger_conditions.age_range[0] if event.trigger_conditions and event.trigger_conditions.age_range else '' }}">
+                            <span class="range-sep">至</span>
+                            <input type="number" name="age_max" placeholder="最大年龄" min="0" max="666"
+                                value="{{ event.trigger_conditions.age_range[1] if event.trigger_conditions and event.trigger_conditions.age_range else '' }}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>最低属性要求 (min_attributes)</label>
+                    <div class="attributes-grid">
+                        {% set min_attrs = event.trigger_conditions.min_attributes if event.trigger_conditions and
+                        event.trigger_conditions.min_attributes else {} %}
+                        <div class="attr-input">
+                            <span>健康</span>
+                            <input type="number" name="min_health" placeholder="-"
+                                value="{{ min_attrs.health if min_attrs.health is defined else '' }}">
+                        </div>
+                        <div class="attr-input">
+                            <span>金钱</span>
+                            <input type="number" name="min_money" placeholder="-"
+                                value="{{ min_attrs.money if min_attrs.money is defined else '' }}">
+                        </div>
+                        <div class="attr-input">
+                            <span>社交</span>
+                            <input type="number" name="min_social" placeholder="-"
+                                value="{{ min_attrs.social if min_attrs.social is defined else '' }}">
+                        </div>
+                        <div class="attr-input">
+                            <span>智力</span>
+                            <input type="number" name="min_intelligence" placeholder="-"
+                                value="{{ min_attrs.intelligence if min_attrs.intelligence is defined else '' }}">
+                        </div>
+                        <div class="attr-input">
+                            <span>幸运</span>
+                            <input type="number" name="min_luck" placeholder="-"
+                                value="{{ min_attrs.luck if min_attrs.luck is defined else '' }}">
+                        </div>
+                        <div class="attr-input">
+                            <span>理智</span>
+                            <input type="number" name="min_san" placeholder="-"
+                                value="{{ min_attrs.san if min_attrs.san is defined else '' }}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>最高属性限制 (max_attributes)</label>
+                    <div class="attributes-grid">
+                        {% set max_attrs = event.trigger_conditions.max_attributes if event.trigger_conditions and
+                        event.trigger_conditions.max_attributes else {} %}
+                        <div class="attr-input">
+                            <span>健康</span>
+                            <input type="number" name="max_health" placeholder="-"
+                                value="{{ max_attrs.health if max_attrs.health is defined else '' }}">
+                        </div>
+                        <div class="attr-input">
+                            <span>金钱</span>
+                            <input type="number" name="max_money" placeholder="-"
+                                value="{{ max_attrs.money if max_attrs.money is defined else '' }}">
+                        </div>
+                        <div class="attr-input">
+                            <span>社交</span>
+                            <input type="number" name="max_social" placeholder="-"
+                                value="{{ max_attrs.social if max_attrs.social is defined else '' }}">
+                        </div>
+                        <div class="attr-input">
+                            <span>智力</span>
+                            <input type="number" name="max_intelligence" placeholder="-"
+                                value="{{ max_attrs.intelligence if max_attrs.intelligence is defined else '' }}">
+                        </div>
+                        <div class="attr-input">
+                            <span>幸运</span>
+                            <input type="number" name="max_luck" placeholder="-"
+                                value="{{ max_attrs.luck if max_attrs.luck is defined else '' }}">
+                        </div>
+                        <div class="attr-input">
+                            <span>理智</span>
+                            <input type="number" name="max_san" placeholder="-"
+                                value="{{ max_attrs.san if max_attrs.san is defined else '' }}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>临时属性要求 (temp)</label>
+                    <div class="range-inputs">
+                        <input type="number" name="min_temp" placeholder="最低值"
+                            value="{{ event.trigger_conditions.min_temp if event.trigger_conditions and event.trigger_conditions.min_temp is defined else '' }}">
+                        <span class="range-sep">至</span>
+                        <input type="number" name="max_temp" placeholder="最高值"
+                            value="{{ event.trigger_conditions.max_temp if event.trigger_conditions and event.trigger_conditions.max_temp is defined else '' }}">
+                    </div>
+                    <p class="form-hint">临时属性条件，用于连续事件分支</p>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="required_tags">必需标签 (required_tags)</label>
+                        <input type="text" id="required_tags" name="required_tags" placeholder="用逗号分隔多个标签"
+                            value="{{ event.trigger_conditions.required_tags|join(', ') if event.trigger_conditions and event.trigger_conditions.required_tags else '' }}">
+                        <p class="form-hint">玩家必须拥有这些标签才会触发</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="excluded_tags">排除标签 (excluded_tags)</label>
+                        <input type="text" id="excluded_tags" name="excluded_tags" placeholder="用逗号分隔多个标签"
+                            value="{{ event.trigger_conditions.excluded_tags|join(', ') if event.trigger_conditions and event.trigger_conditions.excluded_tags else '' }}">
+                        <p class="form-hint">拥有这些标签的玩家不会触发</p>
+                    </div>
+                </div>
+            </div>
+        </details>
+    </div>
+
+    <div class="form-section">
+        <h2>选项列表</h2>
+        <p class="section-hint">玩家可以选择的选项</p>
+
+        <div id="optionsContainer">
+            {% for option in event.options %}
+            {% set outer_loop = loop %}
+            <div class="option-card" data-index="{{ loop.index0 }}">
+                <div class="option-header">
+                    <span class="option-number">选项 {{ loop.index }}</span>
+                    <button type="button" class="btn btn-danger btn-small" onclick="removeOption(this)">删除选项</button>
+                </div>
+
+                <div class="form-group">
+                    <label>选项文本 *</label>
+                    <input type="text" name="option_text_{{ loop.index0 }}" value="{{ option.text }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label>结果描述</label>
+                    <textarea name="option_result_{{ loop.index0 }}" rows="2">{{ option.result }}</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>属性效果 (effects)</label>
+                    <div class="effects-grid">
+                        {% set effects = option.effects if option.effects else {} %}
+                        <div class="effect-input">
+                            <span>健康</span>
+                            <input type="number" name="option_effect_health_{{ loop.index0 }}"
+                                value="{{ effects.health if effects.health is defined else '' }}">
+                        </div>
+                        <div class="effect-input">
+                            <span>金钱</span>
+                            <input type="number" name="option_effect_money_{{ loop.index0 }}"
+                                value="{{ effects.money if effects.money is defined else '' }}">
+                        </div>
+                        <div class="effect-input">
+                            <span>社交</span>
+                            <input type="number" name="option_effect_social_{{ loop.index0 }}"
+                                value="{{ effects.social if effects.social is defined else '' }}">
+                        </div>
+                        <div class="effect-input">
+                            <span>智力</span>
+                            <input type="number" name="option_effect_intelligence_{{ loop.index0 }}"
+                                value="{{ effects.intelligence if effects.intelligence is defined else '' }}">
+                        </div>
+                        <div class="effect-input">
+                            <span>幸运</span>
+                            <input type="number" name="option_effect_luck_{{ loop.index0 }}"
+                                value="{{ effects.luck if effects.luck is defined else '' }}">
+                        </div>
+                        <div class="effect-input">
+                            <span>理智</span>
+                            <input type="number" name="option_effect_san_{{ loop.index0 }}"
+                                value="{{ effects.san if effects.san is defined else '' }}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>添加标签 (add_tags)</label>
+                        <input type="text" name="option_add_tags_{{ loop.index0 }}" placeholder="用逗号分隔"
+                            value="{{ option.add_tags|join(', ') if option.add_tags else '' }}">
+                    </div>
+                    <div class="form-group">
+                        <label>移除标签 (remove_tags)</label>
+                        <input type="text" name="option_remove_tags_{{ loop.index0 }}" placeholder="用逗号分隔"
+                            value="{{ option.remove_tags|join(', ') if option.remove_tags else '' }}">
+                    </div>
+                </div>
+
+                <details class="advanced-settings">
+                    <summary>高级选项设置 (点击展开) <span class="advanced-status status-disabled">未启用</span></summary>
+                    <div class="details-content">
+
+                        <div class="form-group">
+                            <label>直接设置属性 (set_attributes)</label>
+                            <div class="effects-grid">
+                                {% set set_attrs = option.set_attributes if option.set_attributes else {} %}
+                                <div class="effect-input">
+                                    <span>健康</span>
+                                    <input type="number" name="option_set_health_{{ loop.index0 }}"
+                                        value="{{ set_attrs.health if set_attrs.health is defined else '' }}"
+                                        placeholder="设为">
+                                </div>
+                                <div class="effect-input">
+                                    <span>金钱</span>
+                                    <input type="number" name="option_set_money_{{ loop.index0 }}"
+                                        value="{{ set_attrs.money if set_attrs.money is defined else '' }}"
+                                        placeholder="设为">
+                                </div>
+                                <div class="effect-input">
+                                    <span>社交</span>
+                                    <input type="number" name="option_set_social_{{ loop.index0 }}"
+                                        value="{{ set_attrs.social if set_attrs.social is defined else '' }}"
+                                        placeholder="设为">
+                                </div>
+                                <div class="effect-input">
+                                    <span>智力</span>
+                                    <input type="number" name="option_set_intelligence_{{ loop.index0 }}"
+                                        value="{{ set_attrs.intelligence if set_attrs.intelligence is defined else '' }}"
+                                        placeholder="设为">
+                                </div>
+                                <div class="effect-input">
+                                    <span>幸运</span>
+                                    <input type="number" name="option_set_luck_{{ loop.index0 }}"
+                                        value="{{ set_attrs.luck if set_attrs.luck is defined else '' }}"
+                                        placeholder="设为">
+                                </div>
+                                <div class="effect-input">
+                                    <span>理智</span>
+                                    <input type="number" name="option_set_san_{{ loop.index0 }}"
+                                        value="{{ set_attrs.san if set_attrs.san is defined else '' }}"
+                                        placeholder="设为">
+                                </div>
+                            </div>
+                            <p class="form-hint">直接将属性设为指定值（非增减）</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label>设置临时属性 (set_temp)</label>
+                            <input type="number" name="option_set_temp_{{ loop.index0 }}" placeholder="将临时属性设为..."
+                                value="{{ set_attrs.temp if set_attrs.temp is defined else '' }}">
+                            <p class="form-hint">设置临时属性值（用于连续事件分支）</p>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>后续事件 (continue_event)</label>
+                                <input type="text" name="option_continue_event_{{ loop.index0 }}"
+                                    placeholder="事件ID，多个用逗号分隔"
+                                    value="{% if option.continue_event is iterable and option.continue_event is not string %}{{ option.continue_event|join(', ') }}{% else %}{{ option.continue_event if option.continue_event else '' }}{% endif %}">
+                                <p class="form-hint">支持多个事件ID（逗号分隔），将随机选取一个</p>
+                            </div>
+                            <div class="form-group">
+                                <label>死亡风险 (risk)</label>
+                                <input type="number" name="option_risk_{{ loop.index0 }}" step="0.01" min="0" max="1"
+                                    placeholder="0-1" value="{{ option.risk if option.risk is defined else '' }}">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>死亡描述 (death_reason)</label>
+                            <input type="text" name="option_death_reason_{{ loop.index0 }}" placeholder="风险触发时的死因描述"
+                                value="{{ option.death_reason if option.death_reason else '' }}">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group form-checkbox">
+                                <label>
+                                    <input type="checkbox" name="option_death_flag_{{ loop.index0 }}" {% if
+                                        option.death_flag %}checked{% endif %}>
+                                    直接致死 (death_flag)
+                                </label>
+                                <p class="form-hint">勾选后选择此选项直接导致死亡</p>
+                            </div>
+                        </div>
+
+                        <div class="form-group conditional-results-section">
+                            <label>条件结果 (conditional_results) <span class="optional-badge">高级</span></label>
+
+                            <div class="conditional-results-container" data-option-index="{{ loop.index0 }}">
+                                {% if option.conditional_results %}
+                                {% for cond in option.conditional_results %}
+                                <div class="conditional-result-item" data-cond-index="{{ loop.index0 }}">
+                                    <div class="cond-header">
+                                        <span>条件 {{ loop.index }}</span>
+                                        <button type="button" class="btn btn-danger btn-small"
+                                            onclick="removeConditionalResult(this)">删除</button>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>条件类型</label>
+                                            <select name="option_{{ outer_loop.index0 }}_cond_{{ loop.index0 }}_type"
+                                                class="cond-type-select" onchange="toggleConditionFields(this)">
+                                                <option value="attributes" {% if cond.conditions.min_attributes or
+                                                    cond.conditions.max_attributes %}selected{% endif %}>属性条件</option>
+                                                <option value="temp" {% if cond.conditions.min_temp is defined or
+                                                    cond.conditions.max_temp is defined %}selected{% endif %}>临时属性
+                                                </option>
+                                                <option value="tags" {% if cond.conditions.required_tags %}selected{%
+                                                    endif %}>
+                                                    标签条件</option>
+                                                <option value="default" {% if cond.conditions.default %}selected{% endif
+                                                    %}>
+                                                    默认（兜底）</option>
+                                            </select>
+                                        </div>
+
+                                        <!-- Attribute Fields -->
+                                        <div class="form-group cond-field-group cond-attr-fields">
+                                            <label>属性名</label>
+                                            <select name="option_{{ outer_loop.index0 }}_cond_{{ loop.index0 }}_attr">
+                                                <option value="">--</option>
+                                                <option value="health" {% if cond.conditions.min_attributes and
+                                                    cond.conditions.min_attributes.health is defined %}selected{% endif
+                                                    %}>健康
+                                                </option>
+                                                <option value="money" {% if cond.conditions.min_attributes and
+                                                    cond.conditions.min_attributes.money is defined %}selected{% endif
+                                                    %}>金钱
+                                                </option>
+                                                <option value="intelligence" {% if cond.conditions.min_attributes and
+                                                    cond.conditions.min_attributes.intelligence is defined %}selected{%
+                                                    endif %}>智力</option>
+                                                <option value="luck" {% if cond.conditions.min_attributes and
+                                                    cond.conditions.min_attributes.luck is defined %}selected{% endif
+                                                    %}>幸运
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group cond-field-group cond-attr-fields">
+                                            <label>最低值</label>
+                                            <input type="number"
+                                                name="option_{{ outer_loop.index0 }}_cond_{{ loop.index0 }}_min"
+                                                value="{% if cond.conditions.min_attributes %}{{ cond.conditions.min_attributes.values()|list|first }}{% endif %}">
+                                        </div>
+
+                                        <!-- Temp Fields -->
+                                        <div class="form-group cond-field-group cond-temp-fields" style="display:none">
+                                            <label>临时属性最低值</label>
+                                            <input type="number"
+                                                name="option_{{ outer_loop.index0 }}_cond_{{ loop.index0 }}_temp_min"
+                                                value="{% if cond.conditions.min_temp is defined %}{{ cond.conditions.min_temp }}{% endif %}">
+                                        </div>
+
+                                        <!-- Tag Fields -->
+                                        <div class="form-group cond-field-group cond-tag-fields" style="display:none">
+                                            <label>必需标签</label>
+                                            <input type="text"
+                                                name="option_{{ outer_loop.index0 }}_cond_{{ loop.index0 }}_tags"
+                                                placeholder="逗号分隔"
+                                                value="{{ cond.conditions.required_tags|join(', ') if cond.conditions.required_tags else '' }}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>结果描述 *</label>
+                                        <input type="text"
+                                            name="option_{{ outer_loop.index0 }}_cond_{{ loop.index0 }}_result"
+                                            value="{{ cond.result }}" required>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>效果 (效果属性:值)</label>
+                                            <input type="text"
+                                                name="option_{{ outer_loop.index0 }}_cond_{{ loop.index0 }}_effects"
+                                                placeholder="health:10, money:-5"
+                                                value="{% if cond.effects %}{% for k,v in cond.effects.items() %}{{ k }}:{{ v }}{% if not loop.last %}, {% endif %}{% endfor %}{% endif %}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>添加标签</label>
+                                            <input type="text"
+                                                name="option_{{ outer_loop.index0 }}_cond_{{ loop.index0 }}_add_tags"
+                                                placeholder="逗号分隔"
+                                                value="{{ cond.add_tags|join(', ') if cond.add_tags else '' }}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>后续事件</label>
+                                        <input type="text"
+                                            name="option_{{ outer_loop.index0 }}_cond_{{ loop.index0 }}_continue"
+                                            placeholder="事件ID，多个用逗号分隔"
+                                            value="{% if cond.continue_event is iterable and cond.continue_event is not string %}{{ cond.continue_event|join(', ') }}{% else %}{{ cond.continue_event if cond.continue_event else '' }}{% endif %}">
+                                    </div>
+                                </div>
+                                {% endfor %}
+                                {% endif %}
+                            </div>
+                            <button type="button" class="btn btn-secondary btn-small"
+                                onclick="addConditionalResult({{ loop.index0 }})">+ 添加条件结果</button>
+
+                            <details class="json-fallback">
+                                <summary>或直接编辑 JSON</summary>
+                                <textarea name="option_conditional_results_{{ loop.index0 }}" rows="4"
+                                    class="code-editor"
+                                    placeholder='[{"conditions": {"min_attributes": {"luck": 80}}, "result": "幸运结果", "effects": {"money": 100}}]'>{{ option.conditional_results|json_dumps if option.conditional_results else '' }}</textarea>
+                            </details>
+                            <p class="form-hint">添加多个条件结果，系统按顺序检查，匹配第一个满足条件的结果</p>
+                        </div>
+                    </div>
+                </details>
+            </div>
+            {% endfor %}
+        </div>
+
+        <button type="button" class="btn btn-secondary" onclick="addOption()">+ 添加新选项</button>
+    </div>
+
+    <input type="hidden" name="option_count" id="optionCount" value="{{ event.options|length }}">
+
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary btn-large">💾 保存事件</button>
+        <a href="{{ url_for('tag_events', filename=filename, tag_name=tag_name) }}" class="btn btn-secondary">取消</a>
+    </div>
+</form>
+
+<div class="raw-data-section">
+    <details>
+        <summary>查看完整JSON数据</summary>
+        <pre class="raw-json">{{ event|json_dumps }}</pre>
+    </details>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    let optionCount = {{ event.options| length }};
+
+    function addOption() {
+        const container = document.getElementById('optionsContainer');
+        const index = optionCount;
+
+        const optionHtml = `
+        <div class="option-card" data-index="${index}">
+            <div class="option-header">
+                <span class="option-number">选项 ${index + 1}</span>
+                <button type="button" class="btn btn-danger btn-small" onclick="removeOption(this)">删除选项</button>
+            </div>
+            
+            <div class="form-group">
+                <label>选项文本 *</label>
+                <input type="text" name="option_text_${index}" required>
+            </div>
+            
+            <div class="form-group">
+                <label>结果描述</label>
+                <textarea name="option_result_${index}" rows="2"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>属性效果 (effects)</label>
+                <div class="effects-grid">
+                    <div class="effect-input"><span>健康</span><input type="number" name="option_effect_health_${index}"></div>
+                    <div class="effect-input"><span>金钱</span><input type="number" name="option_effect_money_${index}"></div>
+                    <div class="effect-input"><span>社交</span><input type="number" name="option_effect_social_${index}"></div>
+                    <div class="effect-input"><span>智力</span><input type="number" name="option_effect_intelligence_${index}"></div>
+                    <div class="effect-input"><span>幸运</span><input type="number" name="option_effect_luck_${index}"></div>
+                    <div class="effect-input"><span>理智</span><input type="number" name="option_effect_san_${index}"></div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>直接设置属性 (set_attributes)</label>
+                <div class="effects-grid">
+                    <div class="effect-input"><span>健康</span><input type="number" name="option_set_health_${index}" placeholder="设为"></div>
+                    <div class="effect-input"><span>金钱</span><input type="number" name="option_set_money_${index}" placeholder="设为"></div>
+                    <div class="effect-input"><span>社交</span><input type="number" name="option_set_social_${index}" placeholder="设为"></div>
+                    <div class="effect-input"><span>智力</span><input type="number" name="option_set_intelligence_${index}" placeholder="设为"></div>
+                    <div class="effect-input"><span>幸运</span><input type="number" name="option_set_luck_${index}" placeholder="设为"></div>
+                    <div class="effect-input"><span>理智</span><input type="number" name="option_set_san_${index}" placeholder="设为"></div>
+                </div>
+                <p class="form-hint">直接将属性设为指定值（非增减）</p>
+            </div>
+            
+            <div class="form-group">
+                <label>设置临时属性 (set_temp)</label>
+                <input type="number" name="option_set_temp_${index}" placeholder="将临时属性设为...">
+                <p class="form-hint">设置临时属性值（用于连续事件分支）</p>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>添加标签 (add_tags)</label>
+                    <input type="text" name="option_add_tags_${index}" placeholder="用逗号分隔">
+                </div>
+                <div class="form-group">
+                    <label>移除标签 (remove_tags)</label>
+                    <input type="text" name="option_remove_tags_${index}" placeholder="用逗号分隔">
+                </div>
+            </div>
+            
+            <details class="advanced-settings">
+                <summary>高级选项设置 (点击展开) <span class="advanced-status status-disabled">未启用</span></summary>
+                <div class="details-content">
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>后续事件 (continue_event)</label>
+                    <input type="text" name="option_continue_event_${index}" placeholder="事件ID，多个用逗号分隔">
+                    <p class="form-hint">支持多个事件ID（逗号分隔），将随机选取一个</p>
+                </div>
+                <div class="form-group">
+                    <label>死亡风险 (risk)</label>
+                    <input type="number" name="option_risk_${index}" step="0.01" min="0" max="1" placeholder="0-1">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>死亡描述 (death_reason)</label>
+                <input type="text" name="option_death_reason_${index}" placeholder="风险触发时的死因描述">
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group form-checkbox">
+                    <label>
+                        <input type="checkbox" name="option_death_flag_${index}">
+                        直接致死 (death_flag)
+                    </label>
+                    <p class="form-hint">勾选后选择此选项直接导致死亡</p>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>条件结果 (conditional_results) <span class="optional-badge">高级</span></label>
+                <textarea name="option_conditional_results_${index}" rows="4" class="code-editor" 
+                    placeholder='[{"conditions": {"min_attributes": {"luck": 80}}, "result": "幸运结果", "effects": {"money": 100}}]'></textarea>
+                <p class="form-hint">JSON数组格式，根据不同条件触发不同结果</p>
+            </div>
+            </div>
+            </details>
+        </div>
+    `;
+
+        container.insertAdjacentHTML('beforeend', optionHtml);
+        optionCount++;
+        document.getElementById('optionCount').value = optionCount;
+        updateOptionNumbers();
+    }
+
+    function removeOption(button) {
+        const optionCard = button.closest('.option-card');
+        optionCard.remove();
+        updateOptionNumbers();
+    }
+
+    function updateOptionNumbers() {
+        const cards = document.querySelectorAll('.option-card');
+        cards.forEach((card, index) => {
+            card.querySelector('.option-number').textContent = `选项 ${index + 1}`;
+        });
+    }
+
+    // 条件结果相关函数
+    let condResultCounters = {};  // 跟踪每个选项的条件结果数量
+
+    function addConditionalResult(optionIndex) {
+        const container = document.querySelector(`.conditional-results-container[data-option-index="${optionIndex}"]`);
+        if (!condResultCounters[optionIndex]) {
+            condResultCounters[optionIndex] = container.querySelectorAll('.conditional-result-item').length;
+        }
+        const condIndex = condResultCounters[optionIndex]++;
+
+        const html = `
+        <div class="conditional-result-item" data-cond-index="${condIndex}">
+            <div class="cond-header">
+                <span>条件 ${condIndex + 1}</span>
+                <button type="button" class="btn btn-danger btn-small" onclick="removeConditionalResult(this)">删除</button>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>条件类型</label>
+                    <select name="option_${optionIndex}_cond_${condIndex}_type" class="cond-type-select" onchange="toggleConditionFields(this)">
+                        <option value="attributes">属性条件</option>
+                        <option value="temp">临时属性</option>
+                        <option value="tags">标签条件</option>
+                        <option value="default">默认（兜底）</option>
+                    </select>
+                </div>
+                
+                <!-- Attribute Fields -->
+                <div class="form-group cond-field-group cond-attr-fields">
+                    <label>属性名</label>
+                    <select name="option_${optionIndex}_cond_${condIndex}_attr">
+                        <option value="">--</option>
+                        <option value="health">健康</option>
+                        <option value="money">金钱</option>
+                        <option value="intelligence">智力</option>
+                        <option value="luck">幸运</option>
+                    </select>
+                </div>
+                <div class="form-group cond-field-group cond-attr-fields">
+                    <label>最低值</label>
+                    <input type="number" name="option_${optionIndex}_cond_${condIndex}_min">
+                </div>
+
+                <!-- Temp Fields -->
+                <div class="form-group cond-field-group cond-temp-fields" style="display:none">
+                    <label>临时属性最低值</label>
+                    <input type="number" name="option_${optionIndex}_cond_${condIndex}_temp_min">
+                </div>
+
+                <!-- Tag Fields -->
+                <div class="form-group cond-field-group cond-tag-fields" style="display:none">
+                    <label>必需标签</label>
+                    <input type="text" name="option_${optionIndex}_cond_${condIndex}_tags" placeholder="逗号分隔">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>结果描述 *</label>
+                <input type="text" name="option_${optionIndex}_cond_${condIndex}_result" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>效果 (属性:值)</label>
+                    <input type="text" name="option_${optionIndex}_cond_${condIndex}_effects" placeholder="health:10, money:-5">
+                </div>
+                <div class="form-group">
+                    <label>添加标签</label>
+                    <input type="text" name="option_${optionIndex}_cond_${condIndex}_add_tags" placeholder="逗号分隔">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>后续事件</label>
+                <input type="text" name="option_${optionIndex}_cond_${condIndex}_continue" placeholder="事件ID，多个用逗号分隔">
+            </div>
+        </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+        updateAdvancedStatus(container.closest('.option-card'));
+    }
+
+    function removeConditionalResult(button) {
+        const card = button.closest('.option-card');
+        button.closest('.conditional-result-item').remove();
+        updateAdvancedStatus(card);
+    }
+
+    function toggleConditionFields(selectElement) {
+        const row = selectElement.closest('.form-row');
+        const type = selectElement.value;
+
+        // Hide all first
+        row.querySelectorAll('.cond-field-group').forEach(el => el.style.display = 'none');
+
+        // Show selected
+        if (type === 'attributes') {
+            row.querySelectorAll('.cond-attr-fields').forEach(el => el.style.display = 'block');
+        } else if (type === 'temp') {
+            row.querySelectorAll('.cond-temp-fields').forEach(el => el.style.display = 'block');
+        } else if (type === 'tags') {
+            row.querySelectorAll('.cond-tag-fields').forEach(el => el.style.display = 'block');
+        }
+    }
+
+    // 初始化字段状态
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.cond-type-select').forEach(select => {
+            toggleConditionFields(select);
+        });
+
+        // 初始化所有选项的高级设置状态
+        document.querySelectorAll('.option-card').forEach(card => {
+            updateAdvancedStatus(card);
+        });
+
+        // 监听表单变化，动态更新状态
+        document.getElementById('eventForm').addEventListener('input', function (e) {
+            const card = e.target.closest('.option-card');
+            if (card) {
+                updateAdvancedStatus(card);
+            }
+        });
+
+        // 监听点击事件（特别是复选框和删除按钮）
+        document.getElementById('eventForm').addEventListener('click', function (e) {
+            const card = e.target.closest('.option-card');
+            if (card) {
+                // 延迟一下确保 DOM 已更新（针对添加/删除操作）
+                setTimeout(() => updateAdvancedStatus(card), 10);
+            }
+        });
+    });
+
+    /**
+     * 更新高级设置的状态提示
+     */
+    function updateAdvancedStatus(card) {
+        const advancedSection = card.querySelector('.advanced-settings');
+        if (!advancedSection) return;
+
+        const statusLabel = advancedSection.querySelector('.advanced-status');
+        if (!statusLabel) return;
+
+        let isEnabled = false;
+
+        // 1. 检查直接设置属性 (set_attributes)
+        const setAttrs = advancedSection.querySelectorAll('input[name*="_set_"]');
+        for (let input of setAttrs) {
+            if (input.value.trim() !== '') {
+                isEnabled = true;
+                break;
+            }
+        }
+
+        // 2. 检查后续事件、风险、死亡描述
+        if (!isEnabled) {
+            const fields = [
+                card.querySelector('input[name*="_continue_event_"]'),
+                card.querySelector('input[name*="_risk_"]'),
+                card.querySelector('input[name*="_death_reason_"]')
+            ];
+            for (let f of fields) {
+                if (f && f.value.trim() !== '') {
+                    isEnabled = true;
+                    break;
+                }
+            }
+        }
+
+        // 3. 检查死亡标志 (checkbox)
+        if (!isEnabled) {
+            const deathFlag = card.querySelector('input[name*="_death_flag_"]');
+            if (deathFlag && deathFlag.checked) {
+                isEnabled = true;
+            }
+        }
+
+        // 4. 检查条件结果 (structured)
+        if (!isEnabled) {
+            const condItems = advancedSection.querySelectorAll('.conditional-result-item');
+            if (condItems.length > 0) {
+                isEnabled = true;
+            }
+        }
+
+        // 5. 检查条件结果 (JSON textarea)
+        if (!isEnabled) {
+            const jsonFallback = advancedSection.querySelector('textarea[name*="_conditional_results_"]');
+            if (jsonFallback && jsonFallback.value.trim() !== '' && jsonFallback.value.trim() !== '[]' && jsonFallback.value.trim() !== 'null') {
+                isEnabled = true;
+            }
+        }
+
+        // 更新 UI
+        if (isEnabled) {
+            statusLabel.textContent = '已启用';
+            statusLabel.classList.remove('status-disabled');
+            statusLabel.classList.add('status-enabled');
+        } else {
+            statusLabel.textContent = '未启用';
+            statusLabel.classList.remove('status-enabled');
+            statusLabel.classList.add('status-disabled');
+        }
+    }
+</script>
+{% endblock %}
