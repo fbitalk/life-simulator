@@ -784,6 +784,12 @@ class LifeSimulatorGame {
                 if (!this.player.tags.includes(tag)) {
                     this.player.tags.push(tag);
 
+                    // 检查并解锁成就
+                    const achievement = achievementManager.checkAndUnlockByTag(tag);
+                    if (achievement) {
+                        console.log(`成就解锁: ${achievement.name}`);
+                    }
+
                     // 检查标签类型并显示相应效果
                     if (this.isRedTag(tag)) {
                         this.showTagEffect(tag, 'red');

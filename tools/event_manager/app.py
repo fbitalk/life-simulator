@@ -77,7 +77,7 @@ def category(filename):
         tags.append({
             'name': tag_name,
             'event_count': event_count,
-            'is_color': tag_data.get('is_red') or tag_data.get('is_black') or tag_data.get('is_purple') or tag_data.get('is_pink') or tag_data.get('is_gold') if isinstance(tag_data, dict) else False
+            'is_color': tag_data.get('is_red') or tag_data.get('is_black') or tag_data.get('is_purple') or tag_data.get('is_pink') or tag_data.get('is_golden') if isinstance(tag_data, dict) else False
         })
     
     display_name = FILE_DISPLAY_NAMES.get(filename, filename)
@@ -114,7 +114,7 @@ def add_tag(filename):
         'blackEvents.js': 'is_black',
         'purpleEvents.js': 'is_purple',
         'pinkEvents.js': 'is_pink',
-        'goldEvents.js': 'is_gold'
+        'goldEvents.js': 'is_golden'
     }
     
     if filename in color_map:
@@ -123,7 +123,7 @@ def add_tag(filename):
     # Handle fixed attributes for Purple and Pink
     if filename in ['purpleEvents.js', 'pinkEvents.js']:
         fixed_attrs = {}
-        for attr in ['health', 'money', 'social', 'intelligence', 'luck', 'san']:
+        for attr in ['health', 'money', 'social', 'intelligence', 'luck', 'san', 'mystery']:
             val = request.form.get(f'fixed_{attr}', '').strip()
             if val:
                 fixed_attrs[attr] = int(val)
@@ -172,7 +172,7 @@ def tag_events(filename, tag_name):
         # Fixed attributes for Purple and Pink
         if filename in ['purpleEvents.js', 'pinkEvents.js']:
             fixed_attrs = {}
-            for attr in ['health', 'money', 'social', 'intelligence', 'luck', 'san']:
+            for attr in ['health', 'money', 'social', 'intelligence', 'luck', 'san', 'mystery']:
                 val = request.form.get(f'fixed_{attr}', '').strip()
                 if val:
                     fixed_attrs[attr] = int(val)
@@ -344,7 +344,7 @@ def event_edit(filename, tag_name, event_id):
         
         # Min attributes
         min_attrs = {}
-        for attr in ['health', 'money', 'social', 'intelligence', 'luck', 'san']:
+        for attr in ['health', 'money', 'social', 'intelligence', 'luck', 'san', 'mystery']:
             val = request.form.get(f'min_{attr}', '').strip()
             if val:
                 min_attrs[attr] = int(val)
@@ -353,7 +353,7 @@ def event_edit(filename, tag_name, event_id):
         
         # Max attributes
         max_attrs = {}
-        for attr in ['health', 'money', 'social', 'intelligence', 'luck', 'san']:
+        for attr in ['health', 'money', 'social', 'intelligence', 'luck', 'san', 'mystery']:
             val = request.form.get(f'max_{attr}', '').strip()
             if val:
                 max_attrs[attr] = int(val)
@@ -410,7 +410,7 @@ def event_edit(filename, tag_name, event_id):
             
             # Effects
             effects = {}
-            for attr in ['health', 'money', 'social', 'intelligence', 'luck', 'san']:
+            for attr in ['health', 'money', 'social', 'intelligence', 'luck', 'san', 'mystery', 'temp']:
                 val = request.form.get(f'option_effect_{attr}_{idx}', '').strip()
                 if val:
                     effects[attr] = int(val)
@@ -419,7 +419,7 @@ def event_edit(filename, tag_name, event_id):
             
             # Set attributes (direct set)
             set_attrs = {}
-            for attr in ['health', 'money', 'social', 'intelligence', 'luck', 'san']:
+            for attr in ['health', 'money', 'social', 'intelligence', 'luck', 'san', 'mystery']:
                 val = request.form.get(f'option_set_{attr}_{idx}', '').strip()
                 if val:
                     set_attrs[attr] = int(val)
@@ -705,8 +705,9 @@ if __name__ == '__main__':
     local_ip = get_ip()
     print("=" * 50)
     print("  Life Simulator Event Manager")
+    print(f"  监听地址: 0.0.0.0:5000 (允许任何设备访问)")
     print(f"  本地访问: http://127.0.0.1:5000")
-    print(f"  远程访问: http://{local_ip}:5000")
+    print(f"  局域网访问: http://{local_ip}:5000")
     print("=" * 50)
     app.run(host='0.0.0.0', debug=True, port=5000)
 

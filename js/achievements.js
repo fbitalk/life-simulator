@@ -11,7 +11,7 @@ const achievementManager = {
                         "stars": 1,
                         "tag": "鸟人",
                         "unlocked": false,
-                        "golden": true
+                        "golden": false
                 },
                 {
                         "id": "student",
@@ -484,7 +484,7 @@ const achievementManager = {
                 {
                         "id": "test",
                         "name": "test",
-                        "description": "tttt",
+                        "description": "这是一个测试项目",
                         "icon": "🏆",
                         "stars": 1,
                         "tag": "t",
