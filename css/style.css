@@ -4220,3 +4220,31 @@ screen and (orientation: landscape) {
         -webkit-overflow-scrolling: touch;
     }
 }
+
+/* 强制修复移动端高度问题 */
+@media (max-width: 768px) {
+    html, body {
+        height: 100%;
+        overflow: hidden;
+    }
+    
+    .game-container {
+        height: 100% !important;
+        width: 100% !important;
+        max-height: none !important;
+        border-radius: 0 !important;
+        padding: 10px !important;
+        box-sizing: border-box !important;
+    }
+    
+    .game-screen {
+        height: 100% !important;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .event-interface {
+        height: 100% !important;
+        flex: 1;
+    }
+}
