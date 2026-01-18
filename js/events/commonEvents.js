@@ -1479,7 +1479,7 @@ const commonEvents = {
                             "学生"
                         ],
                         "continue_event": [
-                            "gaokao_chinese",
+                            "gkyw3",
                             "gkyw1",
                             "gkyw2"
                         ]

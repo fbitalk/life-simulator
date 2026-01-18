@@ -514,9 +514,11 @@
 
     <input type="hidden" name="option_count" id="optionCount" value="{{ event.options|length }}">
 
-    <div class="form-actions">
-        <button type="submit" class="btn btn-primary btn-large">💾 保存事件</button>
-        <a href="{{ url_for('tag_events', filename=filename, tag_name=tag_name) }}" class="btn btn-secondary">取消</a>
+    <div class="sticky-actions">
+        <div class="form-actions container">
+            <button type="submit" class="btn btn-primary btn-large">💾 保存事件</button>
+            <a href="{{ url_for('tag_events', filename=filename, tag_name=tag_name) }}" class="btn btn-secondary">取消</a>
+        </div>
     </div>
 </form>
 

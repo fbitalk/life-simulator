@@ -384,6 +384,13 @@ class LifeSimulatorGame {
                 const button = document.createElement('button');
                 button.className = 'option-btn';
 
+                // 检查是否为条件选项，添加特殊样式
+                if (option.conditional_results && option.conditional_results.length > 0) {
+                    button.classList.add('option-conditional');
+                }
+
+
+
                 const icon = document.createElement('span');
                 icon.className = 'option-icon';
                 icon.textContent = option.icon || '🔘';

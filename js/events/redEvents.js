@@ -827,41 +827,154 @@ const redEvents = {
         "is_red": true,
         "description": "开始高考",
         "events": {
-            "gaokao_chinese": {
+            "gkyw1": {
                 "title": "高考语文",
-                "description": "第一科是语文，{user}坐在考场上，看着试卷上的作文题目。",
+                "description": "第一科是语文，{user}翻开试卷，看到了一道古诗词鉴赏题：\"落红不是无情物，化作春泥更护花\"这句诗出自哪位诗人的作品？",
                 "is_continue": true,
                 "options": [
                     {
-                        "text": "认真答题",
-                        "result": "{user}仔细审题，认真作答，发挥出了平时的水平。",
+                        "text": "龚自珍",
+                        "result": "{user}选择了龚自珍。这是正确答案，这句诗出自清代诗人龚自珍的《己亥杂诗》，表达了诗人虽然离开官场，但仍关心国家命运的爱国情怀。",
                         "effects": {
-                            "intelligence": 5,
-                            "san": 3
+                            "temp": 20
                         },
-                        "continue_event": "gaokao_math"
+                        "continue_event": [
+                            "gksx1",
+                            "gksx2",
+                            "gksx3"
+                        ]
                     },
                     {
-                        "text": "紧张过度",
-                        "result": "{user}因为过度紧张，答题时出现了不少失误。",
-                        "effects": {
-                            "intelligence": -5,
-                            "san": -10
-                        },
-                        "continue_event": "gaokao_math"
+                        "text": "杜甫",
+                        "result": "{user}选择了杜甫。杜甫是唐代诗人，但这句诗是清代龚自珍的作品。",
+                        "continue_event": [
+                            "gksx1",
+                            "gksx2",
+                            "gksx3"
+                        ]
                     },
                     {
-                        "text": "提前交卷",
-                        "result": "{user}觉得题目太简单，提前交卷离开了考场。",
-                        "effects": {
-                            "intelligence": -3,
-                            "san": 5
-                        },
-                        "continue_event": "gaokao_math"
+                        "text": "李白",
+                        "result": "{user}选择了李白。李白是唐代诗人，但这句诗是清代龚自珍的作品。",
+                        "continue_event": [
+                            "gksx1",
+                            "gksx2",
+                            "gksx3"
+                        ]
+                    },
+                    {
+                        "text": "白居易",
+                        "result": "{user}选择了白居易。白居易是唐代诗人，但这句诗是清代龚自珍的作品。",
+                        "continue_event": [
+                            "gksx1",
+                            "gksx2",
+                            "gksx3"
+                        ]
                     }
-                ]
+                ],
+                "priority": 0,
+                "allow_repeat": false,
+                "trigger_conditions": {}
             },
-            "gaokao_math": {
+            "gkyw2": {
+                "title": "高考语文",
+                "description": "{user}继续答题，看到了一道成语辨析题：下列成语中，哪个成语的意思是\"不能使大家信服，未符合大家的期望\"？",
+                "is_continue": true,
+                "options": [
+                    {
+                        "text": "不孚众望",
+                        "result": "{user}选择了不孚众望。这是正确答案，\"不孚众望\"意思是不能使大家信服，未符合大家的期望。注意与\"不负众望\"（不辜负大家的期望）的区别。",
+                        "effects": {
+                            "temp": 20
+                        },
+                        "continue_event": [
+                            "gksx1",
+                            "gksx2",
+                            "gksx3"
+                        ]
+                    },
+                    {
+                        "text": "不负众望",
+                        "result": "{user}选择了不负众望。\"不负众望\"意思是不辜负大家的期望，与题目要求的\"不能使大家信服，未符合大家的期望\"意思相反。",
+                        "continue_event": [
+                            "gksx1",
+                            "gksx2",
+                            "gksx3"
+                        ]
+                    },
+                    {
+                        "text": "不耻下问",
+                        "result": "{user}选择了不耻下问。\"不耻下问\"意思是向地位比自己低、学识比自己少的人请教而不感到羞耻，与题目要求的含义不符。",
+                        "continue_event": [
+                            "gksx1",
+                            "gksx2",
+                            "gksx3"
+                        ]
+                    },
+                    {
+                        "text": "不以为然",
+                        "result": "{user}选择了不以为然。\"不以为然\"意思是不认为是对的，表示不同意或否定，与题目要求的含义不符。",
+                        "continue_event": [
+                            "gksx1",
+                            "gksx2",
+                            "gksx3"
+                        ]
+                    }
+                ],
+                "priority": 0,
+                "allow_repeat": false,
+                "trigger_conditions": {}
+            },
+            "gkyw3": {
+                "title": "高考语文",
+                "description": "{user}继续答题，看到了一道文言文理解题：\"先天下之忧而忧，后天下之乐而乐\"这句话体现了作者怎样的思想境界？",
+                "is_continue": true,
+                "options": [
+                    {
+                        "text": "以天下为己任的忧国忧民情怀",
+                        "result": "{user}选择了这个答案。这是正确答案，这句话出自范仲淹的《岳阳楼记》，体现了作者以天下为己任、忧国忧民的高尚思想境界。",
+                        "effects": {
+                            "temp": 20
+                        },
+                        "continue_event": [
+                            "gksx1",
+                            "gksx2",
+                            "gksx3"
+                        ]
+                    },
+                    {
+                        "text": "个人享乐主义思想",
+                        "result": "{user}选择了这个答案。这句话体现的是忧国忧民的情怀，而不是个人享乐主义。",
+                        "continue_event": [
+                            "gksx1",
+                            "gksx2",
+                            "gksx3"
+                        ]
+                    },
+                    {
+                        "text": "消极避世的人生态度",
+                        "result": "{user}选择了这个答案。这句话体现的是积极入世、关心国家命运的态度，而不是消极避世。",
+                        "continue_event": [
+                            "gksx1",
+                            "gksx2",
+                            "gksx3"
+                        ]
+                    },
+                    {
+                        "text": "追求个人名利的思想",
+                        "result": "{user}选择了这个答案。这句话体现的是无私奉献、以天下为己任的情怀，而不是追求个人名利。",
+                        "continue_event": [
+                            "gksx1",
+                            "gksx2",
+                            "gksx3"
+                        ]
+                    }
+                ],
+                "priority": 0,
+                "allow_repeat": false,
+                "trigger_conditions": {}
+            },
+            "gksx1": {
                 "title": "高考数学",
                 "description": "已知M(-2,0),N(2,0),|PM|-|PN|=4,则动点P的轨迹是",
                 "is_continue": true,
@@ -870,50 +983,150 @@ const redEvents = {
                         "text": "双曲线",
                         "result": "{user}认为动点P的轨迹是双曲线。",
                         "effects": {
-                            "intelligence": 8,
-                            "san": 5
+                            "temp": 20
                         },
-                        "continue_event": "gaokao_english"
+                        "continue_event": [
+                            "gkyy1",
+                            "gkyy2"
+                        ]
                     },
                     {
                         "text": "双曲线左支",
                         "result": "{user}认为动点P的轨迹是双曲线左支。",
                         "effects": {
-                            "intelligence": 3,
-                            "san": -5
+                            "temp": 10
                         },
-                        "continue_event": "gaokao_english"
+                        "continue_event": [
+                            "gkyy1",
+                            "gkyy2"
+                        ]
                     },
                     {
                         "text": "双曲线右支",
                         "result": "{user}认为动点P的轨迹是双曲线右支。",
                         "effects": {
-                            "intelligence": 3,
-                            "san": -5
+                            "temp": 10
                         },
-                        "continue_event": "gaokao_english"
+                        "continue_event": [
+                            "gkyy1",
+                            "gkyy2"
+                        ]
                     },
                     {
                         "text": "椭圆",
                         "result": "{user}认为动点P的轨迹是椭圆。",
                         "effects": {
-                            "intelligence": -3,
-                            "san": -8
+                            "temp": 10
                         },
-                        "continue_event": "gaokao_english"
+                        "continue_event": [
+                            "gkyy1",
+                            "gkyy2"
+                        ]
                     },
                     {
                         "text": "射线",
                         "result": "{user}认为动点P的轨迹是射线。",
-                        "effects": {
-                            "intelligence": -3,
-                            "san": -8
-                        },
-                        "continue_event": "gaokao_english"
+                        "continue_event": [
+                            "gkyy1",
+                            "gkyy2"
+                        ]
                     }
-                ]
+                ],
+                "priority": 0,
+                "allow_repeat": false,
+                "trigger_conditions": {}
             },
-            "gaokao_english": {
+            "gksx2": {
+                "title": "高考数学",
+                "description": "某公司的班车在7:00,8:00,8:30发车,小明在7:50至8:30之间到达发车站乘坐班车,且到达发车站的时刻是随机的,则他等车时间不超过10分钟的概率是___",
+                "is_continue": true,
+                "options": [
+                    {
+                        "text": "1/3",
+                        "result": "{user}选择了1/3这个答案。",
+                        "continue_event": [
+                            "gkyy1",
+                            "gkyy2"
+                        ]
+                    },
+                    {
+                        "text": "1/2",
+                        "result": "{user}选择了1/2这个答案。这是正确答案，小明在7:50-8:00和8:20-8:30这两个时间段到达时，等车时间不超过10分钟，概率为20/40=1/2。",
+                        "effects": {
+                            "temp": 20
+                        },
+                        "continue_event": [
+                            "gkyy1",
+                            "gkyy2"
+                        ]
+                    },
+                    {
+                        "text": "2/3",
+                        "result": "{user}选择了2/3这个答案。",
+                        "continue_event": [
+                            "gkyy1",
+                            "gkyy2"
+                        ]
+                    },
+                    {
+                        "text": "3/4",
+                        "result": "{user}选择了3/4这个答案。",
+                        "continue_event": [
+                            "gkyy1",
+                            "gkyy2"
+                        ]
+                    }
+                ],
+                "priority": 0,
+                "allow_repeat": false,
+                "trigger_conditions": {}
+            },
+            "gksx3": {
+                "title": "高考数学",
+                "description": "“a为锐角”是“sina>0”的",
+                "is_continue": true,
+                "options": [
+                    {
+                        "text": "充分非必要条件",
+                        "result": "{user}选择了充分非必要条件。这是正确答案，如果a是锐角（0°<a<90°），则sina>0一定成立，所以是充分条件；但如果sina>0，a不一定是锐角（如150°时sina>0但a不是锐角），所以不是必要条件。",
+                        "effects": {
+                            "temp": 20
+                        },
+                        "continue_event": [
+                            "gkyy1",
+                            "gkyy2"
+                        ]
+                    },
+                    {
+                        "text": "必要非充分条件",
+                        "result": "{user}选择了必要非充分条件。",
+                        "continue_event": [
+                            "gkyy1",
+                            "gkyy2"
+                        ]
+                    },
+                    {
+                        "text": "非充分非必要条件",
+                        "result": "{user}选择了非充分非必要条件。",
+                        "continue_event": [
+                            "gkyy1",
+                            "gkyy2"
+                        ]
+                    },
+                    {
+                        "text": "充要条件",
+                        "result": "{user}选择了充要条件。",
+                        "continue_event": [
+                            "gkyy1",
+                            "gkyy2"
+                        ]
+                    }
+                ],
+                "priority": 0,
+                "allow_repeat": false,
+                "trigger_conditions": {}
+            },
+            "gkyy1": {
                 "title": "高考英语",
                 "description": "Jack was ______ in the lab when the power cut occurred.",
                 "is_continue": true,
@@ -921,33 +1134,88 @@ const redEvents = {
                     {
                         "text": "works",
                         "result": "Jack was works in the lab when the power cut occurred.",
-                        "effects": {
-                            "intelligence": -5,
-                            "san": -3
-                        },
-                        "continue_event": "gaokao_science"
+                        "continue_event": [
+                            "gklk1",
+                            "gklk2",
+                            "gklk3"
+                        ]
                     },
                     {
                         "text": "has worked",
                         "result": "Jack was has worked in the lab when the power cut occurred.",
-                        "effects": {
-                            "intelligence": -2,
-                            "san": -3
-                        },
-                        "continue_event": "gaokao_science"
+                        "continue_event": [
+                            "gklk1",
+                            "gklk2",
+                            "gklk3"
+                        ]
                     },
                     {
                         "text": "working",
                         "result": "Jack was working in the lab when the power cut occurred.",
                         "effects": {
-                            "intelligence": 8,
-                            "san": 5
+                            "temp": 20
                         },
-                        "continue_event": "gaokao_science"
+                        "continue_event": [
+                            "gklk1",
+                            "gklk2",
+                            "gklk3"
+                        ]
                     }
-                ]
+                ],
+                "priority": 0,
+                "allow_repeat": false,
+                "trigger_conditions": {}
             },
-            "gaokao_science": {
+            "gkyy2": {
+                "title": "高考英语",
+                "description": "It was not until liberation that ___ to his hometown.",
+                "is_continue": true,
+                "options": [
+                    {
+                        "text": "did he return",
+                        "result": "{user}选择了did he return。这是正确的答案，It was not until...that句型需要部分倒装。",
+                        "effects": {
+                            "temp": 20
+                        },
+                        "continue_event": [
+                            "gklk1",
+                            "gklk2",
+                            "gklk3"
+                        ]
+                    },
+                    {
+                        "text": "was he returned",
+                        "result": "It was not until liberation that was he returned to his hometown.",
+                        "continue_event": [
+                            "gklk1",
+                            "gklk2",
+                            "gklk3"
+                        ]
+                    },
+                    {
+                        "text": "he did return",
+                        "result": "It was not until liberation that he did return to his hometown.",
+                        "continue_event": [
+                            "gklk1",
+                            "gklk2",
+                            "gklk3"
+                        ]
+                    },
+                    {
+                        "text": "he",
+                        "result": "It was not until liberation that he to his hometown.",
+                        "continue_event": [
+                            "gklk1",
+                            "gklk2",
+                            "gklk3"
+                        ]
+                    }
+                ],
+                "priority": 0,
+                "allow_repeat": false,
+                "trigger_conditions": {}
+            },
+            "gklk1": {
                 "title": "高考理科综合",
                 "description": "最后一科是理科综合，{user}翻开试卷，看到了一道物理题：一个质量为m的小球从高度为h的斜面顶端由静止释放，滑到斜面底端时的速度为v，则小球从斜面顶端到底端所用的时间t为？",
                 "is_continue": true,
@@ -956,55 +1224,299 @@ const redEvents = {
                         "text": "t = 2h/v",
                         "result": "{user}选择了t = 2h/v这个答案。",
                         "effects": {
-                            "intelligence": 8,
-                            "san": 5
+                            "temp": 20
                         },
-                        "continue_event": "gaokao_result"
+                        "continue_event": [
+                            "gkwk1",
+                            "gkwk2",
+                            "gkwk3"
+                        ]
                     },
                     {
                         "text": "t = h/v",
                         "result": "{user}选择了t = h/v这个答案。",
-                        "effects": {
-                            "intelligence": -3,
-                            "san": -5
-                        },
-                        "continue_event": "gaokao_result"
+                        "continue_event": [
+                            "gkwk1",
+                            "gkwk2",
+                            "gkwk3"
+                        ]
                     },
                     {
                         "text": "t = v/h",
                         "result": "{user}选择了t = v/h这个答案。",
-                        "effects": {
-                            "intelligence": -5,
-                            "san": -8
-                        },
-                        "continue_event": "gaokao_result"
+                        "continue_event": [
+                            "gkwk1",
+                            "gkwk2",
+                            "gkwk3"
+                        ]
                     },
                     {
                         "text": "t = 2v/h",
                         "result": "{user}选择了t = 2v/h这个答案。",
+                        "continue_event": [
+                            "gkwk1",
+                            "gkwk2",
+                            "gkwk3"
+                        ]
+                    }
+                ],
+                "priority": 0,
+                "allow_repeat": false,
+                "trigger_conditions": {}
+            },
+            "gklk2": {
+                "title": "高考理科综合",
+                "description": "{user}继续答题，看到了一道化学题：下列说法错误的是？",
+                "is_continue": true,
+                "options": [
+                    {
+                        "text": "蔗糖,果糖,麦芽糖均为双糖",
+                        "result": "{user}选择了这个答案。果糖是单糖，不是双糖，所以这个说法是错误的。",
                         "effects": {
-                            "intelligence": -5,
-                            "san": -8
+                            "temp": 20
+                        },
+                        "continue_event": [
+                            "gkwk1",
+                            "gkwk2",
+                            "gkwk3"
+                        ]
+                    },
+                    {
+                        "text": "酶是一类具有高选择催化性能的蛋白质",
+                        "result": "{user}选择了这个答案。这个说法是正确的，但题目问的是错误的说法。",
+                        "continue_event": [
+                            "gkwk1",
+                            "gkwk2",
+                            "gkwk3"
+                        ]
+                    },
+                    {
+                        "text": "植物油含不饱和脂肪酸,能使Br2/CCl4褪色",
+                        "result": "{user}选择了这个答案。这个说法是正确的，但题目问的是错误的说法。",
+                        "continue_event": [
+                            "gkwk1",
+                            "gkwk2",
+                            "gkwk3"
+                        ]
+                    },
+                    {
+                        "text": "淀粉和纤维素水解的最终产物均为葡萄糖",
+                        "result": "{user}选择了这个答案。这个说法是正确的，但题目问的是错误的说法。",
+                        "continue_event": [
+                            "gkwk1",
+                            "gkwk2",
+                            "gkwk3"
+                        ]
+                    }
+                ],
+                "priority": 0,
+                "allow_repeat": false,
+                "trigger_conditions": {}
+            },
+            "gklk3": {
+                "title": "高考理科综合",
+                "description": "{user}继续答题，看到了一道生物题：豹的某个栖息地由于人类活动被分隔为F区和T区。20世纪90年代初,F区豹种群仅剩25只,且出现诸多疾病。为避免该豹种群消亡,由T区引入8只成年雌豹。经过十年,F区豹种群增至百余只,在此期间F区的____",
+                "is_continue": true,
+                "options": [
+                    {
+                        "text": "豹种群遗传(基因)多样性增加",
+                        "result": "{user}选择了豹种群遗传(基因)多样性增加。这是正确的答案，引入外部个体有助于增加种群的基因多样性。",
+                        "effects": {
+                            "temp": 20
+                        },
+                        "continue_event": [
+                            "gkwk1",
+                            "gkwk2",
+                            "gkwk3"
+                        ]
+                    },
+                    {
+                        "text": "豹后代的性别比例明显改变",
+                        "result": "{user}选择了豹后代的性别比例明显改变。这个说法没有直接证据支持，引入雌豹不一定会显著改变后代性别比例。",
+                        "continue_event": "gaokao_result"
+                    },
+                    {
+                        "text": "物种丰(富)度出现大幅度下降",
+                        "result": "{user}选择了物种丰(富)度出现大幅度下降。物种丰富度指的是物种数量，题目描述的是豹这一个物种的数量变化，且豹的数量是增加的。",
+                        "continue_event": "gaokao_result"
+                    },
+                    {
+                        "text": "豹种群的致病基因频率不变",
+                        "result": "{user}选择了豹种群的致病基因频率不变。引入外部个体可能会改变基因频率，且题目提到F区出现诸多疾病，说明致病基因频率可能发生变化。",
+                        "continue_event": "gaokao_result"
+                    }
+                ],
+                "priority": 0,
+                "allow_repeat": false,
+                "trigger_conditions": {}
+            },
+            "gkwk1": {
+                "title": "高考文科综合",
+                "description": "{user}继续答题，看到了一道历史题：下列哪一历史事件标志着中国新民主主义革命的开始？",
+                "is_continue": true,
+                "options": [
+                    {
+                        "text": "五四运动",
+                        "result": "{user}选择了五四运动。这是正确答案，1919年的五四运动标志着中国新民主主义革命的开始，是中国近代史上具有划时代意义的事件。",
+                        "effects": {
+                            "temp": 20
+                        },
+                        "continue_event": "gaokao_result"
+                    },
+                    {
+                        "text": "辛亥革命",
+                        "result": "{user}选择了辛亥革命。辛亥革命是旧民主主义革命的高潮，但新民主主义革命是从五四运动开始的。",
+                        "continue_event": [
+                            "gkwk1",
+                            "gkwk2",
+                            "gkwk3"
+                        ]
+                    },
+                    {
+                        "text": "中国共产党成立",
+                        "result": "{user}选择了中国共产党成立。中国共产党成立是新民主主义革命的重要里程碑，但新民主主义革命的开始是五四运动。",
+                        "continue_event": [
+                            "gkwk1",
+                            "gkwk2",
+                            "gkwk3"
+                        ]
+                    },
+                    {
+                        "text": "鸦片战争",
+                        "result": "{user}选择了鸦片战争。鸦片战争是中国近代史的开端，但新民主主义革命是从五四运动开始的。",
+                        "continue_event": [
+                            "gkwk1",
+                            "gkwk2",
+                            "gkwk3"
+                        ]
+                    }
+                ],
+                "priority": 0,
+                "allow_repeat": false,
+                "trigger_conditions": {}
+            },
+            "gkwk2": {
+                "title": "高考文科综合",
+                "description": "{user}继续答题，看到了一道地理题：下列哪个因素不是影响气候的主要因素？",
+                "is_continue": true,
+                "options": [
+                    {
+                        "text": "纬度位置",
+                        "result": "{user}选择了纬度位置。纬度位置是影响气候的主要因素之一，它决定了太阳辐射的强度。",
+                        "continue_event": "gaokao_result"
+                    },
+                    {
+                        "text": "海陆位置",
+                        "result": "{user}选择了海陆位置。海陆位置是影响气候的主要因素之一，它影响降水和气温的变化。",
+                        "continue_event": "gaokao_result"
+                    },
+                    {
+                        "text": "地形地势",
+                        "result": "{user}选择了地形地势。地形地势是影响气候的主要因素之一，它影响气温和降水的分布。",
+                        "continue_event": "gaokao_result"
+                    },
+                    {
+                        "text": "人口密度",
+                        "result": "{user}选择了人口密度。这是正确答案，人口密度不是影响气候的主要自然因素，气候主要由纬度、海陆位置、地形地势、洋流等自然因素决定。",
+                        "effects": {
+                            "temp": 20
                         },
                         "continue_event": "gaokao_result"
                     }
-                ]
+                ],
+                "priority": 0,
+                "allow_repeat": false,
+                "trigger_conditions": {}
+            },
+            "gkwk3": {
+                "title": "高考文科综合",
+                "description": "{user}继续答题，看到了一道政治题：社会主义市场经济的基本特征是？",
+                "is_continue": true,
+                "options": [
+                    {
+                        "text": "市场在资源配置中起决定性作用，更好发挥政府作用",
+                        "result": "{user}选择了这个答案。这是正确答案，社会主义市场经济的基本特征是市场在资源配置中起决定性作用，同时更好发挥政府作用，实现市场机制和宏观调控的有机结合。",
+                        "effects": {
+                            "temp": 20
+                        },
+                        "continue_event": "gaokao_result"
+                    },
+                    {
+                        "text": "完全由市场调节，政府不干预",
+                        "result": "{user}选择了这个答案。这是完全自由市场经济的特征，不是社会主义市场经济的基本特征。",
+                        "continue_event": "gaokao_result"
+                    },
+                    {
+                        "text": "完全由政府计划，市场不起作用",
+                        "result": "{user}选择了这个答案。这是计划经济的特征，不是社会主义市场经济的基本特征。",
+                        "continue_event": "gaokao_result"
+                    },
+                    {
+                        "text": "市场与政府作用相等",
+                        "result": "{user}选择了这个答案。社会主义市场经济中，市场起决定性作用，政府起更好作用，两者不是简单的相等关系。",
+                        "continue_event": "gaokao_result"
+                    }
+                ],
+                "priority": 0,
+                "allow_repeat": false,
+                "trigger_conditions": {}
             },
             "gaokao_result": {
                 "title": "高考成绩",
-                "description": "高考成绩终于公布了，{user}在高考中取得了傲人的成绩，他考上了理想的大学。",
+                "description": "高考成绩终于公布了，{user}紧张的查看成绩。",
                 "is_continue": true,
                 "options": [
                     {
                         "text": "继续",
-                        "result": "{user}开始了他的大学生活。",
-                        "effects": {
-                            "intelligence": 10,
-                            "social": 5,
-                            "san": 10
-                        },
+                        "result": "",
+                        "conditional_results": [
+                            {
+                                "conditions": {
+                                    "min_temp": 100
+                                },
+                                "result": "{user}在高考中获得了全市第一。",
+                                "continue_event": "gkzy"
+                            },
+                            {
+                                "conditions": {
+                                    "min_temp": 60
+                                },
+                                "result": "{user}在高考中取得了优异成绩，考上了理想的大学。",
+                                "continue_event": "gkyx"
+                            },
+                            {
+                                "conditions": {
+                                    "default": true
+                                },
+                                "result": "{user}高考失利。",
+                                "continue_event": "gksl"
+                            }
+                        ]
+                    }
+                ],
+                "priority": 0,
+                "allow_repeat": false,
+                "trigger_conditions": {}
+            },
+            "gkzy": {
+                "title": "状元",
+                "description": "{user}取得了全市第一的成绩，成为高考状元。",
+                "priority": 0,
+                "is_continue": true,
+                "allow_repeat": false,
+                "trigger_conditions": {
+                    "age_range": [
+                        0,
+                        666
+                    ]
+                },
+                "options": [
+                    {
+                        "text": "下一个事件",
+                        "result": "{user}取得了全市第一的成绩，成为高考状元。",
                         "add_tags": [
-                            "学霸"
+                            "状元",
+                            "大学生"
                         ],
                         "remove_tags": [
                             "高考"
@@ -1012,9 +1524,9 @@ const redEvents = {
                     }
                 ]
             },
-            "gkyw1": {
-                "title": "gkyw1",
-                "description": "功能测试",
+            "gkyx": {
+                "title": "大学生",
+                "description": "{user}在高考中取得了优异的成绩，考上了理想的大学。",
                 "priority": 0,
                 "is_continue": true,
                 "allow_repeat": false,
@@ -1026,15 +1538,20 @@ const redEvents = {
                 },
                 "options": [
                     {
-                        "text": "test",
-                        "result": "test",
-                        "continue_event": "gaokao_math"
+                        "text": "下一个事件",
+                        "result": "{user}在高考中取得了优异的成绩，考上了理想的大学。",
+                        "add_tags": [
+                            "大学生"
+                        ],
+                        "remove_tags": [
+                            "高考"
+                        ]
                     }
                 ]
             },
-            "gkyw2": {
-                "title": "test",
-                "description": "功能测试",
+            "gksl": {
+                "title": "高考失利",
+                "description": "{user}高考失利，不得不去找工作了。",
                 "priority": 0,
                 "is_continue": true,
                 "allow_repeat": false,
@@ -1046,9 +1563,9 @@ const redEvents = {
                 },
                 "options": [
                     {
-                        "text": "test",
-                        "result": "test",
-                        "continue_event": "gaokao_math"
+                        "text": "继续",
+                        "result": "{user}高考失利，不得不去找工作了。",
+                        "continue_event": "job_hunting"
                     }
                 ]
             }

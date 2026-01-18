@@ -1020,10 +1020,14 @@ const ageEvents = {
                 "options": [
                     {
                         "text": "重入轮回",
-                        "risk": 1.0,
-                        "death_reason": "{user}在被拐卖的非人折磨中，终于迎来了生命的终点。对他而言，这或许是唯一的解脱。"
+                        "result": "{user}在被拐卖的非人折磨中，终于迎来了生命的终点。这或许是唯一的解脱。",
+                        "death_reason": "{user}在被拐卖的非人折磨中，终于迎来了生命的终点。对{user}而言，这或许是唯一的解脱。",
+                        "death_flag": true
                     }
-                ]
+                ],
+                "priority": 0,
+                "allow_repeat": false,
+                "trigger_conditions": {}
             },
             "tv_fan_event": {
                 "title": "电视迷",

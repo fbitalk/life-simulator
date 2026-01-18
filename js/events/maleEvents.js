@@ -8,7 +8,10 @@ const maleEvents = {
                 "title": "天神{user}",
                 "description": "{user}是一位天神，生活在天堂。天堂每天的生活十分美好，但是日复一日，年复一年，{user}倍感无趣，他很喜欢凡间，一直想投胎做人。终于有一天他下定了决心，天神下凡。",
                 "trigger_conditions": {
-                    "age_range": [0, 0]
+                    "age_range": [
+                        0,
+                        0
+                    ]
                 },
                 "options": [
                     {
@@ -26,26 +29,46 @@ const maleEvents = {
                     {
                         "text": "普通人",
                         "result": "{user}投胎成为了一个普通人。",
-                        "effects": { "money": 10, "social": 10 },
-                        "add_tags": ["普通人"]
+                        "effects": {
+                            "money": 10,
+                            "social": 10
+                        },
+                        "add_tags": [
+                            "普通人"
+                        ]
                     },
                     {
                         "text": "富二代",
                         "result": "{user}投胎成为了一个富二代。",
-                        "effects": { "money": 100, "social": 20 },
-                        "add_tags": ["富二代"]
+                        "effects": {
+                            "money": 100,
+                            "social": 20
+                        },
+                        "add_tags": [
+                            "富二代"
+                        ]
                     },
                     {
                         "text": "nigger",
                         "result": "{user}投胎成为了一个nigger。",
-                        "effects": { "health": 20, "social": -10 },
-                        "add_tags": ["nigger"]
+                        "effects": {
+                            "health": 20,
+                            "social": -10
+                        },
+                        "add_tags": [
+                            "nigger"
+                        ]
                     },
                     {
                         "text": "不平凡的人",
                         "result": "{user}投胎成为了一个不平凡的人。",
-                        "effects": { "intelligence": 50, "luck": 50 },
-                        "add_tags": ["天选之子"]
+                        "effects": {
+                            "intelligence": 50,
+                            "luck": 50
+                        },
+                        "add_tags": [
+                            "天选之子"
+                        ]
                     }
                 ]
             },
@@ -754,6 +777,26 @@ const maleEvents = {
                             "social": -2,
                             "mystery": 5
                         }
+                    }
+                ]
+            },
+            "store_man": {
+                "title": "新事件",
+                "description": "事件描述",
+                "priority": 0,
+                "is_continue": false,
+                "allow_repeat": false,
+                "trigger_conditions": {
+                    "age_range": [
+                        0,
+                        666
+                    ]
+                },
+                "options": [
+                    {
+                        "text": "选项1",
+                        "result": "结果描述",
+                        "effects": {}
                     }
                 ]
             }
