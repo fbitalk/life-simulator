@@ -210,6 +210,24 @@
     <!-- 金色成就特效容器 -->
     <div id="goldenAchievementEffect"></div>
 
+    <!-- 自定义模态弹窗 -->
+    <div class="custom-modal-overlay" id="customModalOverlay" style="display: none;">
+        <div class="custom-modal">
+            <div class="custom-modal-icon" id="customModalIcon">⚠️</div>
+            <div class="custom-modal-message" id="customModalMessage"></div>
+            <div class="custom-modal-buttons" id="customModalButtons"></div>
+        </div>
+    </div>
+
+    <!-- 死亡遮罩 -->
+    <div class="death-overlay" id="deathOverlay" style="display: none;">
+        <div class="death-content">
+            <div class="death-icon">💀</div>
+            <div class="death-message" id="deathMessage"></div>
+            <button class="btn death-continue-btn" id="deathContinueBtn">继续</button>
+        </div>
+    </div>
+
     <!-- 引入脚本文件 -->
     <script src="js/modules/DataManager.js"></script>
     <script src="js/modules/constants.js"></script>

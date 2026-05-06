@@ -187,51 +187,6 @@ function createParticle(parent) {
 }
 
 /**
- * 显示加载动画
- */
-function showLoading() {
-    const loading = document.getElementById('loading');
-    if (loading) {
-        loading.style.display = 'flex';
-    }
-}
-
-/**
- * 隐藏加载动画
- */
-function hideLoading() {
-    const loading = document.getElementById('loading');
-    if (loading) {
-        loading.style.display = 'none';
-    }
-}
-
-/**
- * 页面过渡效果
- * @param {HTMLElement} fromElement - 要隐藏的元素
- * @param {HTMLElement} toElement - 要显示的元素
- */
-function pageTransition(fromElement, toElement) {
-    // 添加淡出效果
-    fromElement.classList.add('fade-out');
-    
-    // 等待淡出完成
-    setTimeout(() => {
-        fromElement.style.display = 'none';
-        fromElement.classList.remove('fade-out');
-        
-        // 显示目标元素并添加淡入效果
-        toElement.style.display = 'block';
-        toElement.classList.add('fade-in');
-        
-        // 淡入完成后移除类
-        setTimeout(() => {
-            toElement.classList.remove('fade-in');
-        }, 500);
-    }, 500);
-}
-
-/**
  * 显示成就解锁动画
  * @param {String} achievementName - 成就名称
  */
@@ -253,9 +208,6 @@ function showAchievementUnlocked(achievementName) {
     // 显示动画
     setTimeout(() => {
         notification.classList.add('show');
-        
-        // 播放音效（如果有）
-        playSound('achievement');
     }, 100);
     
     // 一段时间后隐藏
@@ -268,32 +220,56 @@ function showAchievementUnlocked(achievementName) {
 }
 
 /**
- * 播放音效
- * @param {String} soundType - 音效类型
+ * 显示自定义模态弹窗（替代 alert）
+ * @param {String} message - 消息文本
+ * @param {String} icon - 图标（默认 ⚠️）
  */
-function playSound(soundType) {
-    // 根据类型播放不同的音效
-    switch (soundType) {
-        case 'button':
-            // 按钮点击音效
-            break;
-        case 'achievement':
-            // 成就解锁音效
-            break;
-        case 'event':
-            // 事件触发音效
-            break;
-        case 'result':
-            // 结果显示音效
-            break;
-        default:
-            // 默认音效
-            break;
-    }
-    
-    // 实际项目中可以使用 Audio API 播放音效
-    // const audio = new Audio(`sounds/${soundType}.mp3`);
-    // audio.play();
+function showModal(message, icon = '⚠️') {
+    return new Promise((resolve) => {
+        document.getElementById('customModalIcon').textContent = icon;
+        document.getElementById('customModalMessage').textContent = message;
+        document.getElementById('customModalButtons').innerHTML = `
+            <button class="modal-btn-confirm" id="modalConfirmBtn">确定</button>
+        `;
+        document.getElementById('customModalOverlay').style.display = 'flex';
+        document.getElementById('modalConfirmBtn').onclick = () => {
+            document.getElementById('customModalOverlay').style.display = 'none';
+            resolve(true);
+        };
+    });
+}
+
+/**
+ * 显示自定义确认弹窗（替代 confirm）
+ * @param {String} message - 消息文本
+ * @param {String} icon - 图标（默认 ❓）
+ * @returns {Promise<Boolean>} 用户选择
+ */
+function showConfirm(message, icon = '❓') {
+    return new Promise((resolve) => {
+        document.getElementById('customModalIcon').textContent = icon;
+        document.getElementById('customModalMessage').textContent = message;
+        document.getElementById('customModalButtons').innerHTML = `
+            <button class="modal-btn-cancel" id="modalCancelBtn">取消</button>
+            <button class="modal-btn-confirm" id="modalConfirmBtn">确定</button>
+        `;
+        document.getElementById('customModalOverlay').style.display = 'flex';
+        document.getElementById('modalConfirmBtn').onclick = () => {
+            document.getElementById('customModalOverlay').style.display = 'none';
+            resolve(true);
+        };
+        document.getElementById('modalCancelBtn').onclick = () => {
+            document.getElementById('customModalOverlay').style.display = 'none';
+            resolve(false);
+        };
+        // 点击遮罩关闭
+        document.getElementById('customModalOverlay').onclick = (e) => {
+            if (e.target === e.currentTarget) {
+                document.getElementById('customModalOverlay').style.display = 'none';
+                resolve(false);
+            }
+        };
+    });
 }
 
 /**
@@ -386,17 +362,22 @@ const mobileAdapter = {
             document.body.classList.remove('mobile-device', 'portrait', 'landscape');
         }
         
-        // 监听设备方向变化
+        // 防抖的resize处理
+        let resizeTimeout;
         window.addEventListener('resize', () => {
-            if (this.isMobile()) {
-                if (this.isPortrait()) {
-                    document.body.classList.add('portrait');
-                    document.body.classList.remove('landscape');
-                } else {
-                    document.body.classList.add('landscape');
-                    document.body.classList.remove('portrait');
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                if (this.isMobile()) {
+                    if (this.isPortrait()) {
+                        document.body.classList.add('portrait');
+                        document.body.classList.remove('landscape');
+                    } else {
+                        document.body.classList.add('landscape');
+                        document.body.classList.remove('portrait');
+                    }
                 }
-            }
+                this.adjustUI();
+            }, 150);
         });
     },
     
@@ -432,11 +413,6 @@ const mobileAdapter = {
         }
     }
 };
-
-// 响应页面大小变化
-window.addEventListener('resize', function() {
-    mobileAdapter.adjustUI();
-});
 
 // 防止缩放导致的布局问题（iOS设备）
 document.addEventListener('gesturestart', function(e) {

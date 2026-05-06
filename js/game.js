@@ -221,18 +221,7 @@ class LifeSimulatorGame {
 
         // 创建一个标签对象数组，包含标签类型和添加时间信息
         const tagObjects = this.player.tags.map((tag, index) => {
-            let type = 'normal';
-            if (this.isBlackTag(tag)) {
-                type = 'black';
-            } else if (this.isPurpleTag(tag)) {
-                type = 'purple';
-            } else if (this.isRedTag(tag)) {
-                type = 'red';
-            } else if (this.isPinkTag(tag)) {
-                type = 'pink';
-            } else if (this.isGoldenTag(tag)) {
-                type = 'golden';
-            }
+            const type = this.getTagType(tag);
 
             return {
                 text: tag,
@@ -318,6 +307,80 @@ class LifeSimulatorGame {
      * 显示事件
      * @param {Object} event - 事件对象
      */
+    /**
+     * 应用事件效果（记录历史、属性变化、标签变更）
+     * @param {Object} event - 事件对象
+     * @param {Number} optionIndex - 选项索引
+     * @param {Object} result - 结果对象
+     */
+    applyEventEffects(event, optionIndex, result) {
+        const finalResult = {
+            result: result.result || event.description || '',
+            effects: event.effects || result.effects || {}
+        };
+        this.recordHistory(event, optionIndex, finalResult);
+
+        if (event.effects) {
+            this.applyEffects(event.effects);
+        }
+
+        if (event.add_tags && Array.isArray(event.add_tags)) {
+            event.add_tags.forEach(tag => {
+                if (\!this.player.tags.includes(tag)) {
+                    this.player.tags.push(tag);
+                    this.showTagEffect(tag, 'add');
+                }
+            });
+        }
+
+        if (event.remove_tags && Array.isArray(event.remove_tags)) {
+            event.remove_tags.forEach(tag => {
+                const index = this.player.tags.indexOf(tag);
+                if (index \!== -1) {
+                    this.player.tags.splice(index, 1);
+                    this.showTagEffect(tag, 'remove');
+                }
+            });
+        }
+
+        this.updateTagsDisplay();
+    }
+
+
+    /**
+     * 渲染标签元素到容器中（排序并按颜色分类）
+     * @param {Array} tags - 标签列表
+     * @param {HTMLElement} container - 目标容器
+     */
+    renderTagElements(tags, container) {
+        container.innerHTML = '';
+        const fragment = document.createDocumentFragment();
+
+        const tagObjects = tags.map(tag => ({
+            text: tag,
+            type: this.getTagType(tag),
+            random: Math.random()
+        }));
+
+        const typeOrder = { 'black': 1, 'purple': 2, 'red': 3, 'pink': 4, 'golden': 5, 'normal': 6 };
+
+        tagObjects.sort((a, b) => {
+            if (typeOrder[a.type] \!== typeOrder[b.type]) return typeOrder[a.type] - typeOrder[b.type];
+            return a.random - b.random;
+        });
+
+        tagObjects.forEach(tagObj => {
+            const tagEl = document.createElement('span');
+            tagEl.className = 'tag';
+            if (tagObj.type \!== 'normal') tagEl.classList.add(tagObj.type);
+            tagEl.textContent = tagObj.text;
+            fragment.appendChild(tagEl);
+        });
+
+        container.appendChild(fragment);
+    }
+
+
     displayEvent(event) {
         // 检查是否是需要自动跳过的默认事件
         if (event.auto_skip) {
@@ -422,40 +485,12 @@ class LifeSimulatorGame {
             button.appendChild(content);
 
             button.addEventListener('click', () => {
-                // 记录历史
+                // 应用事件效果
                 const autoResult = {
                     result: event.description ? event.description.replace(/{user}/g, this.player.name) : "",
                     effects: event.effects || {}
                 };
-                this.recordHistory(event, 0, autoResult);
-
-                // 应用事件效果
-                if (event.effects) {
-                    this.applyEffects(event.effects);
-                }
-
-                // 处理标签添加和移除
-                if (event.add_tags && Array.isArray(event.add_tags)) {
-                    event.add_tags.forEach(tag => {
-                        if (!this.player.tags.includes(tag)) {
-                            this.player.tags.push(tag);
-                            this.showTagEffect(tag, 'add');
-                        }
-                    });
-                }
-
-                if (event.remove_tags && Array.isArray(event.remove_tags)) {
-                    event.remove_tags.forEach(tag => {
-                        const index = this.player.tags.indexOf(tag);
-                        if (index !== -1) {
-                            this.player.tags.splice(index, 1);
-                            this.showTagEffect(tag, 'remove');
-                        }
-                    });
-                }
-
-                // 更新标签显示
-                this.updateTagsDisplay();
+                this.applyEventEffects(event, 0, autoResult);
 
                 // 获取并显示后续事件
                 const nextEvent = eventManager.getContinuationEvent(event.continue_event);
@@ -486,40 +521,12 @@ class LifeSimulatorGame {
             button.appendChild(content);
 
             button.addEventListener('click', () => {
-                // 记录历史（修复：无选项事件也需要记录历史，防止重复触发）
+                // 应用事件效果
                 const autoResult = {
                     result: event.description ? event.description.replace(/{user}/g, this.player.name) : "继续前进",
                     effects: event.effects || {}
                 };
-                this.recordHistory(event, 0, autoResult);
-
-                // 应用事件效果（如果有）
-                if (event.effects) {
-                    this.applyEffects(event.effects);
-                }
-
-                // 处理标签添加和移除
-                if (event.add_tags && Array.isArray(event.add_tags)) {
-                    event.add_tags.forEach(tag => {
-                        if (!this.player.tags.includes(tag)) {
-                            this.player.tags.push(tag);
-                            this.showTagEffect(tag, 'add');
-                        }
-                    });
-                }
-
-                if (event.remove_tags && Array.isArray(event.remove_tags)) {
-                    event.remove_tags.forEach(tag => {
-                        const index = this.player.tags.indexOf(tag);
-                        if (index !== -1) {
-                            this.player.tags.splice(index, 1);
-                            this.showTagEffect(tag, 'remove');
-                        }
-                    });
-                }
-
-                // 更新标签显示
-                this.updateTagsDisplay();
+                this.applyEventEffects(event, 0, autoResult);
 
                 // 进入下一年
                 this.progressToNextYear();
@@ -535,131 +542,6 @@ class LifeSimulatorGame {
         eventContainer.appendChild(eventCard);
     }
 
-    /**
-     * 根据选项文本获取合适的图标
-     * @param {String} optionText - 选项文本
-     * @returns {String} 图标文本
-     */
-    getOptionIcon(optionText) {
-        // 根据关键词匹配图标
-        const iconMap = {
-            '学习': '📚',
-            '读书': '📖',
-            '工作': '💼',
-            '打工': '🛠️',
-            '运动': '🏃',
-            '锻炼': '💪',
-            '健身': '🏋️',
-            '游戏': '🎮',
-            '玩耍': '🎯',
-            '旅行': '🧳',
-            '旅游': '🏝️',
-            '恋爱': '❤️',
-            '表白': '💌',
-            '告白': '💘',
-            '结婚': '💍',
-            '婚礼': '👰',
-            '购买': '🛒',
-            '买': '💰',
-            '卖': '💵',
-            '交朋友': '👥',
-            '社交': '🗣️',
-            '聚会': '🎉',
-            '派对': '🎊',
-            '思考': '🤔',
-            '冥想': '🧘',
-            '休息': '😴',
-            '睡觉': '💤',
-            '吃饭': '🍽️',
-            '美食': '🍲',
-            '喝酒': '🍺',
-            '饮料': '🥤',
-            '拒绝': '❌',
-            '接受': '✅',
-            '同意': '👍',
-            '反对': '👎',
-            '战斗': '⚔️',
-            '战争': '🛡️',
-            '和平': '☮️',
-            '医疗': '🏥',
-            '治疗': '💉',
-            '药物': '💊',
-            '音乐': '🎵',
-            '唱歌': '🎤',
-            '跳舞': '💃',
-            '艺术': '🎨',
-            '绘画': '🖌️',
-            '科学': '🔬',
-            '研究': '🔭',
-            '实验': '⚗️',
-            '编程': '💻',
-            '计算机': '🖥️',
-            '手机': '📱',
-            '投资': '📈',
-            '股票': '📊',
-            '赌博': '🎲',
-            '冒险': '🧗',
-            '探险': '🗺️',
-            '逃跑': '🏃',
-            '躲避': '🙈',
-            '哭泣': '😢',
-            '笑': '😄',
-            '开心': '😊',
-            '悲伤': '😔',
-            '愤怒': '😡',
-            '恐惧': '😱',
-            '惊讶': '😲',
-            '继续': '➡️',
-            '下一步': '⏭️',
-            '返回': '⬅️',
-            '等待': '⏳',
-            '观察': '👀',
-            '看': '👁️',
-            '听': '👂',
-            '说话': '💬',
-            '沉默': '🤐',
-            '祈祷': '🙏',
-            '魔法': '✨',
-            '超能力': '🔮',
-            '神秘': '🌌',
-            '宇宙': '🌠',
-            '自然': '🌿',
-            '动物': '🐾',
-            '植物': '🌱',
-            '海洋': '🌊',
-            '山脉': '🏔️',
-            '城市': '🏙️',
-            '乡村': '🏡',
-            '家庭': '👨‍👩‍👧‍👦',
-            '朋友': '👫',
-            '敌人': '👤',
-            '老师': '👨‍🏫',
-            '学生': '👨‍🎓',
-            '医生': '👨‍⚕️',
-            '警察': '👮',
-            '军人': '💂',
-            '艺术家': '👨‍🎨',
-            '科学家': '👨‍🔬',
-            '工程师': '👨‍💻',
-            '厨师': '👨‍🍳',
-            '运动员': '🏅',
-            '政治家': '👔',
-            '商人': '💼'
-        };
-
-        // 默认图标
-        let icon = '🔹';
-
-        // 查找关键词
-        for (const [keyword, emoji] of Object.entries(iconMap)) {
-            if (optionText.includes(keyword)) {
-                icon = emoji;
-                break;
-            }
-        }
-
-        return icon;
-    }
 
     /**
      * 显示事件结果
@@ -797,17 +679,12 @@ class LifeSimulatorGame {
                         console.log(`成就解锁: ${achievement.name}`);
                     }
 
-                    // 检查标签类型并显示相应效果
-                    if (this.isRedTag(tag)) {
-                        this.showTagEffect(tag, 'red');
-                    } else if (this.isBlackTag(tag)) {
-                        this.showTagEffect(tag, 'black');
-                    } else if (this.isPurpleTag(tag)) {
-                        this.showTagEffect(tag, 'purple');
-                    } else if (this.isPinkTag(tag)) {
-                        this.showTagEffect(tag, 'pink');
-                    } else if (this.isGoldenTag(tag)) {
+                    // check tag type and show effect
+                    const tagType = this.getTagType(tag);
+                    if (tagType === 'golden') {
                         this.showGoldenAchievementEffect(tag);
+                    } else {
+                        this.showTagEffect(tag, tagType);
                     }
                 }
             });
@@ -1017,16 +894,11 @@ class LifeSimulatorGame {
         // 为新添加的标签显示颜色效果
         for (const tag of newTags) {
             // 检查标签类型并显示相应效果
-            if (this.isRedTag(tag)) {
-                this.showTagEffect(tag, 'red');
-            } else if (this.isBlackTag(tag)) {
-                this.showTagEffect(tag, 'black');
-            } else if (this.isPurpleTag(tag)) {
-                this.showTagEffect(tag, 'purple');
-            } else if (this.isPinkTag(tag)) {
-                this.showTagEffect(tag, 'pink');
-            } else if (this.isGoldenTag(tag)) {
+            const tagType = this.getTagType(tag);
+            if (tagType === 'golden') {
                 this.showGoldenAchievementEffect(tag);
+            } else {
+                this.showTagEffect(tag, tagType);
             }
         }
     }
@@ -1095,19 +967,11 @@ class LifeSimulatorGame {
             this.player.tags.push(currentAgeGroup);
 
             // 检查标签类型并显示相应效果
-            if (this.isRedTag(currentAgeGroup)) {
-                this.showTagEffect(currentAgeGroup, 'red');
-            } else if (this.isBlackTag(currentAgeGroup)) {
-                this.showTagEffect(currentAgeGroup, 'black');
-            } else if (this.isPurpleTag(currentAgeGroup)) {
-                this.showTagEffect(currentAgeGroup, 'purple');
-            } else if (this.isPinkTag(currentAgeGroup)) {
-                this.showTagEffect(currentAgeGroup, 'pink');
-            } else if (this.isGoldenTag(currentAgeGroup)) {
+            const ageGroupType = this.getTagType(currentAgeGroup);
+            if (ageGroupType === 'golden') {
                 this.showGoldenAchievementEffect(currentAgeGroup);
             } else {
-                // 普通标签也显示一下效果，以便玩家感知成长
-                this.showTagEffect(currentAgeGroup, 'normal');
+                this.showTagEffect(currentAgeGroup, ageGroupType);
             }
         }
     }
@@ -1157,12 +1021,18 @@ class LifeSimulatorGame {
     handleDeath(reason, type) {
         this.isGameOver = true;
         this.deathReason = reason;
-        this.deathType = type; // 记录死亡类型
+        this.deathType = type;
 
-        // 显示游戏结束界面
-        setTimeout(() => {
+        // 显示死亡遮罩
+        const deathOverlay = document.getElementById('deathOverlay');
+        const deathMessage = document.getElementById('deathMessage');
+        deathMessage.textContent = `你${reason}`;
+        deathOverlay.style.display = 'flex';
+
+        document.getElementById('deathContinueBtn').onclick = () => {
+            deathOverlay.style.display = 'none';
             this.showGameOver();
-        }, 2000);
+        };
     }
 
     /**
@@ -1183,18 +1053,7 @@ class LifeSimulatorGame {
 
         // 创建标签对象数组，按照颜色排序（黑、紫、红、粉、金、普通）
         const tagObjects = this.player.tags.map((tag, index) => {
-            let type = 'normal';
-            if (this.isBlackTag(tag)) {
-                type = 'black';
-            } else if (this.isPurpleTag(tag)) {
-                type = 'purple';
-            } else if (this.isRedTag(tag)) {
-                type = 'red';
-            } else if (this.isPinkTag(tag)) {
-                type = 'pink';
-            } else if (this.isGoldenTag(tag)) {
-                type = 'golden';
-            }
+            const type = this.getTagType(tag);
 
             return {
                 text: tag,
@@ -1439,18 +1298,20 @@ class LifeSimulatorGame {
         document.getElementById('lifeDetailsScreen').style.display = 'none';
     }
 
-    clearPersistentTags() {
-        if (confirm("你确定要清除所有累积的黑色记忆吗？这将重置你的轮回优势。")) {
+    async clearPersistentTags() {
+        const confirmed = await showConfirm("你确定要清除所有累积的黑色记忆吗？这将重置你的轮回优势。", "🧼");
+        if (confirmed) {
             dataManager.clearPersistentTags();
             this.persistentTags = [];
-            alert("所有黑色记忆已清除。");
+            await showModal("所有黑色记忆已清除。", "✅");
         }
     }
 
-    confirmResetGame() {
-        if (confirm("确定要重置游戏吗？这将清除所有保存的数据、成就和记忆！")) {
+    async confirmResetGame() {
+        const confirmed = await showConfirm("确定要重置游戏吗？这将清除所有保存的数据、成就和记忆！", "🔄");
+        if (confirmed) {
             dataManager.clearAllData();
-            alert("游戏已重置！");
+            await showModal("游戏已重置！", "✅");
             location.reload();
         }
     }
@@ -1460,9 +1321,9 @@ class LifeSimulatorGame {
         document.getElementById('characterCreation').style.display = 'block';
     }
 
-    saveLife() {
+    async saveLife() {
         const savedLife = this.saveCurrentLife();
-        alert(`下葬成功`);
+        await showModal("下葬成功", "🪦");
     }
 
     renderSavedLives() {
@@ -1549,11 +1410,8 @@ class LifeSimulatorGame {
                     const tagEl = document.createElement('div');
                     tagEl.className = 'tag';
 
-                    if (this.isBlackTag(tag)) tagEl.classList.add('black');
-                    else if (this.isRedTag(tag)) tagEl.classList.add('red');
-                    else if (this.isPurpleTag(tag)) tagEl.classList.add('purple');
-                    else if (this.isPinkTag(tag)) tagEl.classList.add('pink');
-                    else if (this.isGoldenTag(tag)) tagEl.classList.add('golden');
+                    const tagType = this.getTagType(tag);
+                    if (tagType !== 'normal') tagEl.classList.add(tagType);
 
                     tagEl.textContent = tag;
                     fragment.appendChild(tagEl);

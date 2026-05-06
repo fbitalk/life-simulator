@@ -130,17 +130,6 @@ class EventManager {
         return { id: selectedEvent[0], ...selectedEvent[1] };
     }
 
-    /**
-     * 获取开局事件 (不再使用独立逻辑，通过0岁时的Gender标签触发)
-     * @returns {Object} 应该返回通过getEventForPlayer获取的事件
-     */
-    getStartEvent(player) {
-        // 兼容旧代码调用，实际应该直接使用 getEventForPlayer
-        if (player) {
-            return this.getEventForPlayer(player);
-        }
-        return null;
-    }
 
     /**
      * 根据优先级分组事件
@@ -163,12 +152,6 @@ class EventManager {
         return eventsByPriority;
     }
 
-    /**
-     * 根据标签获取相关事件
-     * @param {String} tag - 标签名称
-     * @param {Object} player - 玩家对象
-     * @returns {Array} 满足条件的事件列表 [eventId, event]
-     */
     /**
      * 根据标签获取相关事件
      * @param {String} tag - 标签名称
@@ -202,28 +185,6 @@ class EventManager {
         return result;
     }
 
-    /**
-     * 根据年龄段获取事件
-     * @param {String} ageGroup - 年龄段名称
-     * @param {Object} player - 玩家对象
-     * @returns {Array} 满足条件的事件列表 [eventId, event]
-     */
-    getEventsByAgeGroup(ageGroup, player) {
-        let result = [];
-
-        // 现在的逻辑其实已经被 getEventsByTag 覆盖了，因为 AgeGroup 也是 Tag。
-        // 但为了兼容性或者显式调用，我们保留这个方法，但逻辑必须和 getEventsByTag 一致，期待 .events 结构
-        if (this.allEvents.age[ageGroup] && this.allEvents.age[ageGroup].events) {
-            Object.entries(this.allEvents.age[ageGroup].events).forEach(([eventId, event]) => {
-                // 排除标记为连续事件的事件
-                if (!event.is_continue && this.checkEventConditions(event, player)) {
-                    result.push([eventId, event]);
-                }
-            });
-        }
-
-        return result;
-    }
 
     /**
      * 检查事件触发条件是否满足
@@ -299,27 +260,7 @@ class EventManager {
         return true;
     }
 
-    /**
-     * 根据优先级对事件进行分组
-     * @param {Array} events - 事件列表
-     * @returns {Object} 按优先级分组的事件
-     */
-    groupEventsByPriority(events) {
-        const eventsByPriority = {};
-
-        events.forEach(([eventId, event]) => {
-            const priority = event.priority || 0; // 默认优先级为0
-
-            if (!eventsByPriority[priority]) {
-                eventsByPriority[priority] = [];
-            }
-
-            eventsByPriority[priority].push([eventId, event]);
-        });
-
-        return eventsByPriority;
-    }
-
+   
     /**
      * 解析 continue_event 值（支持数组形式，随机选取一个）
      * @param {String|Array} continueEvent - 单个事件ID或事件ID数组
