@@ -1,7 +1,7 @@
 // 游戏常量定义
 
 // 属性相关常量
-const ATTRIBUTES = {
+export const ATTRIBUTES = {
     HEALTH: 'health',       // 健康
     MONEY: 'money',         // 金钱
     SOCIAL: 'social',       // 社交
@@ -13,7 +13,7 @@ const ATTRIBUTES = {
 };
 
 // 属性默认值
-const DEFAULT_ATTRIBUTES = {
+export const DEFAULT_ATTRIBUTES = {
     [ATTRIBUTES.HEALTH]: 50,
     [ATTRIBUTES.MONEY]: 50,
     [ATTRIBUTES.SOCIAL]: 50,
@@ -25,7 +25,7 @@ const DEFAULT_ATTRIBUTES = {
 };
 
 // 属性阈值 - 当属性达到这些值时获得对应标签
-const ATTRIBUTE_THRESHOLDS = {
+export const ATTRIBUTE_THRESHOLDS = {
     [ATTRIBUTES.HEALTH]: {
         HIGH: { value: 90, tag: "健康" },
         LOW: { value: 30, tag: "体弱多病" }
@@ -52,7 +52,7 @@ const ATTRIBUTE_THRESHOLDS = {
 };
 
 // 年龄段定义
-const AGE_GROUPS = {
+export const AGE_GROUPS = {
     INFANT: { name: "幼儿", min: 1, max: 5 },
     CHILD: { name: "少年", min: 6, max: 12 },
     TEENAGER: { name: "青少年", min: 13, max: 18 },
@@ -63,7 +63,7 @@ const AGE_GROUPS = {
 };
 
 // 根据年龄获取年龄段
-function getAgeGroup(age) {
+export function getAgeGroup(age) {
     for (const group of Object.values(AGE_GROUPS)) {
         if (age >= group.min && age <= group.max) {
             return group.name;
@@ -73,7 +73,7 @@ function getAgeGroup(age) {
 }
 
 // 标签类型
-const TAG_TYPES = {
+export const TAG_TYPES = {
     NORMAL: 'normal',     // 普通标签
     RED: 'red',           // 红色标签
     BLACK: 'black',       // 黑色标签（轮回记忆）
@@ -85,7 +85,7 @@ const TAG_TYPES = {
 };
 
 // 游戏默认配置
-const GAME_CONFIG = {
+export const GAME_CONFIG = {
     MAX_HEALTH: 100,
     MIN_HEALTH: 0,
     YEARLY_HEALTH_DECREASE_AGE: 60, // 60岁后健康每年下降
