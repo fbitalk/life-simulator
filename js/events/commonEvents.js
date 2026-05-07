@@ -1,6 +1,6 @@
 
 // 普通标签事件 (绿色标签，含属性标签)
-const commonEvents = {
+export const commonEvents = {
     "富有": {
         "events": {
             "rich_party": {
@@ -1857,4 +1857,4 @@ const commonEvents = {
     }
 };
 
-window.commonEvents = commonEvents;
+

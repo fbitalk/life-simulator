@@ -1,7 +1,7 @@
 
 // 年龄段事件文件
 // 包含所有仅在拥有特定年龄段标签时触发的事件
-const ageEvents = {
+export const ageEvents = {
     "幼儿": {
         "events": {
             "learn_walk": {
@@ -3143,4 +3143,4 @@ const ageEvents = {
     }
 };
 
-window.ageEvents = ageEvents;
+

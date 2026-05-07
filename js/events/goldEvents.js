@@ -1,6 +1,6 @@
 
 // 金色标签事件 (成就/特殊)
-const goldEvents = {
+export const goldEvents = {
     "天命之子": {
         "is_golden": true,
         "events": {
@@ -281,4 +281,4 @@ const goldEvents = {
     }
 };
 
-window.goldEvents = goldEvents;
+

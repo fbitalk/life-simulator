@@ -1,7 +1,7 @@
 
 // 女性事件文件
 // 包含所有仅在拥有"女性"标签时触发的事件
-const femaleEvents = {
+export const femaleEvents = {
     // 标签: 女性
     "女性": {
         "events": {
@@ -466,4 +466,4 @@ const femaleEvents = {
 };
 
 // 导出
-window.femaleEvents = femaleEvents;
+

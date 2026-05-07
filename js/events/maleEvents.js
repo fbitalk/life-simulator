@@ -1,7 +1,7 @@
 
 // 男性事件文件
 // 包含所有仅在拥有"男性"标签时触发的事件
-const maleEvents = {
+export const maleEvents = {
     "男性": {
         "events": {
             "special_angel_birth": {
@@ -804,4 +804,4 @@ const maleEvents = {
     }
 };
 
-window.maleEvents = maleEvents;
+

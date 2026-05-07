@@ -2,7 +2,7 @@
  * DataManager - 模拟后端数据管理模块
  * 负责所有的持久化数据存取 (localStorage)
  */
-class DataManager {
+export class DataManager {
     constructor() {
         this.STORAGE_KEYS = {
             THEME: 'theme',
@@ -79,4 +79,4 @@ class DataManager {
 }
 
 // 导出全局实例
-window.dataManager = new DataManager();
+export const dataManager = new DataManager();

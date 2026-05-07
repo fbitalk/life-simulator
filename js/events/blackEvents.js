@@ -1,6 +1,6 @@
 
 // 黑色标签事件 (轮回记忆)
-const blackEvents = {
+export const blackEvents = {
     "穿越者": {
         "is_black": true,
         "events": {
@@ -567,4 +567,4 @@ const blackEvents = {
     }
 };
 
-window.blackEvents = blackEvents;
+

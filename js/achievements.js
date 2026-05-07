@@ -1,6 +1,6 @@
 // achievements.js - 成就系统
 
-const achievementManager = {
+export const achievementManager = {
     // 成就定义
     achievements: [
                 {

@@ -1,6 +1,6 @@
 
 // 紫色标签事件 (固定属性/特殊能力)
-const purpleEvents = {
+export const purpleEvents = {
     "钢铁之躯": {
         "fixed_attributes": {
             "health": 100
@@ -66,4 +66,4 @@ const purpleEvents = {
     }
 };
 
-window.purpleEvents = purpleEvents;
+

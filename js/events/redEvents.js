@@ -1,6 +1,6 @@
 
 // 红色标签事件 (特殊状态)
-const redEvents = {
+export const redEvents = {
     "体弱多病": {
         "is_red": true,
         "events": {
@@ -1573,4 +1573,4 @@ const redEvents = {
     }
 };
 
-window.redEvents = redEvents;
+
