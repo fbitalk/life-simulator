@@ -228,42 +228,8 @@
         </div>
     </div>
 
-    <!-- 引入脚本文件 -->
-    <script src="js/modules/DataManager.js"></script>
-    <script src="js/modules/constants.js"></script>
-    <script src="js/events/startEvents.js"></script>
-    <script src="js/events/commonEvents.js"></script>
-    <script src="js/events/purpleEvents.js"></script>
-    <script src="js/events/blackEvents.js"></script>
-    <script src="js/events/redEvents.js"></script>
-    <script src="js/events/pinkEvents.js"></script>
-    <script src="js/events/goldEvents.js"></script>
-    <script src="js/events/maleEvents.js"></script>
-    <script src="js/events/femaleEvents.js"></script>
-    <script src="js/events/ageEvents.js"></script>
-    <script src="js/achievements.js"></script>
-    <script src="js/eventManager.js"></script>
-    <script src="js/game.js"></script>
-    <script src="js/ui-effects.js"></script>
-
-    <script>
-        // 添加DOM加载完成后的初始化
-        document.addEventListener('DOMContentLoaded', function () {
-            // 初始化游戏实例
-            window.game = new LifeSimulatorGame();
-
-            // 初始化时隐藏所有界面
-            document.getElementById('characterCreation').style.display = 'none';
-            document.getElementById('achievementsScreen').style.display = 'none';
-            document.getElementById('replayScreen').style.display = 'none';
-            document.getElementById('startScreen').style.display = 'none';
-            document.getElementById('gameScreen').style.display = 'none';
-            document.getElementById('gameoverScreen').style.display = 'none';
-            document.getElementById('lifeDetailsScreen').style.display = 'none';
-            // 只显示主菜单
-            document.getElementById('mainMenu').style.display = 'block';
-        });
-    </script>
+    <!-- ES Module 入口 -->
+    <script type="module" src="js/main.js"></script>
 </body>
 
 </html>
