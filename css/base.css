@@ -1,0 +1,163 @@
+/* ============================================
+   base.css — CSS 变量、Reset、字体、基础样式
+   ============================================ */
+
+/* === 新版 CSS 变量体系 === */
+:root {
+    /* 主色 */
+    --color-primary: #667eea;
+    --color-primary-dark: #5a6fd6;
+    --color-primary-light: #b794f4;
+    --color-secondary: #764ba2;
+
+    /* 背景 */
+    --color-bg: #f7fafc;
+    --color-bg-dark: #1a1a2e;
+    --color-bg-gradient-start: #a18cd1;
+    --color-bg-gradient-end: #fbc2eb;
+
+    /* 表面/卡片 */
+    --color-surface: #ffffff;
+    --color-surface-dark: #16213e;
+
+    /* 文字 */
+    --color-text: #2d3748;
+    --color-text-dark: #e0e0e0;
+    --color-text-secondary: #718096;
+    --color-text-muted: #666666;
+
+    /* 语义色 */
+    --color-danger: #e74c3c;
+    --color-success: #2ecc71;
+    --color-warning: #f39c12;
+    --color-gold: #ffd700;
+
+    /* 间距 */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+    --space-2xl: 48px;
+
+    /* 圆角 */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    --radius-2xl: 24px;
+    --radius-round: 50%;
+
+    /* 阴影 */
+    --shadow-card: 0 10px 30px -5px rgba(0, 0, 0, 0.1);
+    --shadow-hover: 0 20px 40px -5px rgba(0, 0, 0, 0.15);
+    --shadow-modal: 0 20px 60px rgba(0, 0, 0, 0.3);
+    --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 5px 15px rgba(0, 0, 0, 0.08);
+    --shadow-btn: 0 4px 15px rgba(102, 126, 234, 0.4);
+
+    /* 过渡 */
+    --transition-fast: 0.2s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+    --transition-bounce: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+    /* 字体 */
+    --font-family: 'Microsoft YaHei', 'PingFang SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.25rem;
+    --font-size-xl: 1.5rem;
+    --font-size-2xl: 2rem;
+    --font-size-3xl: 2.5rem;
+
+    /* 其他 */
+    --color-input-bg: #fff;
+    --color-input-border: #e2e8f0;
+    --color-tag-bg: rgba(66, 153, 225, 0.9);
+    --color-tag-text: #fff;
+    --color-glass-border: 1px solid rgba(255, 255, 255, 0.6);
+
+    /* 渐变 */
+    --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    --gradient-bg: linear-gradient(135deg, var(--color-bg-gradient-start) 0%, var(--color-bg-gradient-end) 100%);
+
+    /* === 旧版变量兼容映射（JS 代码中引用的变量名） === */
+    --primary-color: var(--color-primary);
+    --primary-rgb: 102, 126, 234;
+    --secondary-color: var(--color-secondary);
+    --bg-gradient-start: var(--color-bg-gradient-start);
+    --bg-gradient-end: var(--color-bg-gradient-end);
+    --text-color: var(--color-text);
+    --text-secondary: var(--color-text-secondary);
+    --bg-color: var(--color-bg);
+    --card-bg: rgba(255, 255, 255, 0.92);
+    --card-shadow: var(--shadow-card);
+    --card-shadow-hover: var(--shadow-hover);
+    --border-color: var(--color-input-border);
+    --input-bg: var(--color-input-bg);
+    --tag-bg: var(--color-tag-bg);
+    --tag-text: var(--color-tag-text);
+    --glass-border: var(--color-glass-border);
+}
+
+/* === Reset === */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    font-family: var(--font-family);
+    background: var(--gradient-bg);
+    color: var(--color-text);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: background var(--transition-slow);
+    line-height: 1.6;
+}
+
+/* === 通用元素 === */
+button {
+    cursor: pointer;
+    border: none;
+    font-family: inherit;
+}
+
+input {
+    font-family: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+}
+
+/* === 滚动条美化 === */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(102, 126, 234, 0.5);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(118, 75, 162, 0.7);
+}

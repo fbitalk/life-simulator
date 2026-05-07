@@ -1,0 +1,1398 @@
+/* ============================================
+   components.css — 按钮、卡片、标签、输入框、模态弹窗
+   ============================================ */
+
+/* === 游戏标题 === */
+.game-title {
+    font-size: var(--font-size-3xl);
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: var(--space-lg);
+    font-weight: bold;
+    animation: scale-pulse 2s ease-in-out infinite;
+}
+
+.game-description {
+    color: var(--color-text-secondary);
+    font-size: 1.1em;
+    line-height: 1.8;
+    margin-bottom: var(--space-xl);
+}
+
+/* === 菜单按钮 === */
+.menu-btn {
+    background: rgba(255, 255, 255, 0.8);
+    border: none;
+    padding: var(--space-lg) var(--space-xl);
+    border-radius: var(--radius-xl);
+    font-size: 1.2em;
+    font-weight: 600;
+    color: var(--color-text);
+    cursor: pointer;
+    transition: all var(--transition-bounce);
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+}
+
+.menu-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--gradient-primary);
+    opacity: 0;
+    z-index: -1;
+    transition: opacity var(--transition-normal);
+}
+
+.menu-btn:hover {
+    transform: translateY(-5px) scale(1.02);
+    color: white;
+    box-shadow: var(--shadow-hover);
+}
+
+.menu-btn:hover::before {
+    opacity: 1;
+}
+
+.menu-btn .icon {
+    font-size: 1.6em;
+    margin-right: 15px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+    transition: transform var(--transition-normal);
+}
+
+.menu-btn:hover .icon {
+    transform: scale(1.2) rotate(5deg);
+}
+
+.menu-btn:active {
+    transform: scale(0.95);
+    transition: transform 0.1s;
+}
+
+/* === 通用按钮 === */
+.btn {
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 50px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    box-shadow: var(--shadow-btn);
+    font-weight: 600;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+}
+
+.btn:active {
+    transform: translateY(0) scale(0.95);
+    transition: transform 0.1s;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.continue-btn {
+    margin-top: var(--space-lg);
+    width: 100%;
+}
+
+/* === 返回按钮 === */
+.back-btn {
+    position: absolute;
+    top: var(--space-lg);
+    left: var(--space-lg);
+    background: var(--color-surface);
+    border: 2px solid var(--color-primary);
+    border-radius: var(--radius-round);
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    font-size: 1.5em;
+}
+
+.back-btn:hover {
+    background: var(--color-primary);
+    color: white;
+    transform: scale(1.1);
+}
+
+/* === 性别卡片 === */
+.gender-card {
+    background: var(--color-surface);
+    border: 3px solid var(--color-input-border);
+    border-radius: 15px;
+    padding: var(--space-xl);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    text-align: center;
+    width: 150px;
+}
+
+.gender-card:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+}
+
+.gender-card.selected {
+    border-color: var(--color-primary);
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.gender-icon {
+    font-size: var(--font-size-3xl);
+    margin-bottom: 10px;
+}
+
+/* === 名字输入框 === */
+.name-input {
+    padding: 15px 25px;
+    font-size: 1.1em;
+    border: 2px solid var(--color-input-border);
+    border-radius: 50px;
+    width: 300px;
+    text-align: center;
+    transition: all var(--transition-normal);
+    background: var(--color-input-bg);
+    color: var(--color-text);
+}
+
+.name-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+/* === 统一标签样式 === */
+.tag {
+    background: white;
+    padding: 6px 14px;
+    border-radius: var(--radius-md);
+    font-size: 0.9em;
+    font-weight: 600;
+    color: #4a5568;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 4px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--color-input-border);
+    transition: all var(--transition-normal);
+    animation: scale-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.tag:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 红色标签 */
+.tag.red {
+    background: #fff5f5;
+    color: #e53e3e;
+    border: 1px solid #feb2b2;
+    box-shadow: 0 2px 5px rgba(229, 62, 62, 0.1);
+}
+
+.tag.red::before {
+    content: '\26A1';
+    margin-right: 4px;
+    font-size: 0.8em;
+}
+
+/* 粉色标签 */
+.tag.pink {
+    background: #fff5f7;
+    color: #d53f8c;
+    border: 1px solid #fbb6ce;
+    box-shadow: 0 2px 5px rgba(213, 63, 140, 0.1);
+}
+
+.tag.pink::before {
+    content: '\2764';
+    margin-right: 4px;
+    font-size: 0.8em;
+}
+
+/* 紫色标签 */
+.tag.purple {
+    background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+    color: #6a1b9a;
+    border: 1px solid #ce93d8;
+    box-shadow: 0 2px 8px rgba(156, 39, 176, 0.2);
+}
+
+.tag.purple::before {
+    content: '\1F52E';
+    margin-right: 4px;
+    font-size: 0.8em;
+}
+
+/* 黑色标签 */
+.tag.black {
+    background: #2d3748;
+    color: #e2e8f0;
+    border: 1px solid #1a202c;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.tag.black::before {
+    content: '\1F441';
+    margin-right: 4px;
+    font-size: 0.8em;
+}
+
+/* 金色标签 */
+.tag.golden {
+    background: linear-gradient(135deg, #fffdf0, #fff7cd);
+    color: #b7791f;
+    border: 1px solid #f6e05e;
+    box-shadow: 0 4px 12px rgba(236, 201, 75, 0.2);
+}
+
+.tag.golden::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.5) 50%, transparent 70%);
+    animation: shimmer 3s infinite;
+}
+
+/* === 事件标题 === */
+.event-title {
+    color: #2d3748;
+    font-size: 1.8em;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin: 0;
+    background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1.2;
+}
+
+/* === 选项按钮 === */
+.option-btn {
+    background: linear-gradient(to right, #f8f9fa, #f1f3f9);
+    border: 2px solid #e0e6ed;
+    padding: 14px 20px;
+    border-radius: 15px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: hidden;
+    font-size: 1em;
+    color: #4a5568;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+}
+
+.option-btn::before {
+    content: '';
+    position: absolute;
+    left: -5px;
+    top: 0;
+    height: 100%;
+    width: 5px;
+    background: var(--gradient-primary);
+    transition: all var(--transition-normal);
+}
+
+.option-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: all var(--transition-slow);
+}
+
+.option-btn:hover {
+    border-color: var(--color-primary);
+    background: linear-gradient(to right, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.03));
+    transform: translateX(5px) translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+    color: #2d3748;
+    animation: glow-pulse 1.5s infinite;
+}
+
+.option-btn:hover::before {
+    left: 0;
+}
+
+.option-btn:hover::after {
+    left: 100%;
+}
+
+.option-btn:active {
+    transform: translateX(5px) translateY(0) scale(0.95);
+    box-shadow: 0 2px 5px rgba(102, 126, 234, 0.2);
+    transition: transform 0.1s;
+}
+
+/* 选项图标 */
+.option-icon {
+    margin-right: 15px;
+    font-size: 1.2em;
+    opacity: 0.8;
+    min-width: 24px;
+    text-align: center;
+}
+
+/* 选项内容 */
+.option-content {
+    flex-grow: 1;
+}
+
+/* 选项特殊状态 */
+.option-selected {
+    border-color: var(--color-primary) !important;
+    background: linear-gradient(to right, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.05)) !important;
+    transform: translateX(5px) !important;
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3) !important;
+    position: relative;
+    z-index: 2;
+}
+
+.option-disabled {
+    opacity: 0.5;
+    cursor: default !important;
+    transform: none !important;
+    animation: none !important;
+}
+
+/* 条件选项 */
+.option-conditional {
+    border-left: 4px solid #9c27b0;
+    background: linear-gradient(to right, #f8f9fa, #f3e5f5);
+}
+
+.option-conditional .option-icon {
+    position: relative;
+}
+
+.option-conditional .option-icon::after {
+    content: '\26A1';
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    font-size: 0.6em;
+    animation: scale-pulse 1s infinite;
+}
+
+.option-conditional:hover {
+    border-color: #9c27b0;
+    background: linear-gradient(to right, rgba(156, 39, 176, 0.05), rgba(156, 39, 176, 0.1));
+    box-shadow: 0 5px 15px rgba(156, 39, 176, 0.2);
+}
+
+/* 风险选项 */
+.option-risk {
+    border-left: 4px solid #ff4444;
+    background: linear-gradient(to right, #f8f9fa, #ffebee);
+}
+
+.option-risk .option-icon::after {
+    content: '\26A0\FE0F';
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    font-size: 0.6em;
+    animation: scale-pulse 1s infinite;
+}
+
+.option-risk:hover {
+    border-color: #ff4444;
+    background: linear-gradient(to right, rgba(255, 68, 68, 0.05), rgba(255, 68, 68, 0.1));
+    box-shadow: 0 5px 15px rgba(255, 68, 68, 0.2);
+}
+
+/* === 结果展示 === */
+.result-display {
+    animation: scale-in 0.6s ease-out;
+}
+
+.result-text {
+    font-size: 1.2em;
+    line-height: 1.7;
+    color: #4a5568;
+    margin-bottom: var(--space-lg);
+    padding: 10px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.7);
+}
+
+/* 效果显示 */
+.effects-display {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: var(--space-lg);
+    padding-top: 15px;
+    border-top: 1px dashed var(--color-input-border);
+}
+
+.effect-item {
+    background: #f7fafc;
+    padding: 8px 15px;
+    border-radius: 50px;
+    font-size: 0.95em;
+    display: inline-flex;
+    align-items: center;
+    box-shadow: var(--shadow-sm);
+}
+
+.effect-item::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-round);
+    margin-right: var(--space-sm);
+    background-color: #cbd5e0;
+}
+
+.effect-item.positive {
+    color: #38a169;
+    background: #f0fff4;
+    border-left: 3px solid #38a169;
+}
+
+.effect-item.positive::before {
+    background-color: #38a169;
+}
+
+.effect-item.negative {
+    color: #e53e3e;
+    background: #fff5f5;
+    border-left: 3px solid #e53e3e;
+}
+
+.effect-item.negative::before {
+    background-color: #e53e3e;
+}
+
+/* === 成就通知 === */
+.achievement-notification {
+    position: fixed;
+    top: 80px;
+    right: var(--space-lg);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 248, 220, 0.95) 100%);
+    border-left: 5px solid var(--color-gold);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15), 0 0 20px rgba(255, 215, 0, 0.3);
+    padding: 15px 20px;
+    z-index: 1000;
+    animation: slide-in-right 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+    transition: all var(--transition-slow);
+    display: flex;
+    align-items: center;
+    min-width: 280px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.achievement-notification::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent 40%, rgba(255, 255, 255, 0.8) 50%, transparent 60%);
+    background-size: 200% 200%;
+    animation: shimmer 2s infinite;
+    pointer-events: none;
+    border-radius: var(--radius-sm);
+    opacity: 0.5;
+}
+
+.achievement-notification-hide {
+    animation: slide-out-right 0.5s ease forwards;
+}
+
+.achievement-notification-content {
+    display: flex;
+    align-items: center;
+}
+
+.achievement-notification-icon {
+    font-size: var(--font-size-2xl);
+    margin-right: 15px;
+    animation: float-y 1s infinite alternate;
+}
+
+.achievement-notification-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: var(--color-text);
+}
+
+.achievement-notification-name {
+    color: var(--color-text);
+}
+
+/* === 金色成就通知 === */
+.golden-achievement-notification {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(135deg, #fffdf0, #fffce0);
+    border: 2px solid var(--color-gold);
+    border-radius: 15px;
+    padding: var(--space-lg) 40px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.6), inset 0 0 20px rgba(255, 215, 0, 0.2);
+    z-index: 3000;
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    min-width: 300px;
+}
+
+.golden-achievement-notification.show {
+    opacity: 1;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+.golden-achievement-notification .achievement-icon {
+    font-size: var(--font-size-3xl);
+    margin: 0;
+    filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.2));
+    animation: float-y 1s infinite alternate;
+    background: none;
+    width: auto;
+    height: auto;
+}
+
+.golden-achievement-notification .achievement-text {
+    font-size: 1.5em;
+    font-weight: 800;
+    color: #b7791f;
+    text-shadow: 0 1px 0px rgba(255, 255, 255, 0.5);
+}
+
+/* === 金色成就弹窗内容 === */
+.golden-achievement-content {
+    background: linear-gradient(135deg, var(--color-gold), #ffed4e);
+    padding: var(--space-xl) 50px;
+    border-radius: var(--radius-xl);
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(255, 215, 0, 0.5);
+}
+
+.golden-achievement-title {
+    font-size: var(--font-size-2xl);
+    color: var(--color-text);
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.golden-achievement-desc {
+    font-size: 1.2em;
+    color: var(--color-text-secondary);
+}
+
+/* === 金色/标签获得特效 === */
+.golden-achievement-effect,
+.golden-tag-effect {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2000;
+    pointer-events: none;
+    animation: pop-fade 1s ease-out forwards;
+}
+
+.normal-tag-effect,
+.add-tag-effect,
+.remove-tag-effect,
+.red-tag-effect,
+.black-tag-effect,
+.purple-tag-effect,
+.pink-tag-effect,
+.golden-tag-effect {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2000;
+    pointer-events: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+}
+
+.normal-tag-effect,
+.add-tag-effect {
+    animation: pop-fade 1.5s ease-out forwards;
+}
+
+.remove-tag-effect {
+    animation: remove-tag-fade 1.5s ease-out forwards;
+}
+
+.red-tag-effect {
+    animation: tag-appear-red 1.5s ease-out forwards;
+}
+
+.black-tag-effect {
+    animation: tag-appear-black 1.5s ease-out forwards;
+}
+
+.purple-tag-effect {
+    animation: tag-appear-purple 1.5s ease-out forwards;
+}
+
+.pink-tag-effect {
+    animation: tag-appear-pink 1.5s ease-out forwards;
+}
+
+/* 各色标签特效内容 */
+.normal-tag-content,
+.add-tag-content {
+    background: var(--gradient-primary);
+    padding: var(--space-xl) 50px;
+    border-radius: var(--radius-xl);
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(102, 126, 234, 0.6);
+    color: white;
+}
+
+.remove-tag-content {
+    background: linear-gradient(135deg, #718096, #2d3748);
+    padding: var(--space-xl) 50px;
+    border-radius: var(--radius-xl);
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    color: white;
+}
+
+.red-tag-content {
+    background: linear-gradient(135deg, #ff4444, #cc0000);
+    padding: var(--space-xl) 50px;
+    border-radius: var(--radius-xl);
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(255, 0, 0, 0.6);
+    color: white;
+}
+
+.black-tag-content {
+    background: linear-gradient(135deg, #333333, #000000);
+    padding: var(--space-xl) 50px;
+    border-radius: var(--radius-xl);
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+    color: white;
+}
+
+.purple-tag-content {
+    background: linear-gradient(135deg, #9c27b0, #673ab7);
+    padding: var(--space-xl) 50px;
+    border-radius: var(--radius-xl);
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(128, 0, 128, 0.6);
+    color: white;
+}
+
+.pink-tag-content {
+    background: linear-gradient(135deg, #ff6b9e, #ff0066);
+    padding: var(--space-xl) 50px;
+    border-radius: var(--radius-xl);
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(255, 77, 148, 0.6);
+    color: white;
+}
+
+/* === 成就卡片 === */
+.achievement-card {
+    background: var(--color-surface);
+    border-radius: 15px;
+    padding: 25px;
+    position: relative;
+    transition: all var(--transition-normal);
+    border: 2px solid var(--color-input-border);
+    display: flex;
+    flex-direction: column;
+    min-height: 150px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.achievement-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.achievement-card.unlocked {
+    border-color: var(--color-gold);
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 223, 0, 0.05));
+    box-shadow: 0 6px 12px rgba(255, 215, 0, 0.2);
+}
+
+.achievement-card.unlocked:hover {
+    box-shadow: 0 8px 20px rgba(255, 215, 0, 0.3);
+}
+
+.achievement-card.locked {
+    opacity: 0.5;
+    filter: grayscale(1);
+}
+
+.achievement-card.golden {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 223, 0, 0.1));
+    border-color: var(--color-gold);
+    position: relative;
+    overflow: hidden;
+}
+
+.achievement-card.golden::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.4) 50%, transparent 70%);
+    animation: shimmer 3s infinite;
+    pointer-events: none;
+}
+
+.achievement-content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.achievement-header {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.achievement-icon {
+    font-size: var(--font-size-3xl);
+    margin-right: 15px;
+    background: rgba(102, 126, 234, 0.1);
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-round);
+}
+
+.achievement-card.unlocked .achievement-icon {
+    background: rgba(255, 215, 0, 0.2);
+}
+
+.achievement-name {
+    font-size: 1.4em;
+    font-weight: bold;
+    color: #4a5568;
+}
+
+.achievement-description {
+    font-size: 1em;
+    color: var(--color-text-secondary);
+    margin-top: 10px;
+    line-height: 1.5;
+    padding-left: 75px;
+}
+
+.achievement-stars {
+    color: var(--color-gold);
+    font-size: 1.1em;
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    letter-spacing: -1px;
+    text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+}
+
+.achievement-lock {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    font-size: 1.5em;
+    opacity: 0.8;
+    z-index: 2;
+}
+
+/* === 墓地/存档卡片 === */
+.saved-life-card {
+    background: var(--color-surface);
+    border-radius: 15px;
+    padding: var(--space-lg);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    border: 2px solid var(--color-input-border);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    -webkit-tap-highlight-color: rgba(102, 126, 234, 0.2);
+    touch-action: manipulation;
+}
+
+.saved-life-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 5px;
+    height: 100%;
+    background: linear-gradient(to bottom, var(--color-primary) 0%, var(--color-secondary) 100%);
+}
+
+.saved-life-card:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+}
+
+.saved-life-card:active {
+    background: rgba(102, 126, 234, 0.1);
+    transform: translateY(-3px) scale(0.99);
+}
+
+.saved-life-card .btn {
+    position: relative;
+    z-index: 2;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-tap-highlight-color: rgba(102, 126, 234, 0.4);
+    margin-top: 15px;
+    width: 100%;
+}
+
+.saved-life-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.saved-life-name {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: var(--color-primary);
+}
+
+.saved-life-age {
+    font-size: 1.1em;
+    color: var(--color-text-secondary);
+    background: rgba(102, 126, 234, 0.1);
+    padding: 3px 10px;
+    border-radius: var(--radius-xl);
+    font-weight: bold;
+}
+
+.saved-life-date {
+    color: #888;
+    font-size: 0.9em;
+    margin-bottom: 15px;
+}
+
+.saved-life-tags {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.no-saves {
+    text-align: center;
+    color: #888;
+    font-size: 1.1em;
+    margin-top: 50px;
+}
+
+/* === 历史事件 === */
+.history-item {
+    margin: 10px 0;
+    padding: 10px;
+    background: var(--color-surface);
+    border-radius: var(--radius-sm);
+    border-left: 3px solid var(--color-primary);
+}
+
+.history-event {
+    background: rgba(102, 126, 234, 0.05);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 10px;
+    animation: fade-in 0.3s ease-out;
+    border-left: 3px solid var(--color-primary);
+}
+
+.history-event-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-sm);
+    padding-bottom: var(--space-sm);
+    border-bottom: 1px dashed rgba(102, 126, 234, 0.2);
+}
+
+.history-event-title {
+    font-weight: bold;
+    color: #4a5568;
+    font-size: 1em;
+}
+
+.history-age {
+    font-weight: bold;
+    color: var(--color-primary);
+    background: rgba(102, 126, 234, 0.1);
+    padding: 3px 8px;
+    border-radius: var(--radius-md);
+    font-size: 0.85em;
+}
+
+.history-event-content {
+    color: var(--color-text-secondary);
+    font-size: 0.95em;
+    line-height: 1.5;
+}
+
+/* === 游戏结束界面元素 === */
+.final-age {
+    font-size: 4em;
+    color: var(--color-primary);
+    margin: var(--space-lg) 0;
+    font-weight: bold;
+    animation: scale-in 1s ease-out;
+}
+
+.death-reason {
+    font-size: 1.2em;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-xl);
+    font-style: italic;
+}
+
+/* === 角色信息文字 === */
+.player-name {
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+.age-display {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.background-display {
+    font-size: 1.1em;
+    opacity: 0.9;
+}
+
+/* === 选择闪光效果 === */
+.selection-flash {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
+    animation: flash-sweep 0.7s ease-out;
+    pointer-events: none;
+    border-radius: inherit;
+}
+
+/* 选择粒子效果 */
+.selection-particle {
+    position: absolute;
+    border-radius: var(--radius-round);
+    pointer-events: none;
+    opacity: 0.8;
+    transform: scale(0);
+    animation: particle-pop 1s ease-out forwards;
+    z-index: 1;
+}
+
+/* === 波纹效果 === */
+.ripple {
+    position: absolute;
+    border-radius: var(--radius-round);
+    background: rgba(255, 255, 255, 0.5);
+    transform: scale(0);
+    animation: ripple-effect 0.6s linear;
+    pointer-events: none;
+}
+
+/* === 浮动形状 === */
+.floating-shape {
+    position: absolute;
+    border-radius: var(--radius-round);
+    background: rgba(255, 255, 255, 0.1);
+    animation: float-3d 20s infinite ease-in-out;
+}
+
+/* === 主题切换 === */
+.theme-toggle {
+    background: rgba(255, 255, 255, 0.8);
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-round);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    transition: all var(--transition-normal);
+}
+
+.theme-toggle:hover {
+    transform: rotate(30deg);
+    box-shadow: 0 5px 15px var(--shadow-card);
+}
+
+.theme-options {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    background: var(--color-surface);
+    border-radius: 10px;
+    box-shadow: 0 5px 20px var(--shadow-card);
+    padding: 10px 0;
+    width: 150px;
+    display: none;
+    transform: translateY(-10px);
+    transition: all var(--transition-normal);
+}
+
+.theme-options.show {
+    display: block;
+    transform: translateY(0);
+    animation: fade-in 0.3s ease;
+}
+
+.theme-option {
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.theme-option:hover {
+    background: rgba(102, 126, 234, 0.1);
+    padding-left: var(--space-lg);
+}
+
+/* === 音效切换 === */
+.sound-toggle {
+    background: rgba(255, 255, 255, 0.8);
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-round);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    transition: all var(--transition-normal);
+}
+
+.sound-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 5px 15px var(--shadow-card);
+}
+
+/* === 标签动画 === */
+.tag-animate {
+    animation: scale-in 0.5s ease forwards;
+}
+
+/* === 加载动画 === */
+.loading {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba(102, 126, 234, 0.3);
+    border-top-color: var(--color-primary);
+    border-radius: var(--radius-round);
+    animation: spin 1s linear infinite;
+}
+
+/* === 下一事件按钮效果 === */
+.next-event-ripple {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0) 70%);
+    border-radius: inherit;
+    transform: scale(0);
+    animation: ripple-effect 0.8s ease-out;
+    pointer-events: none;
+}
+
+.next-arrow-animation {
+    position: fixed;
+    font-size: var(--font-size-2xl);
+    color: var(--color-primary);
+    transform: translateY(-50%);
+    pointer-events: none;
+    animation: arrow-fly 0.8s ease-out;
+    z-index: 1000;
+}
+
+/* === 淡出效果 === */
+.fade-out {
+    animation: fade-out 0.5s ease-out;
+}
+
+/* === 奖励效果 === */
+.reward-effect {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+.reward-particle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: var(--radius-round);
+    background: gold;
+    pointer-events: none;
+}
+
+/* === Modal === */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1001;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    padding: var(--space-xl);
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 700px;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px var(--shadow-card);
+    position: relative;
+    animation: scale-in 0.4s ease-out;
+}
+
+.close-btn {
+    color: #aaa;
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    font-size: 32px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: var(--color-text);
+    text-decoration: none;
+}
+
+#replayModalHistoryContainer {
+    max-height: 300px;
+    overflow-y: auto;
+    background: #f0f0f0;
+    padding: 15px;
+    border-radius: var(--radius-sm);
+}
+
+#replayModalHistoryContainer .history-item {
+    margin: var(--space-sm) 0;
+    padding: var(--space-sm);
+    background: var(--color-surface);
+    border-radius: 6px;
+    border-left: 3px solid var(--color-secondary);
+    font-size: 0.95em;
+}
+
+/* === 自定义模态弹窗 === */
+.custom-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fade-in 0.2s ease;
+}
+
+.custom-modal {
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    max-width: 380px;
+    width: 90%;
+    text-align: center;
+    box-shadow: var(--shadow-modal);
+    animation: fade-in 0.3s ease;
+}
+
+.custom-modal-icon {
+    font-size: 40px;
+    margin-bottom: var(--space-md);
+}
+
+.custom-modal-message {
+    font-size: var(--font-size-base);
+    color: var(--color-text);
+    margin-bottom: var(--space-lg);
+    line-height: 1.5;
+}
+
+.custom-modal-buttons {
+    display: flex;
+    gap: var(--space-md);
+    justify-content: center;
+}
+
+.custom-modal-buttons button {
+    padding: 10px var(--space-lg);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.modal-btn-confirm {
+    background: var(--color-primary);
+    color: #fff;
+}
+
+.modal-btn-confirm:hover {
+    background: var(--color-secondary);
+}
+
+.modal-btn-cancel {
+    background: var(--color-input-border);
+    color: var(--color-text);
+}
+
+.modal-btn-cancel:hover {
+    background: #999;
+}
+
+/* === 死亡遮罩 === */
+.death-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fade-in 0.6s ease;
+}
+
+.death-content {
+    text-align: center;
+    animation: scale-in 1s ease;
+}
+
+.death-icon {
+    font-size: 64px;
+    margin-bottom: var(--space-md);
+    animation: scale-pulse 2s ease-in-out infinite;
+}
+
+.death-message {
+    font-size: var(--font-size-lg);
+    color: #fff;
+    margin-bottom: var(--space-xl);
+    line-height: 1.6;
+    max-width: 300px;
+}
+
+.death-continue-btn {
+    padding: var(--space-md) 40px;
+    font-size: var(--font-size-base);
+    background: var(--color-primary);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background var(--transition-fast);
+}
+
+.death-continue-btn:hover {
+    background: var(--color-secondary);
+}
+
+/* === 再现人生标签容器 === */
+.replay-tags-container {
+    margin-bottom: var(--space-lg);
+}

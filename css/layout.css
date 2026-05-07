@@ -1,0 +1,608 @@
+/* ============================================
+   layout.css — 容器、屏幕级布局
+   ============================================ */
+
+/* === 背景动画层 === */
+.bg-animation {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    opacity: 0.3;
+}
+
+/* === 主题选择器 === */
+.theme-selector {
+    position: fixed;
+    top: var(--space-lg);
+    right: var(--space-lg);
+    z-index: 100;
+}
+
+/* === 音效控制 === */
+.sound-control {
+    position: fixed;
+    top: var(--space-lg);
+    left: var(--space-lg);
+    z-index: 100;
+}
+
+/* === 主容器 === */
+.game-container {
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: var(--glass-border);
+    border-radius: var(--radius-2xl);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    width: 90%;
+    max-width: 800px;
+    height: 90vh;
+    max-height: 800px;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+    animation: fade-in 0.6s ease-out;
+    display: flex;
+    flex-direction: column;
+}
+
+/* === 主菜单 === */
+.main-menu {
+    text-align: center;
+    animation: fade-in 0.6s ease-out;
+}
+
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+/* === 角色创建 === */
+.character-creation {
+    display: none;
+    animation: fade-in var(--transition-slow) ease-out;
+}
+
+.creation-title {
+    text-align: center;
+    font-size: var(--font-size-2xl);
+    color: var(--color-primary);
+    margin-bottom: var(--space-xl);
+}
+
+.gender-selection {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-xl);
+    margin-bottom: var(--space-xl);
+}
+
+.name-input-container {
+    text-align: center;
+    margin: var(--space-xl) 0;
+}
+
+/* === 开始界面 === */
+.start-screen {
+    display: none;
+    text-align: center;
+    animation: fade-in 0.6s ease-out;
+}
+
+.features {
+    text-align: left;
+    background: rgba(102, 126, 234, 0.05);
+    border-radius: 10px;
+    padding: var(--space-lg);
+    margin-bottom: var(--space-xl);
+}
+
+.feature-item {
+    margin: 10px 0;
+    opacity: 0;
+    animation: fade-in 0.5s ease-out forwards;
+}
+
+.feature-item:nth-child(1) { animation-delay: 0.1s; }
+.feature-item:nth-child(2) { animation-delay: 0.2s; }
+.feature-item:nth-child(3) { animation-delay: 0.3s; }
+.feature-item:nth-child(4) { animation-delay: 0.4s; }
+.feature-item:nth-child(5) { animation-delay: 0.5s; }
+
+/* === 游戏界面 === */
+.game-screen {
+    display: none;
+    animation: fade-in var(--transition-slow) ease-out;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* === 状态栏 === */
+.status-bar {
+    background: var(--gradient-primary);
+    color: white;
+    padding: var(--space-lg);
+    border-radius: 15px;
+    margin-bottom: var(--space-xl);
+    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+}
+
+.status-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.player-info {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+}
+
+/* === 事件界面布局 === */
+.event-interface {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* 上半部分：事件历史和角色信息 */
+.event-history-section {
+    display: flex;
+    height: 45%;
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+/* 事件历史记录区域 */
+.event-history {
+    flex: 7;
+    background: var(--color-surface);
+    border-radius: 15px;
+    box-shadow: var(--shadow-md);
+    padding: 15px;
+    overflow-y: auto;
+    margin-right: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 角色信息区域 */
+.character-info {
+    flex: 3;
+    background: var(--color-surface);
+    border-radius: 15px;
+    box-shadow: var(--shadow-md);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.character-header {
+    background: var(--gradient-primary);
+    color: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* 标签容器滚动区域 */
+.tags-scroll-container {
+    padding: 15px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.tags-scroll-container .tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    max-height: none;
+}
+
+/* 标签排序 */
+.tags-container .tag.black  { order: 1; }
+.tags-container .tag.purple { order: 2; }
+.tags-container .tag.red    { order: 3; }
+.tags-container .tag.pink   { order: 4; }
+.tags-container .tag:not(.black):not(.purple):not(.red):not(.pink) { order: 5; }
+
+/* 下半部分：当前事件 */
+.current-event-section {
+    height: 55%;
+    background: var(--color-surface);
+    border-radius: 15px;
+    box-shadow: var(--shadow-md);
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* === 事件卡片内布局 === */
+.event-card {
+    background: var(--color-surface);
+    border-radius: var(--radius-2xl);
+    padding: 0;
+    box-shadow: var(--shadow-card);
+    margin-top: var(--space-lg);
+    animation: fade-in 0.5s ease-out;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 20px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+.event-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: var(--gradient-primary);
+}
+
+.event-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 150px;
+    height: 150px;
+    background: linear-gradient(135deg, transparent 70%, rgba(102, 126, 234, 0.1));
+    border-radius: 0 0 0 100%;
+    z-index: 0;
+}
+
+.event-title-container {
+    padding: 25px 30px 15px;
+    background: linear-gradient(to bottom, var(--color-surface), #fafbff);
+    z-index: 2;
+    position: relative;
+}
+
+.event-title-container::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 30px;
+    width: 60px;
+    height: 4px;
+    background: var(--gradient-primary);
+    border-radius: 2px;
+    opacity: 0.8;
+}
+
+.event-content-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.event-description {
+    color: #4a5568;
+    line-height: 1.75;
+    margin: 20px 0 25px 0;
+    font-size: 1.05em;
+    position: relative;
+    z-index: 1;
+    padding: 0 10px;
+}
+
+.event-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 15px 0;
+    padding-bottom: 10px;
+}
+
+/* === 标签容器 === */
+.tags-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    margin-top: 10px;
+    align-items: flex-start;
+}
+
+/* === 游戏结束界面 === */
+.gameover-screen {
+    display: none;
+    text-align: center;
+    animation: fade-in 0.8s ease-out;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.final-tags {
+    background: rgba(102, 126, 234, 0.05);
+    border-radius: 15px;
+    padding: var(--space-lg);
+    margin: var(--space-lg) 0;
+}
+
+/* 游戏结束标签盒子 */
+#finalTags.tags-box {
+    background: #f5f7ff;
+    border-radius: 10px;
+    padding: 15px;
+    border: 1px solid #e6e9f5;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+#finalTags .tag {
+    display: inline-block;
+    margin: 5px;
+    background: rgba(102, 126, 234, 0.15);
+    color: var(--color-text);
+    backdrop-filter: none;
+    animation: none;
+}
+
+#finalTags .tag.black {
+    background: linear-gradient(135deg, #333333, #000000, #333333);
+    color: white;
+    font-weight: bold;
+}
+
+#finalTags .tag.red {
+    background: linear-gradient(135deg, #ff4444, #cc0000, #ff4444);
+    color: white;
+    font-weight: bold;
+}
+
+#finalTags .tag.purple {
+    background: linear-gradient(135deg, #9c27b0, #673ab7, #9c27b0);
+    color: white;
+    font-weight: bold;
+}
+
+#finalTags .tag.pink {
+    background: linear-gradient(135deg, #ff6b9e, #ff0066, #ff6b9e);
+    color: white;
+    font-weight: bold;
+}
+
+#finalTags .tag.golden {
+    background: linear-gradient(135deg, #ffd700, #ffed4e, #ffd700);
+    color: var(--color-text);
+    font-weight: bold;
+}
+
+.gameover-buttons {
+    display: flex;
+    gap: var(--space-lg);
+    justify-content: center;
+    margin-top: var(--space-xl);
+}
+
+.history-container {
+    max-height: 200px;
+    overflow-y: auto;
+    text-align: left;
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: var(--space-lg);
+    margin: var(--space-lg) 0;
+}
+
+/* === 成就界面 === */
+.achievements-screen {
+    display: none;
+    animation: fade-in var(--transition-slow) ease-out;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.achievements-container {
+    position: absolute;
+    top: 80px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto;
+    padding: 0 10px 30px 10px;
+    -webkit-overflow-scrolling: touch;
+}
+
+.achievements-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    padding-bottom: var(--space-lg);
+}
+
+/* === 再现人生界面 === */
+.replay-screen {
+    display: none;
+    animation: fade-in var(--transition-slow) ease-out;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.saved-lives-list {
+    margin-top: var(--space-xl);
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--space-lg);
+    max-height: calc(100% - 100px);
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+/* === 人生详情页面 === */
+.life-details-screen {
+    display: none;
+    animation: fade-in var(--transition-slow) ease-out;
+    height: 100%;
+    position: relative;
+    overflow-y: auto;
+    padding: var(--space-lg) 0;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+}
+
+.life-details-screen h2 {
+    font-size: var(--font-size-2xl);
+    color: var(--color-primary);
+    margin-bottom: var(--space-lg);
+    text-align: center;
+}
+
+#lifeDetailsSummary {
+    background: rgba(102, 126, 234, 0.05);
+    border-radius: 15px;
+    padding: var(--space-lg);
+    margin-bottom: 25px;
+    box-shadow: var(--shadow-sm);
+    line-height: 1.7;
+}
+
+#lifeDetailsSummary p {
+    margin: 10px 0;
+}
+
+#lifeDetailsSummary strong {
+    color: var(--color-primary);
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+#lifeDetailsHistoryContainer {
+    max-height: none;
+    overflow-y: visible;
+}
+
+/* === 标签容器通用 === */
+.tags-box {
+    background: #f5f7ff;
+    border-radius: 10px;
+    padding: 15px;
+    border: 1px solid #e6e9f5;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.tags-box .tag {
+    margin: 5px;
+    transition: var(--transition-normal);
+    background: rgba(102, 126, 234, 0.15);
+    color: var(--color-text);
+    backdrop-filter: none;
+    animation: none;
+}
+
+.tags-box .tag:hover {
+    transform: scale(1.05);
+}
+
+/* === 事件容器 === */
+#eventContainer {
+    max-height: calc(100vh - 400px);
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+/* === 屏幕过渡 === */
+.main-menu,
+.character-creation,
+.game-screen,
+.gameover-screen,
+.achievements-screen,
+.replay-screen {
+    transition: opacity var(--transition-slow), transform var(--transition-slow);
+}
+
+.page-exit {
+    opacity: 0;
+    transform: translateX(-30px);
+}
+
+.page-enter {
+    opacity: 0;
+    transform: translateX(30px);
+}
+
+.screen-enter {
+    animation: screen-enter 0.5s ease-out;
+}
+
+/* === 游戏结束动画 === */
+.gameover-animation {
+    animation: gameover-effect 1.5s ease;
+}
+
+.gameover-screen .final-age,
+.gameover-screen .death-reason,
+.gameover-screen .final-tags,
+.gameover-screen .history-container {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fade-in 0.5s ease forwards;
+}
+
+.gameover-screen .final-age     { animation-delay: 0.3s; }
+.gameover-screen .death-reason  { animation-delay: 0.6s; }
+.gameover-screen .final-tags    { animation-delay: 0.9s; }
+.gameover-screen .history-container { animation-delay: 1.2s; }
+
+/* === 事件界面标签颜色 === */
+.event-interface .tag {
+    background: rgba(25, 50, 150, 0.9);
+    color: white;
+}
+
+.event-interface .tag.red {
+    background: linear-gradient(135deg, #ff4444, #cc0000);
+    color: white;
+    width: fit-content;
+}
+
+.event-interface .tag.pink {
+    background: linear-gradient(135deg, #ff6b9e, #ff0066);
+    color: white;
+    width: fit-content;
+}
+
+.event-interface .tag.purple {
+    background: linear-gradient(135deg, #9c27b0, #673ab7);
+    color: white;
+    width: fit-content;
+}
+
+.event-interface .tag.black {
+    background: linear-gradient(135deg, #333333, #000000);
+    color: white;
+    width: fit-content;
+}
+
+.event-interface .tag.golden {
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    color: var(--color-text);
+    width: fit-content;
+}

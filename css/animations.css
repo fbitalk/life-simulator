@@ -1,0 +1,177 @@
+/* ============================================
+   animations.css — 统一关键帧动画 + 工具类
+   ============================================ */
+
+/* === 浮动 (合并: float, bounce) === */
+@keyframes float-3d {
+    0%, 100% { transform: translateY(0) translateX(0) scale(1); }
+    33%      { transform: translateY(-100px) translateX(50px) scale(1.1); }
+    66%      { transform: translateY(50px) translateX(-50px) scale(0.9); }
+}
+
+@keyframes float-x {
+    0%, 100% { transform: translateX(0); }
+    50%      { transform: translateX(var(--float-distance, 20px)); }
+}
+
+@keyframes float-y {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(var(--float-distance, -5px)); }
+}
+
+/* === 淡入 (合并: fadeIn, fadeInUp, slideInBottom, screenEnter, fadeInDown, modalSlideIn) === */
+@keyframes fade-in {
+    from { opacity: 0; transform: translateY(var(--fade-offset, 10px)); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-out {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+
+/* === 滑入 (合并: slideIn, slideInRight, slideOutRight) === */
+@keyframes slide-in-right {
+    from { transform: translateX(100%); opacity: 0; }
+    to   { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slide-out-right {
+    from { transform: translateX(0); opacity: 1; }
+    to   { transform: translateX(100%); opacity: 0; }
+}
+
+@keyframes screen-enter {
+    from { opacity: 0; transform: translateY(30px) scale(0.95); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* === 缩放 (合并: pulse, goldShine, countUp, tagAppear, tagPop, modalOpen,
+              fadeInScale, resultFadeIn, scaleIn, deathPulse, deathContentAppear) === */
+@keyframes scale-in {
+    from { transform: scale(0); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+}
+
+@keyframes scale-pulse {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(var(--pulse-scale, 1.05)); }
+}
+
+/* === 旋转 === */
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+@keyframes rotate-in {
+    0%   { opacity: 0; transform: rotateY(-90deg); }
+    100% { opacity: 1; transform: rotateY(0); }
+}
+
+/* === 闪光/流光 (合并: goldShimmer, shine, shimmer) === */
+@keyframes shimmer {
+    0%   { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* === 发光脉冲 (合并: redPulse, pinkPulse, purplePulse, blackPulse, optionPulse) === */
+@keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 var(--glow-size, 10px) var(--glow-color, var(--color-primary)); }
+    50%      { box-shadow: 0 0 calc(var(--glow-size, 10px) * 2) var(--glow-color, var(--color-primary)); }
+}
+
+/* === 波纹 (合并: ripple, nextEventRipple) === */
+@keyframes ripple-effect {
+    to { transform: scale(4); opacity: 0; }
+}
+
+/* === 弹出渐隐 (合并: goldenPop, normalTagAppear) === */
+@keyframes pop-fade {
+    0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+    20%  { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+    80%  { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+}
+
+/* === 移除标签特效 === */
+@keyframes remove-tag-fade {
+    0%   { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(0.5) rotate(10deg); filter: grayscale(1); }
+}
+
+/* === 标签出现特效 (合并: redTagAppear, blackTagAppear, purpleTagAppear, pinkTagAppear) === */
+@keyframes tag-appear-red {
+    0%   { opacity: 0; transform: translate(-50%, -50%) scale(0) rotate(-180deg); }
+    50%  { opacity: 1; transform: translate(-50%, -50%) scale(1.2) rotate(0deg); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+}
+
+@keyframes tag-appear-black {
+    0%   { opacity: 0; transform: translate(-50%, -50%) scale(0) rotate(-180deg); }
+    50%  { opacity: 1; transform: translate(-50%, -50%) scale(1.2) rotate(0deg); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+}
+
+@keyframes tag-appear-purple {
+    0%   { opacity: 0; transform: translate(-50%, -50%) scale(0) rotate(-180deg); }
+    50%  { opacity: 1; transform: translate(-50%, -50%) scale(1.2) rotate(0deg); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+}
+
+@keyframes tag-appear-pink {
+    0%   { opacity: 0; transform: translate(-50%, -50%) scale(0) rotate(-180deg); }
+    50%  { opacity: 1; transform: translate(-50%, -50%) scale(1.2) rotate(0deg); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+}
+
+/* === 闪光扫过 (原 flash) === */
+@keyframes flash-sweep {
+    0%   { opacity: 0; transform: translateX(-100%); }
+    50%  { opacity: 1; }
+    100% { opacity: 0; transform: translateX(100%); }
+}
+
+/* === 粒子扩散 (原 particleFade) === */
+@keyframes particle-pop {
+    0%   { transform: scale(0); opacity: 1; }
+    50%  { opacity: 0.7; }
+    100% { transform: scale(2); opacity: 0; }
+}
+
+/* === 游戏结束效果 === */
+@keyframes gameover-effect {
+    0%   { filter: blur(0); transform: scale(1); }
+    10%  { filter: blur(2px); transform: scale(1.02); }
+    20%  { filter: blur(0); transform: scale(1); }
+    100% { filter: blur(0); }
+}
+
+/* === 箭头飞行 === */
+@keyframes arrow-fly {
+    0%   { opacity: 1; transform: translateY(-50%) translateX(0); }
+    100% { opacity: 0; transform: translateY(-50%) translateX(100px); }
+}
+
+/* === 粒子移动 === */
+@keyframes move-particle {
+    0%   { transform: translate(0, 0); opacity: 1; }
+    100% { transform: translate(var(--x), var(--y)); opacity: 0; }
+}
+
+/* === 结果淡出 === */
+@keyframes result-fade-out {
+    0%   { opacity: 1; transform: scale(1); }
+    100% { opacity: 0.5; transform: scale(0.95); }
+}
+
+/* ============================================
+   动画工具类
+   ============================================ */
+.animate-float-x    { animation: float-x 3s ease-in-out infinite; }
+.animate-float-y    { animation: float-y 3s ease-in-out infinite; }
+.animate-fade-in    { animation: fade-in 0.5s ease forwards; }
+.animate-scale-in   { animation: scale-in 0.3s ease forwards; }
+.animate-pulse      { animation: scale-pulse 2s ease-in-out infinite; }
+.animate-spin       { animation: spin 1s linear infinite; }
+.animate-shimmer    { animation: shimmer 3s infinite; }

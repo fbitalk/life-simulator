@@ -1,0 +1,846 @@
+/* ============================================
+   mobile.css — 移动端响应式 + 触摸优化
+   ============================================ */
+
+/* ==============================================
+   通用移动端适配 (max-width: 768px)
+   ============================================== */
+@media (max-width: 768px) {
+    /* --- 基础容器 --- */
+    html, body {
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .game-container {
+        height: 100% !important;
+        width: 100% !important;
+        max-height: none !important;
+        border-radius: 0 !important;
+        padding: 10px !important;
+        box-sizing: border-box !important;
+        transform: translateZ(0);
+        backface-visibility: hidden;
+        perspective: 1000px;
+    }
+
+    .game-screen {
+        height: 100% !important;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .event-interface {
+        height: 100% !important;
+        flex: 1;
+    }
+
+    /* --- 标题 --- */
+    .game-title {
+        font-size: 1.8em;
+        margin-bottom: 15px;
+    }
+
+    .game-description {
+        font-size: 0.9em;
+        margin-bottom: 20px;
+    }
+
+    /* --- 菜单按钮 --- */
+    .menu-buttons {
+        gap: 12px;
+    }
+
+    .menu-btn {
+        padding: 14px 20px;
+        font-size: 1em;
+    }
+
+    /* --- 性别选择 --- */
+    .gender-selection {
+        flex-direction: row;
+        gap: 15px;
+    }
+
+    .gender-card {
+        padding: 15px;
+        width: 120px;
+    }
+
+    /* --- 状态栏 --- */
+    .status-bar {
+        flex-direction: column;
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .status-info {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .tags-container {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 8px;
+    }
+
+    /* --- 标签 --- */
+    .tag {
+        font-size: 0.8em;
+        padding: 5px 10px;
+        margin: 2px;
+        animation-duration: 0.2s;
+    }
+
+    /* --- 弹窗 --- */
+    .modal-content {
+        width: 95%;
+        padding: 15px;
+    }
+
+    #replayModalHistoryContainer {
+        max-height: 200px;
+    }
+
+    /* --- 成就界面 --- */
+    .achievements-container {
+        top: 60px;
+    }
+
+    .achievement-card {
+        padding: 15px;
+        min-height: 120px;
+    }
+
+    .achievement-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1.8em;
+    }
+
+    .achievement-name {
+        font-size: 1.1em;
+    }
+
+    /* --- 游戏结束 --- */
+    .final-age {
+        font-size: 3em;
+    }
+
+    .death-reason {
+        font-size: 1em;
+    }
+
+    .history-item {
+        padding: 10px;
+        font-size: 0.9em;
+    }
+
+    .gameover-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    #finalTags.tags-box {
+        max-height: 120px;
+        padding: 10px;
+    }
+
+    #finalTags .tag {
+        font-size: 0.85em;
+        padding: 4px 10px;
+    }
+
+    /* --- 导航按钮 --- */
+    .back-btn {
+        font-size: 1.5em;
+        top: 15px;
+        left: 15px;
+    }
+
+    .life-details-screen .back-btn {
+        width: 60px;
+        height: 60px;
+        font-size: 1.8em;
+    }
+
+    /* --- 控制元素 --- */
+    .theme-selector,
+    .sound-control {
+        transform: scale(0.8);
+        top: 5px;
+    }
+
+    .theme-selector {
+        right: 5px;
+    }
+
+    .sound-control {
+        left: auto;
+        right: 60px;
+    }
+
+    /* --- 背景动画 --- */
+    .floating-shape {
+        display: none;
+    }
+
+    /* --- 特效 --- */
+    .golden-achievement-effect,
+    .reward-effect {
+        opacity: 0.7;
+    }
+
+    /* --- 成就通知 --- */
+    .achievement-notification {
+        width: 90%;
+        right: 5%;
+        left: 5%;
+        padding: 10px;
+    }
+
+    /* --- 事件界面布局 --- */
+    .event-history-section {
+        height: 30%;
+        margin-bottom: 10px;
+    }
+
+    .event-history {
+        flex: 6;
+        margin-right: 10px;
+        margin-bottom: 0;
+        max-height: none;
+        padding: 10px;
+        font-size: 0.9em;
+    }
+
+    .character-info {
+        flex: 4;
+        max-height: none;
+    }
+
+    .character-header {
+        padding: 8px;
+    }
+
+    .player-name {
+        font-size: 1.1em;
+    }
+
+    .age-display {
+        font-size: 1.2em;
+    }
+
+    .tags-scroll-container {
+        padding: 8px 6px;
+    }
+
+    .current-event-section {
+        height: 70%;
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* --- 事件卡片 --- */
+    .event-card {
+        height: 100%;
+        margin-top: 0;
+        border-radius: 12px;
+    }
+
+    .event-title-container {
+        padding: 10px 15px 8px 15px;
+        border-bottom: 1px solid rgba(102, 126, 234, 0.2);
+    }
+
+    .event-title {
+        font-size: 1.3em;
+    }
+
+    .event-title::after {
+        width: 30px;
+        height: 2px;
+    }
+
+    .event-content-scroll {
+        padding: 0 15px;
+    }
+
+    .event-description {
+        font-size: 0.95em;
+        margin: 10px 0 12px 0;
+        padding: 5px 0;
+        border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+    }
+
+    .event-options {
+        gap: 10px;
+        margin: 10px 0;
+        padding-bottom: 20px;
+    }
+
+    .option-btn {
+        padding: 10px 15px;
+        font-size: 0.95em;
+        border-width: 1px;
+        border-radius: 12px;
+        min-height: 50px;
+        height: auto;
+        white-space: normal;
+        display: flex;
+        align-items: center;
+        line-height: 1.4;
+    }
+
+    .option-btn::before {
+        width: 3px;
+    }
+
+    .option-icon {
+        margin-right: 10px;
+        font-size: 1.1em;
+        min-width: 20px;
+    }
+
+    /* --- 历史事件 --- */
+    .history-event {
+        padding: 10px;
+        margin-bottom: 6px;
+    }
+
+    .history-event-header {
+        margin-bottom: 4px;
+        padding-bottom: 4px;
+    }
+
+    .history-event-content {
+        font-size: 0.9em;
+        line-height: 1.3;
+    }
+
+    /* --- 标签颜色 --- */
+    .tags-scroll-container .tags-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        max-height: none;
+    }
+
+    .tags-container .tag.black  { order: 1; }
+    .tags-container .tag.purple { order: 2; }
+    .tags-container .tag.red    { order: 3; }
+    .tags-container .tag.pink   { order: 4; }
+    .tags-container .tag:not(.black):not(.purple):not(.red):not(.pink) { order: 5; }
+
+    .event-interface .tag {
+        background: rgba(25, 50, 150, 0.95);
+        color: white;
+        font-size: 0.9em;
+        padding: 6px 12px;
+        margin-bottom: 6px;
+        border-radius: 15px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        width: fit-content;
+        max-width: 90%;
+        word-break: break-word;
+    }
+
+    .event-interface .tag.red,
+    .event-interface .tag.pink,
+    .event-interface .tag.purple,
+    .event-interface .tag.black,
+    .event-interface .tag.golden {
+        box-shadow: 0 2px 8px var(--card-shadow);
+        font-weight: bold;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    /* --- 滚动 --- */
+    .tags-scroll-container {
+        padding: 10px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* --- 硬件加速 --- */
+    .event-card,
+    .option-btn,
+    .menu-btn,
+    .btn {
+        transform: translateZ(0);
+        backface-visibility: hidden;
+        perspective: 1000px;
+    }
+
+    /* --- 存档卡片 --- */
+    .saved-life-card {
+        padding: 20px;
+        margin-bottom: 15px;
+    }
+
+    .saved-life-card .btn {
+        padding: 12px 0;
+        font-size: 1.1em;
+    }
+
+    .saved-lives-list {
+        gap: 15px;
+    }
+
+    #lifeDetailsHistoryContainer,
+    .tags-box {
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* --- 人生详情 --- */
+    .life-details-screen {
+        padding: 15px 0;
+    }
+
+    .life-details-screen h2 {
+        font-size: 1.6em;
+        margin-bottom: 15px;
+    }
+
+    #lifeDetailsSummary {
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    .replay-tags-container {
+        margin-bottom: 20px;
+    }
+
+    #lifeDetailsHistoryContainer {
+        padding: 15px;
+    }
+}
+
+/* ==============================================
+   横屏模式 (max-width: 768px and orientation: landscape)
+   ============================================== */
+@media (max-width: 768px) and (orientation: landscape) {
+    .game-container {
+        height: 90vh;
+    }
+
+    .event-history-section {
+        height: 45%;
+    }
+
+    .current-event-section {
+        height: 55%;
+    }
+
+    .status-bar {
+        flex-direction: row;
+    }
+
+    .gender-selection {
+        flex-direction: row;
+    }
+
+    .achievement-card {
+        min-height: 100px;
+    }
+
+    .event-history {
+        flex: 8;
+    }
+
+    .character-info {
+        flex: 2;
+    }
+}
+
+/* ==============================================
+   小屏设备 (max-width: 480px)
+   ============================================== */
+@media (max-width: 480px) {
+    .game-container {
+        width: 99%;
+        padding: 8px;
+        border-radius: 12px;
+    }
+
+    .game-title {
+        font-size: 1.5em;
+    }
+
+    .menu-btn {
+        padding: 12px 15px;
+        font-size: 0.9em;
+    }
+
+    .gender-card {
+        padding: 12px;
+        width: 100px;
+    }
+
+    .gender-icon {
+        font-size: 2em;
+    }
+
+    .name-input {
+        width: 90%;
+        padding: 12px;
+    }
+
+    .event-history-section {
+        height: 25%;
+    }
+
+    .event-history {
+        flex: 7;
+        margin-right: 10px;
+        padding: 8px;
+    }
+
+    .character-info {
+        flex: 3;
+    }
+
+    .current-event-section {
+        height: 75%;
+        padding: 8px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .event-title-container {
+        padding: 8px 12px 6px 12px;
+    }
+
+    .event-title {
+        font-size: 1.2em;
+    }
+
+    .event-content-scroll {
+        padding: 0 10px;
+    }
+
+    .event-description {
+        font-size: 0.9em;
+        margin: 8px 0 10px 0;
+        padding: 4px 0;
+    }
+
+    .option-btn {
+        padding: 8px 12px;
+        font-size: 0.9em;
+        border-radius: 10px;
+    }
+
+    .option-icon {
+        font-size: 1.1em;
+        margin-right: 8px;
+        min-width: 18px;
+    }
+
+    .event-interface .tag {
+        font-size: 0.85em;
+        padding: 5px 10px;
+        margin-bottom: 5px;
+        border-radius: 12px;
+    }
+
+    .event-interface .tag.red,
+    .event-interface .tag.pink,
+    .event-interface .tag.purple,
+    .event-interface .tag.black,
+    .event-interface .tag.golden {
+        font-size: 0.85em;
+        padding: 5px 10px;
+    }
+
+    .tags-scroll-container {
+        padding: 8px;
+    }
+
+    .event-card {
+        border-radius: 10px;
+        border-top-width: 3px;
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+/* ==============================================
+   极小屏设备 (max-width: 360px)
+   ============================================== */
+@media (max-width: 360px) {
+    .game-container {
+        padding: 6px;
+        border-radius: 10px;
+    }
+
+    .event-history-section {
+        height: 20%;
+        margin-bottom: 6px;
+    }
+
+    .event-history {
+        flex: 6;
+        margin-right: 8px;
+        padding: 6px;
+    }
+
+    .character-info {
+        flex: 4;
+    }
+
+    .character-header {
+        padding: 6px;
+    }
+
+    .current-event-section {
+        height: 80%;
+        padding: 6px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .event-title-container {
+        padding: 6px 8px 4px 8px;
+    }
+
+    .event-title {
+        font-size: 1.1em;
+    }
+
+    .event-description {
+        font-size: 0.85em;
+        margin: 6px 0 8px 0;
+        padding: 3px 0;
+    }
+
+    .event-options {
+        gap: 8px;
+        margin: 8px 0;
+        margin-bottom: 20px;
+        padding-bottom: 2px;
+    }
+
+    .option-btn {
+        padding: 7px 10px;
+        font-size: 0.85em;
+        border-radius: 8px;
+    }
+
+    .option-icon {
+        margin-right: 6px;
+        min-width: 16px;
+    }
+}
+
+/* ==============================================
+   触摸设备优化 (hover: none) and (pointer: coarse)
+   ============================================== */
+@media (hover: none) and (pointer: coarse) {
+    .menu-btn,
+    .option-btn,
+    .btn,
+    .gender-card,
+    .back-btn,
+    .continue-btn,
+    .next-event-btn,
+    .close-btn {
+        min-height: 44px;
+    }
+
+    .menu-btn:hover,
+    .option-btn:hover,
+    .btn:hover {
+        transform: none;
+        box-shadow: none;
+    }
+
+    .menu-btn:active,
+    .option-btn:active,
+    .btn:active {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .achievements-container,
+    .saved-lives-list,
+    #replayModalHistoryContainer,
+    .history-container {
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+    }
+
+    * {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .game-container {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .achievement-card:hover,
+    .event-card:hover,
+    .tag:hover {
+        transform: none;
+    }
+
+    .event-interface .tag {
+        min-height: 36px;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .event-interface .tag:active {
+        transform: scale(0.97);
+        transition: transform 0.1s;
+        opacity: 0.9;
+    }
+
+    .tags-container {
+        gap: 8px;
+    }
+}
+
+/* ==============================================
+   屏幕方向切换
+   ============================================== */
+@media screen and (orientation: portrait),
+       screen and (orientation: landscape) {
+    body {
+        transition: all 0.3s ease;
+    }
+}
+
+@media screen and (orientation: portrait) {
+    .mobile-device .status-bar {
+        flex-direction: column;
+    }
+}
+
+@media screen and (orientation: landscape) {
+    .mobile-device .status-bar {
+        flex-direction: row;
+    }
+
+    .mobile-device .gender-selection {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .mobile-device.landscape .event-history-section {
+        display: flex;
+        flex-direction: row;
+        height: 55%;
+    }
+
+    .mobile-device.landscape .event-history {
+        flex: 7;
+        margin-right: 15px;
+        margin-bottom: 0;
+    }
+
+    .mobile-device.landscape .character-info {
+        flex: 3;
+    }
+
+    .mobile-device.landscape .current-event-section {
+        height: 45%;
+    }
+}
+
+/* ==============================================
+   高 DPI 设备
+   ============================================== */
+@media screen and (min-resolution: 2dppx) {
+    .mobile-device .game-container {
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .mobile-device .tag,
+    .mobile-device .btn,
+    .mobile-device .option-btn {
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+}
+
+/* ==============================================
+   移动端设备特殊样式
+   ============================================== */
+.mobile-device .game-container {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.mobile-device.portrait .game-container {
+    width: 95%;
+    height: 95vh;
+}
+
+.mobile-device.landscape .game-container {
+    width: 95%;
+    height: 85vh;
+}
+
+.mobile-device .floating-shape {
+    opacity: 0.2;
+}
+
+.mobile-device .menu-btn,
+.mobile-device .btn,
+.mobile-device .option-btn {
+    font-size: 1.05em;
+}
+
+.mobile-device .tags-container,
+.mobile-device .achievements-container,
+.mobile-device .saved-lives-list,
+.mobile-device #replayModalHistoryContainer,
+.mobile-device .history-container {
+    scrollbar-width: thin;
+    -ms-overflow-style: none;
+}
+
+.mobile-device .tags-container::-webkit-scrollbar,
+.mobile-device .achievements-container::-webkit-scrollbar,
+.mobile-device .saved-lives-list::-webkit-scrollbar,
+.mobile-device #replayModalHistoryContainer::-webkit-scrollbar,
+.mobile-device .history-container::-webkit-scrollbar {
+    display: none;
+}
+
+.mobile-device .tag {
+    margin: 3px;
+    padding: 6px 12px;
+}
+
+.mobile-device {
+    overscroll-behavior: contain;
+}
+
+.mobile-device .achievements-container,
+.mobile-device .saved-lives-list,
+.mobile-device #replayModalHistoryContainer,
+.mobile-device .history-container {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+}
+
+/* === 触摸活跃状态 === */
+.touch-active {
+    transform: scale(0.97) !important;
+    transition: transform 0.1s !important;
+}
+
+/* === 安全区域适配（全面屏） === */
+@supports (padding: max(0px)) {
+    .mobile-device .game-container {
+        padding-left: max(20px, env(safe-area-inset-left));
+        padding-right: max(20px, env(safe-area-inset-right));
+        padding-top: max(20px, env(safe-area-inset-top));
+        padding-bottom: max(20px, env(safe-area-inset-bottom));
+    }
+}
