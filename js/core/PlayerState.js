@@ -1,5 +1,5 @@
 // js/core/PlayerState.js
-import { ATTRIBUTES, DEFAULT_ATTRIBUTES, ATTRIBUTE_THRESHOLDS } from '../data/constants.js';
+import { ATTRIBUTES, DEFAULT_ATTRIBUTES, ATTRIBUTE_THRESHOLDS, GAME_CONFIG } from '../data/constants.js';
 
 export class PlayerState {
     constructor() {
@@ -10,6 +10,7 @@ export class PlayerState {
         this.tags = [];
         this.background = "";
         this.history = [];
+        this._fixedAttributesMap = {};  // 紫色标签锁定的属性 { attr: fixedValue, ... }
     }
 
     initPlayer({ name, gender }) {
@@ -20,6 +21,7 @@ export class PlayerState {
         this.tags = [];
         this.background = "";
         this.history = [];
+        this._fixedAttributesMap = {};
     }
 
     getAttribute(attr) {
@@ -34,15 +36,39 @@ export class PlayerState {
         return this.attributes[ATTRIBUTES.HEALTH] <= 0;
     }
 
+    /**
+     * 设置紫色标签锁定的属性映射。锁定属性在 modifyAttributes / setAttributes 中会被跳过。
+     * @param {Object} map - { attr: fixedValue, ... }
+     */
+    setFixedAttributesMap(map) {
+        this._fixedAttributesMap = map || {};
+    }
+
+    /**
+     * 封装健康值边界约束与死亡判定逻辑，供 modifyAttributes 和 setAttributes 复用。
+     * @returns {{ dead: boolean, reason?: string, type?: string } | null}
+     */
+    _clampHealth() {
+        const health = this.attributes[ATTRIBUTES.HEALTH];
+        this.attributes[ATTRIBUTES.HEALTH] = Math.max(
+            GAME_CONFIG.MIN_HEALTH,
+            Math.min(GAME_CONFIG.MAX_HEALTH, health)
+        );
+        if (this.attributes[ATTRIBUTES.HEALTH] <= 0) {
+            return { dead: true, reason: "突发心脏病而死", type: "health" };
+        }
+        return null;
+    }
+
     modifyAttributes(effects) {
         if (!effects) return { dead: false };
         for (const [attr, value] of Object.entries(effects)) {
+            // 跳过被紫色标签锁定的属性
+            if (this._fixedAttributesMap.hasOwnProperty(attr)) continue;
             this.attributes[attr] = (this.attributes[attr] || 0) + value;
             if (attr === ATTRIBUTES.HEALTH) {
-                this.attributes[attr] = Math.max(0, Math.min(100, this.attributes[attr]));
-                if (this.attributes[attr] <= 0) {
-                    return { dead: true, reason: "突发心脏病而死", type: "health" };
-                }
+                const deathResult = this._clampHealth();
+                if (deathResult) return deathResult;
             }
         }
         return { dead: false };
@@ -51,12 +77,12 @@ export class PlayerState {
     setAttributes(fixed) {
         if (!fixed) return { dead: false };
         for (const [attr, value] of Object.entries(fixed)) {
+            // 跳过被紫色标签锁定的属性
+            if (this._fixedAttributesMap.hasOwnProperty(attr)) continue;
             this.attributes[attr] = value;
             if (attr === ATTRIBUTES.HEALTH) {
-                this.attributes[attr] = Math.max(0, Math.min(100, this.attributes[attr]));
-                if (this.attributes[attr] <= 0) {
-                    return { dead: true, reason: "突发心脏病而死", type: "health" };
-                }
+                const deathResult = this._clampHealth();
+                if (deathResult) return deathResult;
             }
         }
         return { dead: false };
