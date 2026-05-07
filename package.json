@@ -1,0 +1,47 @@
+{
+  "name": "life-simulator",
+  "version": "1.0.0",
+  "description": "A text-based life simulation game",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "node server.js",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "keywords": [
+    "game",
+    "simulation",
+    "life"
+  ],
+  "author": "fbitalk",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1"
+  },
+  "build": {
+    "appId": "com.fbitalk.lifesimulator",
+    "productName": "Life Simulator",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "**/*",
+      "!dist/**/*",
+      "!tools/**/*",
+      "!.git/**/*",
+      "!.gitignore",
+      "!.continue/**/*"
+    ],
+    "win": {
+      "target": "nsis"
+    },
+    "mac": {
+      "target": "dmg"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
+  }
+}
