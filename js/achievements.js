@@ -1,4 +1,5 @@
 // achievements.js - 成就系统
+import { dataManager } from './data/DataManager.js';
 
 export const achievementManager = {
     // 成就定义
