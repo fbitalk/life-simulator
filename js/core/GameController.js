@@ -232,9 +232,12 @@ export class GameController {
         // 记录人生历史
         this.archive.recordHistory(this.player, this.currentEvent, index, result);
 
-        // 显示结果，然后推进到下一事件或下一年
-        this.renderer.displayResult(result, this.player.name, () => {
-            if (result.continue_event) {
+        // 结果文本
+        const resultText = result.result.replace(/{user}/g, this.player.name);
+
+        // 连续事件：显示结果卡片，通过"→"按钮推进到后续事件
+        if (result.continue_event) {
+            this.renderer.displayResult(result, this.player.name, () => {
                 const nextEvent = this.eventManager.getContinuationEvent(result.continue_event);
                 if (nextEvent) {
                     this.currentEvent = nextEvent;
@@ -247,11 +250,16 @@ export class GameController {
                         });
                         this._progressToNextYear();
                     }
-                    return;
+                } else {
+                    this._progressToNextYear();
                 }
-            }
-            this._progressToNextYear();
-        });
+            });
+            return;
+        }
+
+        // 非连续事件：结果直接显示在上方历史区，自动进入下一年
+        this.renderer.addEventToHistory(resultText);
+        this._progressToNextYear();
     }
 
     _progressToNextYear() {
