@@ -125,7 +125,7 @@ export class GameController {
 
             // 处理开局即 auto_skip 的情况（无匹配事件时的默认事件）
             if (displayResult.autoSkipped) {
-                this.renderer.addEventToHistory(displayResult.message);
+                this.renderer.addEventToHistory(displayResult.message, this.player.age);
                 this.archive.recordHistory(this.player, startEvent, 0, {
                     result: displayResult.message, effects: {}
                 });
@@ -159,7 +159,7 @@ export class GameController {
         if (deathFlag) {
             const reason = result.death_reason || option.death_reason
                 || result.result.replace(/{user}/g, this.player.name);
-            this.renderer.addEventToHistory(result.result.replace(/{user}/g, this.player.name));
+            this.renderer.addEventToHistory(result.result.replace(/{user}/g, this.player.name), this.player.age);
             this.archive.recordHistory(this.player, this.currentEvent, index, result);
             this._handleDeath(reason, "risk");
             return;
@@ -170,7 +170,7 @@ export class GameController {
         if (risk && Math.random() < risk) {
             const reason = result.death_reason || option.death_reason
                 || result.result.replace(/{user}/g, this.player.name);
-            this.renderer.addEventToHistory(result.result.replace(/{user}/g, this.player.name));
+            this.renderer.addEventToHistory(result.result.replace(/{user}/g, this.player.name), this.player.age);
             this.archive.recordHistory(this.player, this.currentEvent, index, result);
             this._handleDeath(reason, "risk");
             return;
@@ -179,7 +179,7 @@ export class GameController {
         // 应用效果变更（增量，如 +10 健康）
         const effectsResult = this.player.modifyAttributes(result.effects || {});
         if (effectsResult.dead) {
-            this.renderer.addEventToHistory(result.result.replace(/{user}/g, this.player.name));
+            this.renderer.addEventToHistory(result.result.replace(/{user}/g, this.player.name), this.player.age);
             this.archive.recordHistory(this.player, this.currentEvent, index, result);
             this._handleDeath(effectsResult.reason, effectsResult.type);
             return;
@@ -188,7 +188,7 @@ export class GameController {
         // 应用设置变更（绝对值，如将金钱设为100）
         const setResult = this.player.setAttributes(result.set_attributes || {});
         if (setResult.dead) {
-            this.renderer.addEventToHistory(result.result.replace(/{user}/g, this.player.name));
+            this.renderer.addEventToHistory(result.result.replace(/{user}/g, this.player.name), this.player.age);
             this.archive.recordHistory(this.player, this.currentEvent, index, result);
             this._handleDeath(setResult.reason, setResult.type);
             return;
@@ -237,14 +237,14 @@ export class GameController {
 
         // 连续事件：显示结果卡片，通过"→"按钮推进到后续事件
         if (result.continue_event) {
-            this.renderer.displayResult(result, this.player.name, () => {
+            this.renderer.displayResult(result, this.player.name, this.player.age, () => {
                 const nextEvent = this.eventManager.getContinuationEvent(result.continue_event);
                 if (nextEvent) {
                     this.currentEvent = nextEvent;
                     const displayResult = this.renderer.displayEvent(nextEvent, this.player.name,
                         (opt, idx) => this._handleOptionSelect(opt, idx));
                     if (displayResult.autoSkipped) {
-                        this.renderer.addEventToHistory(displayResult.message);
+                        this.renderer.addEventToHistory(displayResult.message, this.player.age);
                         this.archive.recordHistory(this.player, nextEvent, 0, {
                             result: displayResult.message, effects: {}
                         });
@@ -258,7 +258,7 @@ export class GameController {
         }
 
         // 非连续事件：结果直接显示在上方历史区，自动进入下一年
-        this.renderer.addEventToHistory(resultText);
+        this.renderer.addEventToHistory(resultText, this.player.age);
         this._progressToNextYear();
     }
 
@@ -413,7 +413,7 @@ export class GameController {
         });
         const target = document.getElementById(screenId);
         if (target) {
-            target.style.display = screenId === 'achievementsScreen' ? 'flex' : 'block';
+            target.style.display = 'flex';
         }
     }
 

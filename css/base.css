@@ -2,103 +2,95 @@
    base.css — CSS 变量、Reset、字体、基础样式
    ============================================ */
 
-/* === 新版 CSS 变量体系 === */
+/* === CSS 变量体系 === */
 :root {
-    /* 主色 */
-    --color-primary: #667eea;
-    --color-primary-dark: #5a6fd6;
-    --color-primary-light: #b794f4;
-    --color-secondary: #764ba2;
-
-    /* 背景 */
-    --color-bg: #f7fafc;
-    --color-bg-dark: #1a1a2e;
-    --color-bg-gradient-start: #a18cd1;
-    --color-bg-gradient-end: #fbc2eb;
-
-    /* 表面/卡片 */
-    --color-surface: #ffffff;
-    --color-surface-dark: #16213e;
-
-    /* 文字 */
-    --color-text: #2d3748;
-    --color-text-dark: #e0e0e0;
-    --color-text-secondary: #718096;
-    --color-text-muted: #666666;
-
     /* 语义色 */
-    --color-danger: #e74c3c;
-    --color-success: #2ecc71;
-    --color-warning: #f39c12;
-    --color-gold: #ffd700;
+    --color-bg: #FAFAF8;
+    --color-surface: #FFFFFF;
+    --color-text: #1C1917;
+    --color-text-secondary: #78716C;
+    --color-border: #E7E5E4;
+    --color-divider: #F0EFED;
 
-    /* 间距 */
-    --space-xs: 4px;
-    --space-sm: 8px;
-    --space-md: 16px;
-    --space-lg: 24px;
-    --space-xl: 32px;
-    --space-2xl: 48px;
+    /* 功能色 */
+    --color-accent: #4F5ADB;
+    --color-accent-hover: #3B45C4;
+    --color-danger: #DC4E4E;
+    --color-success: #2E7D32;
+    --color-warning: #CA9B3E;
+
+    /* 标签色 */
+    --color-tag-bg: #F0EFED;
+    --color-tag-text: #44403C;
+    --color-tag-red-bg: #FEE2E2;
+    --color-tag-red-text: #991B1B;
+    --color-tag-pink-bg: #FCE7F3;
+    --color-tag-pink-text: #9D174D;
+    --color-tag-purple-bg: #EDE9FE;
+    --color-tag-purple-text: #5B21B6;
+    --color-tag-gold-bg: #FEF3C7;
+    --color-tag-gold-text: #92400E;
+    --color-tag-black-bg: #1C1917;
+    --color-tag-black-text: #E7E5E4;
+
+    /* 排版 */
+    --font-serif: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', 'SimSun', Georgia, serif;
+    --font-sans: 'PingFang SC', 'Microsoft YaHei', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+
+    --text-xs: 0.8125rem;
+    --text-sm: 0.9375rem;
+    --text-base: 1rem;
+    --text-lg: 1.75rem;
+    --text-xl: 2.25rem;
+    --text-3xl: 4rem;
+
+    /* 间距 - 4px 步进 */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 24px;
+    --space-6: 32px;
+    --space-7: 48px;
+    --space-8: 64px;
 
     /* 圆角 */
-    --radius-sm: 8px;
-    --radius-md: 12px;
-    --radius-lg: 16px;
-    --radius-xl: 20px;
-    --radius-2xl: 24px;
-    --radius-round: 50%;
+    --radius-sm: 4px;
+    --radius-md: 6px;
+    --radius-lg: 8px;
+    --radius-xl: 12px;
 
-    /* 阴影 */
-    --shadow-card: 0 10px 30px -5px rgba(0, 0, 0, 0.1);
-    --shadow-hover: 0 20px 40px -5px rgba(0, 0, 0, 0.15);
-    --shadow-modal: 0 20px 60px rgba(0, 0, 0, 0.3);
-    --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 5px 15px rgba(0, 0, 0, 0.08);
-    --shadow-btn: 0 4px 15px rgba(102, 126, 234, 0.4);
+    /* 阴影 (极简) */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+    --shadow-hover: 0 1px 3px rgba(0, 0, 0, 0.12);
 
     /* 过渡 */
-    --transition-fast: 0.2s ease;
-    --transition-normal: 0.3s ease;
-    --transition-slow: 0.5s ease;
-    --transition-bounce: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    --transition-fast: 150ms ease;
+    --transition-base: 200ms ease;
+    --transition-slow: 300ms ease;
 
-    /* 字体 */
-    --font-family: 'Microsoft YaHei', 'PingFang SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-size-sm: 0.875rem;
-    --font-size-base: 1rem;
-    --font-size-lg: 1.25rem;
-    --font-size-xl: 1.5rem;
-    --font-size-2xl: 2rem;
-    --font-size-3xl: 2.5rem;
-
-    /* 其他 */
-    --color-input-bg: #fff;
-    --color-input-border: #e2e8f0;
-    --color-tag-bg: rgba(66, 153, 225, 0.9);
-    --color-tag-text: #fff;
-    --color-glass-border: 1px solid rgba(255, 255, 255, 0.6);
-
-    /* 渐变 */
-    --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
-    --gradient-bg: linear-gradient(135deg, var(--color-bg-gradient-start) 0%, var(--color-bg-gradient-end) 100%);
+    /* 尺寸 */
+    --reading-width: 640px;
+    --container-max: 720px;
 
     /* === 旧版变量兼容映射（JS 代码中引用的变量名） === */
-    --primary-color: var(--color-primary);
-    --primary-rgb: 102, 126, 234;
-    --secondary-color: var(--color-secondary);
-    --bg-gradient-start: var(--color-bg-gradient-start);
-    --bg-gradient-end: var(--color-bg-gradient-end);
+    --primary-color: var(--color-accent);
+    --primary-rgb: 79, 90, 219;
+    --secondary-color: #3B45C4;
+    --bg-gradient-start: var(--color-bg);
+    --bg-gradient-end: var(--color-bg);
     --text-color: var(--color-text);
     --text-secondary: var(--color-text-secondary);
     --bg-color: var(--color-bg);
-    --card-bg: rgba(255, 255, 255, 0.92);
-    --card-shadow: var(--shadow-card);
+    --card-bg: rgba(255, 255, 255, 0.98);
+    --card-shadow: var(--shadow-sm);
     --card-shadow-hover: var(--shadow-hover);
-    --border-color: var(--color-input-border);
-    --input-bg: var(--color-input-bg);
+    --border-color: var(--color-border);
+    --input-bg: var(--color-surface);
     --tag-bg: var(--color-tag-bg);
     --tag-text: var(--color-tag-text);
-    --glass-border: var(--color-glass-border);
+    --glass-border: 1px solid var(--color-border);
+    --gradient-primary: none;
 }
 
 /* === Reset === */
@@ -116,15 +108,15 @@ html {
 }
 
 body {
-    font-family: var(--font-family);
-    background: var(--gradient-bg);
+    font-family: var(--font-sans);
+    background: var(--color-bg);
     color: var(--color-text);
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    transition: background var(--transition-slow);
+    transition: background var(--transition-slow), color var(--transition-slow);
     line-height: 1.6;
 }
 
@@ -133,31 +125,38 @@ button {
     cursor: pointer;
     border: none;
     font-family: inherit;
+    font-size: var(--text-sm);
 }
 
 input {
     font-family: inherit;
+    font-size: var(--text-base);
 }
 
 h1, h2, h3, h4, h5, h6 {
     margin: 0;
+    font-family: var(--font-serif);
 }
 
-/* === 滚动条美化 === */
+p {
+    font-family: var(--font-serif);
+    line-height: 1.8;
+}
+
+/* === 滚动条 === */
 ::-webkit-scrollbar {
-    width: 8px;
+    width: 4px;
 }
 
 ::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.05);
-    border-radius: 10px;
+    background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: rgba(102, 126, 234, 0.5);
-    border-radius: 10px;
+    background: var(--color-border);
+    border-radius: 2px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: rgba(118, 75, 162, 0.7);
+    background: var(--color-text-secondary);
 }

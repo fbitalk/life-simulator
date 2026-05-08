@@ -17,22 +17,11 @@
 </head>
 
 <body>
-    <!-- 背景动画 -->
-    <div class="bg-animation">
-        <div class="floating-shape" style="width: 200px; height: 200px; top: 10%; left: 10%;"></div>
-        <div class="floating-shape" style="width: 150px; height: 150px; top: 60%; right: 10%; animation-delay: -5s;">
-        </div>
-        <div class="floating-shape" style="width: 100px; height: 100px; bottom: 10%; left: 50%; animation-delay: -10s;">
-        </div>
-        <div class="floating-shape" style="width: 80px; height: 80px; top: 40%; right: 30%; animation-delay: -15s;">
-        </div>
-    </div>
-
     <!-- Theme Selector -->
     <div class="theme-selector">
-        <div class="theme-toggle" id="themeToggle" title="切换主题">
-            <span id="themeIcon">🌓</span>
-        </div>
+        <button class="theme-toggle" id="themeToggle" title="切换主题">
+            <span id="themeIcon">🌙</span>
+        </button>
     </div>
 
     <!-- 游戏容器 -->
@@ -90,8 +79,10 @@
 
         <!-- 成就界面 -->
         <div class="achievements-screen" id="achievementsScreen" style="display: none;">
-            <button class="back-btn" id="btnBackFromAchievements">←</button>
-            <h2 style="text-align: center; color: #667eea; margin-bottom: 10px;">成就系统</h2>
+            <div class="screen-header">
+                <button class="back-btn" id="btnBackFromAchievements">←</button>
+                <h2>成就系统</h2>
+            </div>
             <div class="achievements-container">
                 <div class="achievements-grid" id="achievementsGrid">
                     <!-- 成就卡片将在这里动态生成 -->
@@ -101,8 +92,10 @@
 
         <!-- 再现人生界面 -->
         <div class="replay-screen" id="replayScreen">
-            <button class="back-btn" id="btnBackFromReplay">←</button>
-            <h2 style="text-align: center; color: #667eea; margin-bottom: 20px;">墓地 (人生回顾)</h2>
+            <div class="screen-header">
+                <button class="back-btn" id="btnBackFromReplay">←</button>
+                <h2>墓地</h2>
+            </div>
             <div class="saved-lives-list" id="savedLivesList">
                 <!-- 保存的人生记录将在这里显示 -->
             </div>
@@ -110,8 +103,11 @@
 
         <!-- 人生详情页面 -->
         <div class="life-details-screen" id="lifeDetailsScreen">
-            <button class="back-btn" id="btnBackFromDetails">←</button>
-            <h2 id="lifeDetailsTitle" style="color: #667eea; margin-bottom: 20px; text-align: center;">人生回顾</h2>
+            <div class="screen-header">
+                <button class="back-btn" id="btnBackFromDetails">←</button>
+                <h2 id="lifeDetailsTitle">人生回顾</h2>
+            </div>
+            <div class="life-details-content">
             <div id="lifeDetailsSummary" style="margin-bottom: 20px; line-height: 1.6;">
                 <p><strong>姓名:</strong> <span id="lifeDetailsName"></span></p>
                 <p><strong>性别:</strong> <span id="lifeDetailsGender"></span></p>
@@ -133,8 +129,9 @@
 
             <!-- 添加一个底部的返回按钮，便于移动端用户操作 -->
             <div style="text-align: center; margin-top: 30px; margin-bottom: 20px;">
-                <button class="btn" id="btnBackFromDetailsBottom">返回列表</button>
+                <button class="btn btn-secondary" id="btnBackFromDetailsBottom">返回列表</button>
             </div>
+        </div> <!-- end life-details-content -->
         </div>
 
         <!-- 开始界面 (旧的，现在隐藏) -->
@@ -156,46 +153,37 @@
 
         <!-- 游戏界面 -->
         <div class="game-screen" id="gameScreen">
-            <div class="event-interface">
-                <!-- 上半部分 -->
-                <div class="event-history-section">
-                    <!-- 左侧显示事件历史记录 -->
-                    <div class="event-history" id="eventHistory">
-                        <!-- 事件结果会在这里动态显示 -->
-                    </div>
-
-                    <!-- 右侧显示个人信息和标签 -->
-                    <div class="character-info">
-                        <div class="character-header">
-                            <div class="player-name" id="playerNameDisplay">玩家</div>
-                            <div class="age-display" id="ageDisplay">0岁</div>
-                        </div>
-                        <div class="tags-scroll-container">
-                            <div class="tags-container" id="tagsContainer"></div>
-                        </div>
-                    </div>
+            <div class="game-screen-header">
+                <div class="player-name" id="playerNameDisplay">玩家</div>
+                <div class="age-display" id="ageDisplay">0岁</div>
+            </div>
+            <div class="header-tags">
+                <div class="tags-container" id="tagsContainer"></div>
+            </div>
+            <div class="event-history-section">
+                <div class="event-history-title">人生履历</div>
+                <div class="event-history" id="eventHistory">
+                    <!-- 事件结果会在这里动态显示 -->
                 </div>
-
-                <!-- 下半部分：当前事件 -->
-                <div class="current-event-section" id="eventContainer">
-                    <!-- 事件卡片或结果会动态插入这里 -->
-                </div>
+            </div>
+            <div class="current-event-section" id="eventContainer">
+                <!-- 事件卡片或结果会动态插入这里 -->
             </div>
         </div>
 
         <!-- 游戏结束界面 -->
         <div class="gameover-screen" id="gameoverScreen">
-            <h2 style="color: #667eea; margin-bottom: 20px;">游戏结束</h2>
+            <h2>游戏结束</h2>
             <div class="final-age" id="finalAge">0岁</div>
             <div class="death-reason" id="deathReason"></div>
 
             <div class="final-tags">
-                <h3 style="margin-bottom: 15px; color: #667eea;">人生标签</h3>
+                <h3>人生标签</h3>
                 <div class="tags-box" id="finalTags"></div>
             </div>
 
             <div class="history-container">
-                <h3 style="margin-bottom: 15px; color: #667eea;">人生回顾</h3>
+                <h3>人生回顾</h3>
                 <div id="historyList"></div>
             </div>
 

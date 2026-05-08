@@ -162,14 +162,14 @@ export class EventRenderer {
     /**
      * 显示事件结果——原 game.js displayResult 方法（第550-573行）
      */
-    displayResult(result, playerName, onNext) {
+    displayResult(result, playerName, age, onNext) {
         const eventContainer = document.getElementById('eventContainer');
         eventContainer.innerHTML = '';
 
         const resultText = result.result.replace(/{user}/g, playerName);
 
         // 添加到事件历史
-        this.addEventToHistory(resultText);
+        this.addEventToHistory(resultText, age);
 
         const resultCard = document.createElement('div');
         resultCard.className = 'result-card';
@@ -188,15 +188,24 @@ export class EventRenderer {
     }
 
     /**
-     * 添加事件结果到历史显示区域
+     * 添加事件结果到历史显示区域（最新在上）
      */
-    addEventToHistory(resultText) {
+    addEventToHistory(resultText, age) {
         const historyContainer = document.getElementById('eventHistory');
         const historyItem = document.createElement('div');
         historyItem.className = 'history-item';
-        historyItem.textContent = resultText;
-        historyContainer.appendChild(historyItem);
-        historyContainer.scrollTop = historyContainer.scrollHeight;
+
+        const ageBadge = document.createElement('span');
+        ageBadge.className = 'history-age-badge';
+        ageBadge.textContent = `${age}岁`;
+
+        const content = document.createElement('span');
+        content.className = 'history-item-text';
+        content.textContent = resultText;
+
+        historyItem.appendChild(ageBadge);
+        historyItem.appendChild(content);
+        historyContainer.insertBefore(historyItem, historyContainer.firstChild);
     }
 
     /**
@@ -233,7 +242,9 @@ export class EventRenderer {
         }
 
         const fragment = document.createDocumentFragment();
-        history.forEach(entry => {
+        // 由新到旧排列
+        for (let i = history.length - 1; i >= 0; i--) {
+            const entry = history[i];
             const item = document.createElement('div');
             item.className = 'history-item';
 
@@ -258,7 +269,7 @@ export class EventRenderer {
             item.appendChild(header);
             item.appendChild(resultContent);
             fragment.appendChild(item);
-        });
+        }
         container.appendChild(fragment);
     }
 
