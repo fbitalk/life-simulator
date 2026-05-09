@@ -120,6 +120,11 @@
     }
 
     /* 游戏结束 */
+    .gameover-screen {
+        justify-content: flex-start;
+        padding: var(--space-4);
+    }
+
     .final-age {
         font-size: 3rem;
     }
@@ -192,6 +197,7 @@
     /* 游戏结束历史 */
     .history-container {
         max-height: 200px;
+        overflow-y: auto;
     }
 
     /* 人生详情 */
