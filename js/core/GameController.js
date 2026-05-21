@@ -11,6 +11,7 @@ import { MobileAdapter } from '../ui/MobileAdapter.js';
 import { ATTRIBUTES, GAME_CONFIG, getAgeGroup, AGE_GROUPS } from '../data/constants.js';
 import { dataManager } from '../data/DataManager.js';
 import { initTagSets, getTagType, isBlackTag, isPurpleTag } from '../data/tagUtils.js';
+import { getTagInfo, getFixedAttributes, isImmortalTag } from '../data/tagRegistry.js';
 import { achievementManager } from '../achievements.js';
 
 export class GameController {
@@ -110,12 +111,16 @@ export class GameController {
 
         // 进入游戏界面
         this._showScreen('gameScreen');
-        this._updatePlayerInfo();
-        this._updateTagsDisplay();
+
+        // 添加开局标签（dbrs 出生事件依赖"未出生"标签触发）
+        this.player.addTag('未出生');
 
         // 触发开局事件
         if (this.player.gender === 'male') this.player.addTag('男性');
         if (this.player.gender === 'female') this.player.addTag('女性');
+
+        this._updatePlayerInfo();
+        this._updateTagsDisplay();
 
         const startEvent = this.eventManager.getEventForPlayer(this.player);
         if (startEvent) {
@@ -157,8 +162,12 @@ export class GameController {
         // 处理死亡标记
         const deathFlag = result.death_flag || option.death_flag;
         if (deathFlag) {
-            const reason = result.death_reason || option.death_reason
-                || result.result.replace(/{user}/g, this.player.name);
+            const reason = (result.death_reason || option.death_reason
+                || result.result || '未知原因')
+                .replace(/{user}/g, this.player.name)
+                .replace(/=NAME=/g, this.player.name)
+                .replace(/{age}/g, this.player.age)
+                .replace(/=AGE=/g, this.player.age);
             this.renderer.addEventToHistory(result.result.replace(/{user}/g, this.player.name), this.player.age);
             this.archive.recordHistory(this.player, this.currentEvent, index, result);
             this._handleDeath(reason, "risk");
@@ -268,8 +277,11 @@ export class GameController {
         this.player.incrementAge();
         this._updateAgeGroupTag();
 
+        // 永生标签绕过衰老和死亡检定
+        const immortal = this.player.tags.some(t => isImmortalTag(t));
+
         // 60岁后健康每年下降（由常量控制值）
-        if (this.player.age >= GAME_CONFIG.YEARLY_HEALTH_DECREASE_AGE) {
+        if (!immortal && this.player.age >= GAME_CONFIG.YEARLY_HEALTH_DECREASE_AGE) {
             const result = this.player.modifyAttributes({
                 [ATTRIBUTES.HEALTH]: -GAME_CONFIG.YEARLY_HEALTH_DECREASE_VALUE
             });
@@ -277,7 +289,7 @@ export class GameController {
         }
 
         // 80岁后每年进行死亡检定
-        if (this.player.age >= GAME_CONFIG.DEATH_CHECK_AGE) {
+        if (!immortal && this.player.age >= GAME_CONFIG.DEATH_CHECK_AGE) {
             const deathResult = this.death.rollOldAgeDeath(
                 this.player.age,
                 this.player.getAttribute(ATTRIBUTES.HEALTH),
@@ -339,9 +351,14 @@ export class GameController {
     }
 
     _updateFixedAttributes() {
-        // 从紫色标签计算固定属性映射，PlayerState 会在 modifyAttributes / setAttributes 中跳过它们
         const fixedMap = {};
         for (const tag of this.player.tags) {
+            // 优先从 tagRegistry 查询固定属性
+            const registryAttrs = getFixedAttributes(tag);
+            if (registryAttrs) {
+                Object.assign(fixedMap, registryAttrs);
+            }
+            // 兼容旧的紫色标签（从 purpleEvents 文件定义的固定属性）
             if (isPurpleTag(tag)) {
                 const purpleData = this.eventManager.allEvents.purple && this.eventManager.allEvents.purple[tag];
                 if (purpleData && purpleData.fixed_attributes) {

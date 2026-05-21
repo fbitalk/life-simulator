@@ -10,6 +10,7 @@ import { goldEvents } from '../events/goldEvents.js';
 import { maleEvents } from '../events/maleEvents.js';
 import { femaleEvents } from '../events/femaleEvents.js';
 import { ageEvents } from '../events/ageEvents.js';
+import { registerAllDbrsEvents } from '../events/dbrs/index.js';
 
 export class EventManager {
     constructor() {
@@ -24,8 +25,32 @@ export class EventManager {
             age: ageEvents || {},
             male: maleEvents || {},
             female: femaleEvents || {},
-            attribute: {}
+            attribute: {},
+            dbrs: {}
         };
+        registerAllDbrsEvents(this);
+    }
+
+    /**
+     * 注册 dbrs 事件（从故事线文件导入）
+     * 深度合并——同一标签下的事件会合并而非覆盖
+     * @param {Object} eventsData - 事件数据对象 { "TagName": { events: {...} }, ... }
+     */
+    registerDbrsEvents(eventsData) {
+        for (const [tag, tagData] of Object.entries(eventsData)) {
+            if (!this.allEvents.dbrs[tag]) {
+                this.allEvents.dbrs[tag] = { events: {} };
+            }
+            if (tagData.events) {
+                Object.assign(this.allEvents.dbrs[tag].events, tagData.events);
+            }
+            // 合并标签级别的属性（如 fixed_attributes, is_color 等）
+            for (const [key, val] of Object.entries(tagData)) {
+                if (key !== 'events') {
+                    this.allEvents.dbrs[tag][key] = val;
+                }
+            }
+        }
     }
 
     getEventForPlayer(player) {
@@ -58,7 +83,7 @@ export class EventManager {
 
     _getEventsByTag(tag, player) {
         const result = [];
-        const categories = ['common', 'red', 'black', 'purple', 'pink', 'golden', 'male', 'female', 'attribute', 'age'];
+        const categories = ['common', 'red', 'black', 'purple', 'pink', 'golden', 'male', 'female', 'attribute', 'age', 'dbrs'];
         for (const cat of categories) {
             const data = this.allEvents[cat];
             if (data && data[tag] && data[tag].events) {
@@ -153,7 +178,7 @@ export class EventManager {
     }
 
     getContinuationEvent(eventId) {
-        const categories = ['common', 'red', 'black', 'purple', 'pink', 'golden', 'male', 'female', 'attribute', 'age'];
+        const categories = ['common', 'red', 'black', 'purple', 'pink', 'golden', 'male', 'female', 'attribute', 'age', 'dbrs'];
         for (const cat of categories) {
             const data = this.allEvents[cat];
             if (!data) continue;

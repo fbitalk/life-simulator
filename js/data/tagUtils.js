@@ -1,5 +1,6 @@
 // js/data/tagUtils.js
 // 标签类型识别工具——从 game.js 的 isBlackTag/isRedTag/getTagType 提取
+import { getTagInfo } from './tagRegistry.js';
 
 const PURPLE_TAGS = new Set([]);
 const BLACK_TAGS = new Set([]);
@@ -29,7 +30,13 @@ export function initTagSets(eventManager) {
     }
 }
 
+/**
+ * 获取标签颜色类型。
+ * 优先查 tagRegistry（新架构），再查从事件文件提取的集合（旧架构兼容）。
+ */
 export function getTagType(tag) {
+    const info = getTagInfo(tag);
+    if (info && info.color && info.color !== 'normal') return info.color;
     if (BLACK_TAGS.has(tag)) return 'black';
     if (PURPLE_TAGS.has(tag)) return 'purple';
     if (RED_TAGS.has(tag)) return 'red';
@@ -38,8 +45,8 @@ export function getTagType(tag) {
     return 'normal';
 }
 
-export function isBlackTag(tag) { return BLACK_TAGS.has(tag); }
-export function isRedTag(tag) { return RED_TAGS.has(tag); }
-export function isPurpleTag(tag) { return PURPLE_TAGS.has(tag); }
-export function isPinkTag(tag) { return PINK_TAGS.has(tag); }
-export function isGoldenTag(tag) { return GOLDEN_TAGS.has(tag); }
+export function isBlackTag(tag) { return getTagType(tag) === 'black'; }
+export function isRedTag(tag) { return getTagType(tag) === 'red'; }
+export function isPurpleTag(tag) { return getTagType(tag) === 'purple'; }
+export function isPinkTag(tag) { return getTagType(tag) === 'pink'; }
+export function isGoldenTag(tag) { return getTagType(tag) === 'golden'; }
