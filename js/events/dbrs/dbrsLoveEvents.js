@@ -6,6 +6,10 @@ import { registerTags } from '../../data/tagRegistry.js';
 // 本文件涉及的标签注册
 registerTags({
     '玻璃心': { color: 'red' },
+    '恋爱': { color: 'pink' },
+    '恋爱中': { color: 'pink' },
+    '结婚': { color: 'pink' },
+    '肌肤之亲': { color: 'pink' },
 });
 
 export const dbrsLoveEvents = {
@@ -314,18 +318,6 @@ export const dbrsLoveEvents = {
             death_reason: '{user}在外面有外遇的事情让老公知道了，{user}惨遭'
         }
             ]
-        },
-        'dbrs_1224': {
-            title: '昆学分享',
-            description: '{user}有一次把女朋友带到了昆学部。与社员们一同分享昆学之道。',
-            priority: 5,
-            trigger_conditions: { age_range: [1, 120], required_tags: ['昆学部', '恋爱', '男性'] },
-            options: [
-        {
-            text: '下一事件',
-            result: '你做出了选择。'
-        }
-            ]
         }
         }
     },
@@ -354,22 +346,6 @@ export const dbrsLoveEvents = {
             text: '下一事件',
             result: '你做出了选择。',
             remove_tags: ['恋爱']
-        }
-            ]
-        }
-        }
-    },
-    '昆学部': {
-        events: {
-        'dbrs_1224': {
-            title: '昆学分享',
-            description: '{user}有一次把女朋友带到了昆学部。与社员们一同分享昆学之道。',
-            priority: 5,
-            trigger_conditions: { age_range: [1, 120], required_tags: ['昆学部', '恋爱', '男性'] },
-            options: [
-        {
-            text: '下一事件',
-            result: '你做出了选择。'
         }
             ]
         }
@@ -788,6 +764,23 @@ export const dbrsLoveEvents = {
         {
             text: '报警',
             result: '{user}立马报警，警察过来了解情况后，无情地将{user}绑起来关进了大牢。'
+        }
+            ]
+        }
+        }
+    },
+    '肌肤之亲': {
+        events: {
+        'dbrs_1134': {
+            title: '开办琴校',
+            description: '{user}生产后，{user}决定从家里搬出来，与仆人佐助开办了一家琴校。',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['肌肤之亲', '女性'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。',
+            add_tags: ['开办琴校']
         }
             ]
         }

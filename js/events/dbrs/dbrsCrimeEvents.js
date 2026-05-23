@@ -1,13 +1,124 @@
 // dbrs 事件文件 - 自动生成
 // 来源: 豆比人生 - 犯罪/执法
-// 事件数: 1
+// 事件数: 6
 import { registerTags } from '../../data/tagRegistry.js';
 
 // 本文件涉及的标签注册
 registerTags({
+    '肝硬化': { color: 'red' },
 });
 
 export const dbrsCrimeEvents = {
+    '交警': {
+        events: {
+        'dbrs_498': {
+            title: '调遣',
+            description: '公安局缺人，{user}收到上级的调遣请求。{user}决定___',
+            priority: 5,
+            trigger_conditions: { age_range: [20, 70], required_tags: ['交警'] },
+            options: [
+        {
+            text: '接受调遣',
+            result: '你做出了选择。'
+        },
+        {
+            text: '委婉拒绝',
+            result: '你做出了选择。'
+        }
+            ]
+        }
+        }
+    },
+    '古惑仔': {
+        events: {
+        'dbrs_464': {
+            title: '肝硬化',
+            description: '{user}因为经常出去和朋友酗酒，落得了肝硬化的毛病。喝酒究竟有什么好？',
+            priority: 5,
+            trigger_conditions: { age_range: [35, 120], required_tags: ['古惑仔'] },
+            options: [
+        {
+            text: '后悔',
+            result: '{user}因为经常出去和朋友酗酒，落得了肝硬化的毛病。{user}非常后悔，但是世界上没有后悔药，这个硬肝将会跟随他一辈子。',
+            add_tags: ['肝硬化']
+        },
+        {
+            text: '酗是兄弟之间的润滑剂，没有它不行',
+            result: '酗是兄弟之间的润滑剂，{user}因为经常出去和朋友酗酒，落得了肝硬化的毛病。',
+            add_tags: ['肝硬化']
+        }
+            ]
+        },
+        'dbrs_1329': {
+            title: '劈友',
+            description: '{user}是个古惑仔，他今天要去“劈友”。上级给{user}发了一把西瓜刀。{user}跟着队友去到现场，发现敌人的人数比自己多很多……{user}___',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['古惑仔'] },
+            options: [
+        {
+            text: '进入战斗！',
+            result: '你做出了选择。',
+            add_tags: ['死亡'],
+            death_flag: true,
+            death_reason: '不幸离世'
+        },
+        {
+            text: '逃跑！',
+            result: '{user}是个古惑仔，他今天要去“劈友”。上级给{user}发了一把西瓜刀。{user}跟着队友去到现场，发现敌人的人数比自己多很多……{user}走在队伍后面，战斗开始了，他就趁机逃跑了。因为临阵脱逃，{user}没脸见自己的大佬了。',
+            add_tags: ['古惑仔：反叛'],
+            remove_tags: ['古惑仔']
+        },
+        {
+            text: '报警',
+            result: '{user}是个古惑仔，他今天要去“劈友”。上级给{user}发了一把西瓜刀。{user}跟着队友去到现场，发现敌人的人数比自己多很多……{user}拿起电话报警，不久后一辆警车来到现场，停在很远的地方，两个警察下车远远观望这次劈友。等战完了，两个警察才慢吞吞地过来清理现场，把残缺不堪的尸体扛上车运走，{user}的尸体也在里面。',
+            add_tags: ['死亡'],
+            death_flag: true,
+            death_reason: '=NAME=是个古惑仔，他今天要去“劈友”。上级给=NAME=发了一把西瓜刀。=NAME=跟着队友去到现场，发现敌人的人数比自己多很多……=NAME=拿起电话报警，不久后一辆警车来到现场，停在很远的地方，两个警察下车远远观望这次劈友。等战完了，两个警察才慢吞吞地过来清理现场，把残缺不堪的尸体扛上车运走，=NAME=的尸体也在里面。'
+        }
+            ]
+        },
+        'dbrs_1330': {
+            title: '朋友借钱',
+            description: '一个古惑仔朋友找到{user}，想问{user}拿点钱。{user}___',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['古惑仔'] },
+            options: [
+        {
+            text: '借给他',
+            result: '一个古惑仔朋友找到{user}，想问{user}拿点钱。{user}借给他了。朋友热雷凝眶，握着{user}的手，激动地说，我肯定会还的……我肯定会还的……然后就走了。'
+        },
+        {
+            text: '给他钱',
+            result: '一个古惑仔朋友找到{user}，想问{user}拿点钱。{user}给他了。朋友热雷凝眶，握着{user}的手，激动地感谢{user}。'
+        },
+        {
+            text: '拒绝',
+            result: '一个古惑仔朋友找到{user}，想问{user}拿点钱。{user}拒绝了，这个朋友骂{user}不仗义，走了。'
+        }
+            ]
+        },
+        'dbrs_1328': {
+            title: '勒索小朋友',
+            description: '{user}是个古惑仔，他想搞点钱去玩，于是找了个___进行勒索。',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['古惑仔'] },
+            options: [
+        {
+            text: '小朋友',
+            result: '你做出了选择。'
+        },
+        {
+            text: '小萝莉',
+            result: '{user}是个古惑仔，他想搞点钱去玩，于是找了个小萝莉，勒索他。谁知道突然跳出来一个壮汉来救小朋友，{user}只能溜了。'
+        },
+        {
+            text: '扣扣会员',
+            result: '你做出了选择。'
+        }
+            ]
+        }
+        }
+    },
     '小偷': {
         events: {
         'dbrs_160': {

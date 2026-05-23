@@ -114,6 +114,7 @@ export class GameController {
 
         // 添加开局标签（dbrs 出生事件依赖"未出生"标签触发）
         this.player.addTag('未出生');
+        this.player.addTag('dbrs通用');
 
         // 触发开局事件
         if (this.player.gender === 'male') this.player.addTag('男性');

@@ -1,6 +1,6 @@
 // dbrs 事件文件 - 自动生成
 // 来源: 豆比人生 - 学校/教育
-// 事件数: 21
+// 事件数: 31
 import { registerTags } from '../../data/tagRegistry.js';
 
 // 本文件涉及的标签注册
@@ -300,6 +300,113 @@ export const dbrsSchoolEvents = {
         }
         }
     },
+    '恋爱': {
+        events: {
+        'dbrs_1224': {
+            title: '昆学分享',
+            description: '{user}有一次把女朋友带到了昆学部。与社员们一同分享昆学之道。',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['昆学部', '恋爱', '男性'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。'
+        }
+            ]
+        }
+        }
+    },
+    '昆学部': {
+        events: {
+        'dbrs_1223': {
+            title: '不合群',
+            description: '在昆学部社团里，没人跟{user}玩，大家都只是沉浸在自我的世界里。{user}选择了离开。',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['昆学部', '女性'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。',
+            remove_tags: ['昆学部']
+        }
+            ]
+        },
+        'dbrs_1225': {
+            title: '昆学研究',
+            description: '{user}放学后都会去参加社团活动。与社员们认真研究昆学。',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['昆学部'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。'
+        }
+            ]
+        },
+        'dbrs_1224': {
+            title: '昆学分享',
+            description: '{user}有一次把女朋友带到了昆学部。与社员们一同分享昆学之道。',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['昆学部', '恋爱', '男性'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。'
+        }
+            ]
+        },
+        'dbrs_1226': {
+            title: '废部',
+            description: '昆学部因为涉嫌进行淫秽集会被举报了，警方立即介入调查，现场抓获全部社员。部室门被黏上封条，禁止任何人出入。昆学部也被学校废部。',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['昆学部'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。',
+            add_tags: ['监狱时间'],
+            remove_tags: ['昆学部']
+        }
+            ]
+        },
+        'dbrs_1231': {
+            title: '学有所成',
+            description: '{user}在昆学部中一直刻苦勤奋地修行，终于学有所成。{user}成功向___表白，摆脱单身。',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['昆学部', '男性'] },
+            options: [
+        {
+            text: '一个女权主义者',
+            result: '你做出了选择。',
+            add_tags: ['恋爱中']
+        },
+        {
+            text: '女神',
+            result: '你做出了选择。',
+            add_tags: ['恋爱中']
+        },
+        {
+            text: '富婆',
+            result: '你做出了选择。',
+            add_tags: ['恋爱中']
+        }
+            ]
+        },
+        'dbrs_1340': {
+            title: '社团研究',
+            description: '{user}在昆学部中搞研究。他与另外一位社员自制催情药。按照网上找来的配方调好，制作完成后，他们以身试药，喝完后药性发作……{user}起身想去厕所解决问题，才发现社团教室的门不小心锁上了。{user}与另外一名社员面面相觑……',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['昆学部'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。',
+            add_tags: ['菊花残']
+        }
+            ]
+        }
+        }
+    },
     '琴校老师': {
         events: {
         'dbrs_1135': {
@@ -469,6 +576,62 @@ export const dbrsSchoolEvents = {
         },
         {
             text: 'java',
+            result: '你做出了选择。'
+        }
+            ]
+        }
+        }
+    },
+    '身体协调': {
+        events: {
+        'dbrs_33': {
+            title: '课堂:体操',
+            description: '{user}做广播体操的姿势非常标准，被国家体操协会邀请去做《第一套广播体操》的视频录像',
+            priority: 5,
+            trigger_conditions: { age_range: [4, 19], required_tags: ['身体协调'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。'
+        }
+            ]
+        },
+        'dbrs_42': {
+            title: '课堂:体育课',
+            description: '在课堂上，{user}现场表演了自己的绝技，身体折起来，嘴巴可以吃到自己下面。',
+            priority: 5,
+            trigger_conditions: { age_range: [7, 17], required_tags: ['身体协调'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。'
+        }
+            ]
+        },
+        'dbrs_207': {
+            title: '表现自己',
+            description: '{user}突然想，自己有这么柔软的身体，应该利用起来。去街头卖艺似乎是一个表现自己的好方法。',
+            priority: 5,
+            trigger_conditions: { age_range: [10, 120], required_tags: ['身体协调'] },
+            options: [
+        {
+            text: '行动',
+            result: '{user}凭借着他柔软的身体，{user}能做出各种特技动作，{user}决定街头表演这些来表现自己。'
+        },
+        {
+            text: '放弃',
+            result: '{user}有个想法，自己有这么柔软的身体，应该利用起来，可以去街头卖艺。但这种事情有一定的危险，{user}思考再三，还是选择了放弃。'
+        }
+            ]
+        },
+        'dbrs_771': {
+            title: '增员操',
+            description: '{user}以前在学校是广播体操模范。工作后在公司的增员操跳得不错，受到老板的提拔，负责领操。',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['身体协调'] },
+            options: [
+        {
+            text: '下一事件',
             result: '你做出了选择。'
         }
             ]

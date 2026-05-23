@@ -1,6 +1,6 @@
 // dbrs 事件文件 - 自动生成
 // 来源: 豆比人生 - 修仙/异能
-// 事件数: 26
+// 事件数: 29
 import { registerTags } from '../../data/tagRegistry.js';
 
 // 本文件涉及的标签注册
@@ -197,6 +197,30 @@ export const dbrsXiuXianEvents = {
         }
         }
     },
+    '冥想家': {
+        events: {
+        'dbrs_1097': {
+            title: '冥想家',
+            description: '{user}是一位冥想家，他走的道路是___',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['冥想家'] },
+            options: [
+        {
+            text: '思考哲学',
+            result: '你做出了选择。',
+            add_tags: ['哲学家'],
+            remove_tags: ['冥想家']
+        },
+        {
+            text: '修仙养性',
+            result: '你做出了选择。',
+            add_tags: ['修仙'],
+            remove_tags: ['冥想家']
+        }
+            ]
+        }
+        }
+    },
     '冰魔法': {
         events: {
         'dbrs_785': {
@@ -293,6 +317,22 @@ export const dbrsXiuXianEvents = {
         }
         }
     },
+    '狐狸的粥': {
+        events: {
+        'dbrs_1266': {
+            title: '道士的警告',
+            description: '有一天，一位道士路过{user}家门口，对{user}说：“你家里妖气好重！”{user}端出粥，道士说：“这粥可吃不得！这是狐狸精做的！”{user}不以为然，他觉得他的朋友肯定是一位好妖精。',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['狐狸的粥'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。'
+        }
+            ]
+        }
+        }
+    },
     '狩魔猎人': {
         events: {
         'dbrs_683': {
@@ -305,6 +345,22 @@ export const dbrsXiuXianEvents = {
             text: '下一事件',
             result: '你做出了选择。',
             remove_tags: ['狩魔猎人']
+        }
+            ]
+        }
+        }
+    },
+    '获得永灵刀': {
+        events: {
+        'dbrs_520': {
+            title: '永灵刀',
+            description: '放了1个星期，已经发臭的猪肉，用永灵刀切片之后，就变成了新鲜猪肉。{user}被这个刀的神秘力量震慑住了。',
+            priority: 5,
+            trigger_conditions: { age_range: [20, 120], required_tags: ['获得永灵刀'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。'
         }
             ]
         }

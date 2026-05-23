@@ -1,6 +1,6 @@
 // dbrs 事件文件 - 自动生成
 // 来源: 豆比人生 - 健康/疾病
-// 事件数: 56
+// 事件数: 75
 import { registerTags } from '../../data/tagRegistry.js';
 
 // 本文件涉及的标签注册
@@ -11,6 +11,7 @@ registerTags({
     '精神分裂': { color: 'red' },
     '肝硬化': { color: 'red' },
     '肥胖': { color: 'red' },
+    '高情商': { color: 'pink' },
 });
 
 export const dbrsHealthEvents = {
@@ -115,6 +116,26 @@ export const dbrsHealthEvents = {
             add_tags: ['死亡'],
             death_flag: true,
             death_reason: '不幸离世'
+        }
+            ]
+        }
+        }
+    },
+    '儿子': {
+        events: {
+        'dbrs_1271': {
+            title: '儿子',
+            description: '{user}发现儿子越来越不像自己，___',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['最爱零食：转基因薯片', '儿子', '男性'] },
+            options: [
+        {
+            text: '去做鉴定',
+            result: '{user}发现儿子越来越不像自己，于是带儿子去做鉴定。鉴定结果儿子基因和他不同。{user}质问老婆，老婆淡定地跟{user}说，可能是他经常吃转基因食品弄的。'
+        },
+        {
+            text: '不以为然',
+            result: '你做出了选择。'
         }
             ]
         }
@@ -302,6 +323,98 @@ export const dbrsHealthEvents = {
         }
         }
     },
+    '寄生虫': {
+        events: {
+        'dbrs_336': {
+            title: '肾结石',
+            description: '{user}得了肾结石，去医院看，医生给出了三个治疗方案。',
+            priority: 5,
+            trigger_conditions: { age_range: [45, 50], required_tags: ['寄生虫'] },
+            options: [
+        {
+            text: '吃药化解结石',
+            result: '{user}得了肾结石，他选择了最舒缓的治疗方法，吃药。半年下来，肾结石的情况得到缓解。但从此之后，{user}一直肾虚，从未好转。',
+            add_tags: ['肾虚']
+        },
+        {
+            text: '微创激光手术',
+            result: '{user}得了肾结石，他听从医生的建议，进行微创激光手术治疗。石头被击碎后，从尿道排出，排石头的时候，{user}痛得咿呀咧嘴。'
+        },
+        {
+            text: '手术切去患病的肾脏',
+            result: '{user}得了肾结石，他听从医生的建议，斩草除根，切除了肾结石的肾脏。治疗非常有效。',
+            add_tags: ['肾虚']
+        },
+        {
+            text: '喝醋',
+            result: '{user}得了肾结石，他炜疾忌医，听小道的消息说喝醋可以溶解肾结石。于是{user}每天坚持喝一瓶醋，然而病情越加恶化，发展到了尿毒症的程度。',
+            add_tags: ['尿毒症']
+        }
+            ]
+        },
+        'dbrs_352': {
+            title: '寄生虫',
+            description: '{user} 经常喜欢去大排档吃东西，饮食非常不卫生。患上了寄生虫。他去医院治疗，医生给出几个治疗方案。',
+            priority: 5,
+            trigger_conditions: { age_range: [10, 60], required_tags: ['寄生虫'] },
+            options: [
+        {
+            text: '吃药杀虫',
+            result: '{user}发现自己有寄生虫，去医院看病。听从了医生的建议，买了几个疗程的杀虫药。{user}吃了这个药后上厕所，拉出来的都是虫！寄生虫被菊花排出来，它还蠕动着想钻回去！{user}一点都不想回忆那个拉虫的经历。',
+            remove_tags: ['寄生虫']
+        },
+        {
+            text: '手术',
+            result: '{user}有寄生虫，去医院做手术。医生用胃镜手术刀，从{user}的肠胃里抽出了几百条大小不一的小肥虫，小肥虫被丢在一个铁盘上，贪婪地蠕动着。',
+            remove_tags: ['寄生虫']
+        },
+        {
+            text: '喝醋',
+            result: '{user}发现自己有寄生虫，但是他并没有去医院。{user}不相信医生，认为医生都是宰人的怪物。他听闻以前有人喝醋杀菌，心想也喝醋杀杀自己肚子里的寄生虫。然后，{user}就坚持每天喝醋，寄生虫还真的好像没有了。',
+            add_tags: ['羊癫疯'],
+            remove_tags: ['寄生虫']
+        }
+            ]
+        }
+        }
+    },
+    '小马': {
+        events: {
+        'dbrs_694': {
+            title: '老人痴呆',
+            description: '在玩SM游戏的时候，{user}忘记了安全词，活活被虐待而死。',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['老人痴呆', '小马'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。',
+            add_tags: ['死亡'],
+            death_flag: true,
+            death_reason: '不幸离世'
+        }
+            ]
+        }
+        }
+    },
+    '尸体': {
+        events: {
+        'dbrs_831': {
+            title: '丧尸',
+            description: '{user}很喜欢吃一种名叫“美味风蛇”的小吃。这种食物没有毒，但是{user}每次吃完，身体就会发生一定程度的腐烂。腐烂的身体让{user}非常自卑。',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['最爱零食：美味风蛇', '尸体'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。',
+            add_tags: ['内向'],
+            remove_tags: ['高情商']
+        }
+            ]
+        }
+        }
+    },
     '尿毒症': {
         events: {
         'dbrs_648': {
@@ -327,6 +440,198 @@ export const dbrsHealthEvents = {
             add_tags: ['死亡'],
             death_flag: true,
             death_reason: '=NAME=发现自己的尿液竟然像硫酸一样，他知道他的尿毒症已经发展到非比寻常的程度了，=NAME=走去公众游泳池撒尿，害死了整个游泳池里的人，一齐为=NAME=陪葬。'
+        }
+            ]
+        }
+        }
+    },
+    '心理扭曲': {
+        events: {
+        'dbrs_867': {
+            title: '课堂：画图课',
+            description: '在一堂美术课上，以“猫”为主题画画。{user}画的是___',
+            priority: 5,
+            trigger_conditions: { age_range: [4, 15], required_tags: ['心理扭曲'] },
+            options: [
+        {
+            text: '一只没有眼睛的猫，正在张开血盆大口',
+            result: '你做出了选择。'
+        },
+        {
+            text: '一个HELLOKITTY的头',
+            result: '你做出了选择。'
+        },
+        {
+            text: '一只红色毛的猫',
+            result: '你做出了选择。'
+        }
+            ]
+        }
+        }
+    },
+    '最爱零食：暗物质': {
+        events: {
+        'dbrs_462': {
+            title: '肝硬化',
+            description: '{user}在一次常规体检中，肝功能不正常。详细检验后，查出了肝硬化。',
+            priority: 5,
+            trigger_conditions: { age_range: [35, 120], required_tags: ['最爱零食：暗物质'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。',
+            add_tags: ['肝硬化'],
+            remove_tags: ['最爱零食：暗物质']
+        }
+            ]
+        }
+        }
+    },
+    '最爱零食：济公丹': {
+        events: {
+        'dbrs_337': {
+            title: '肾结石',
+            description: '{user}得了肾结石，去医院看，医生给出了三个治疗方案。',
+            priority: 5,
+            trigger_conditions: { age_range: [45, 50], required_tags: ['最爱零食：济公丹'] },
+            options: [
+        {
+            text: '吃药化解结石',
+            result: '{user}得了肾结石，他选择了最舒缓的治疗方法，吃药。半年下来，肾结石的情况得到缓解。但从此之后，{user}一直肾虚，从未好转。',
+            add_tags: ['肾虚']
+        },
+        {
+            text: '微创激光手术',
+            result: '{user}得了肾结石，他听从医生的建议，进行微创激光手术治疗。石头被击碎后，从尿道排出，排石头的时候，{user}痛得咿呀咧嘴。'
+        },
+        {
+            text: '手术切去患病的肾脏',
+            result: '{user}得了肾结石，他听从医生的建议，斩草除根，切除了肾结石的肾脏。治疗非常有效。',
+            add_tags: ['肾虚']
+        },
+        {
+            text: '喝醋',
+            result: '{user}得了肾结石，他炜疾忌医，听小道的消息说喝醋可以溶解肾结石。于是{user}每天坚持喝一瓶醋，然而病情越加恶化，发展到了尿毒症的程度。',
+            add_tags: ['尿毒症']
+        }
+            ]
+        },
+        'dbrs_1020': {
+            title: '良性肿瘤',
+            description: '{user}发现身上长了一个小小的包，医院检查结果是良性肿瘤。{user}决定___',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['最爱零食：济公丹'] },
+            options: [
+        {
+            text: '摘除',
+            result: '你做出了选择。'
+        },
+        {
+            text: '不理睬',
+            result: '你做出了选择。',
+            add_tags: ['癌症']
+        }
+            ]
+        }
+        }
+    },
+    '最爱零食：美味风蛇': {
+        events: {
+        'dbrs_831': {
+            title: '丧尸',
+            description: '{user}很喜欢吃一种名叫“美味风蛇”的小吃。这种食物没有毒，但是{user}每次吃完，身体就会发生一定程度的腐烂。腐烂的身体让{user}非常自卑。',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['最爱零食：美味风蛇', '尸体'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。',
+            add_tags: ['内向'],
+            remove_tags: ['高情商']
+        }
+            ]
+        }
+        }
+    },
+    '最爱零食：调味料': {
+        events: {
+        'dbrs_335': {
+            title: '高血压',
+            description: '因为{user}饮食习惯不好，非常喜欢吃咸。长期这样，{user}落得了高血压的毛病。',
+            priority: 5,
+            trigger_conditions: { age_range: [45, 120], required_tags: ['最爱零食：调味料'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。',
+            remove_tags: ['最爱零食：调味料']
+        }
+            ]
+        }
+        }
+    },
+    '最爱零食：转基因薯片': {
+        events: {
+        'dbrs_1271': {
+            title: '儿子',
+            description: '{user}发现儿子越来越不像自己，___',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['最爱零食：转基因薯片', '儿子', '男性'] },
+            options: [
+        {
+            text: '去做鉴定',
+            result: '{user}发现儿子越来越不像自己，于是带儿子去做鉴定。鉴定结果儿子基因和他不同。{user}质问老婆，老婆淡定地跟{user}说，可能是他经常吃转基因食品弄的。'
+        },
+        {
+            text: '不以为然',
+            result: '你做出了选择。'
+        }
+            ]
+        }
+        }
+    },
+    '杂病': {
+        events: {
+        'dbrs_1258': {
+            title: '肺病',
+            description: '也许是{user}一直吸入汽车尾气，{user}近年来不断咳嗽，严重的时候还会咳血。到医院检查，得到的结果是严重的黑肺病。',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['杂病'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。',
+            effects: { health: -10 },
+            add_tags: ['黑肺：阶段1'],
+            remove_tags: ['呼吸道疾病']
+        }
+            ]
+        },
+        'dbrs_1259': {
+            title: '高血压',
+            description: '{user}一直感觉到头痛、头晕、注意力不集中。医院检查，得到的结果是高血压。',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['杂病'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。',
+            effects: { health: -10 },
+            remove_tags: ['杂病']
+        }
+            ]
+        },
+        'dbrs_1257': {
+            title: '风湿',
+            description: '只要天气潮湿，{user}的关节就会噼啪作响，剧痛无比。到医院检查，得到的结果是，风湿。',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['杂病'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。',
+            effects: { health: -10 },
+            add_tags: ['风湿']
         }
             ]
         }
@@ -677,6 +982,119 @@ export const dbrsHealthEvents = {
         }
         }
     },
+    '美容机构：美白': {
+        events: {
+        'dbrs_453': {
+            title: '排斥反应',
+            description: '{user}上次经过美白手术后，{user}感觉身体不对劲，皮肤老是痒痒，而且在皮肤里面痒，抓不到。过了几天接着开始破皮，出血。再过了几天，皮竟然一块一块地脱下来！变得血肉模糊的{user}到死前才意识到，那个美容机构给自己做的不是美白手术，是换皮手术。身体的排斥作用最后要了{user}的命。',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['美容机构：美白'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。',
+            add_tags: ['死亡'],
+            death_flag: true,
+            death_reason: '不幸离世'
+        }
+            ]
+        }
+        }
+    },
+    '老人痴呆': {
+        events: {
+        'dbrs_694': {
+            title: '老人痴呆',
+            description: '在玩SM游戏的时候，{user}忘记了安全词，活活被虐待而死。',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['老人痴呆', '小马'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。',
+            add_tags: ['死亡'],
+            death_flag: true,
+            death_reason: '不幸离世'
+        }
+            ]
+        },
+        'dbrs_951': {
+            title: '薇尔希',
+            description: '{user}有严重的老人痴呆症，生活不能自理。{user}每天都会重新认识一个名叫薇尔希的人。这个名叫薇尔希的人每天都会无微不至地照顾{user}的饮食起居。',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['老人痴呆', '男性'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。'
+        }
+            ]
+        },
+        'dbrs_957': {
+            title: '楼梯之狱',
+            description: '{user}死了。他的尸体坐在楼梯上，挨着扶手，似乎是被累死的。根据警察的简单侦查，排除了他杀的嫌疑。警察根据现场的鞋印推断，{user}老人的死因是不断地忘记自己正在上楼梯还是下楼梯，累死的。',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['老人痴呆'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。',
+            add_tags: ['死亡'],
+            death_flag: true,
+            death_reason: '{user}死了。他的尸体坐在楼梯上，挨着扶手，似乎是被累死'
+        }
+            ]
+        },
+        'dbrs_950': {
+            title: '老人痴呆：忘记密码',
+            description: '{user}忘了自己的银行卡密码！他只隐约记得是个6位数的数字。',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['老人痴呆'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。',
+            effects: { money: -5 }
+        }
+            ]
+        },
+        'dbrs_1028': {
+            title: '治疗老人痴呆',
+            description: '{user}的老人痴呆越来越严重，{user}感觉这样下去不是办法，他决定___',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['老人痴呆'] },
+            options: [
+        {
+            text: '尝试电击治疗',
+            result: '{user}的老人痴呆越来越严重，{user}感觉这样下去不是办法，他尝试电击治疗。他找到了医院负责电击治疗的专家杨教授，杨教授用磁暴枪对准{user}的脑袋开了一炮。超强的电流贯穿{user}全身，{user}一哆嗦，死了。',
+            add_tags: ['死亡'],
+            death_flag: true,
+            death_reason: '=NAME=的老人痴呆越来越严重，=NAME=感觉这样下去不是办法，他尝试电击治疗。他找到了医院负责电击治疗的专家杨教授，杨教授用磁暴枪对准=NAME=的脑袋开了一炮。超强的电流贯穿=NAME=全身，=NAME=一哆嗦，死了。'
+        },
+        {
+            text: '多吃核桃',
+            result: '你做出了选择。'
+        },
+        {
+            text: '喝醋',
+            result: '你做出了选择。'
+        },
+        {
+            text: '吃脑黑金',
+            result: '你做出了选择。'
+        },
+        {
+            text: '拨打12315',
+            result: '你做出了选择。'
+        },
+        {
+            text: '进行聪明珊瑚脑移植手术',
+            result: '你做出了选择。'
+        }
+            ]
+        }
+        }
+    },
     '肉改部': {
         events: {
         'dbrs_1228': {
@@ -1012,6 +1430,22 @@ export const dbrsHealthEvents = {
         },
         {
             text: '规律生活',
+            result: '你做出了选择。'
+        }
+            ]
+        }
+        }
+    },
+    '腹部穿孔': {
+        events: {
+        'dbrs_88': {
+            title: '小瓶子',
+            description: '{user} 随身携带一个小瓶子，用来装{user}的屎尿。有一次{user}的同桌太口渴了于是拿起{user}的小瓶子就喝，味道竟然是甘甜的，{user}的同桌还以为是隐雪饮料。',
+            priority: 5,
+            trigger_conditions: { age_range: [4, 19], required_tags: ['腹部穿孔'] },
+            options: [
+        {
+            text: '下一事件',
             result: '你做出了选择。'
         }
             ]

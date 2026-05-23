@@ -481,6 +481,9 @@ def main():
 
     print(f"总事件数: {len(all_events)}")
 
+    # 需要跳过的标签（废弃事件、极小众死胡同线）
+    SKIP_TAGS = {"作废的事件", "废弃的故事"}
+
     # 故事线定义: (文件名后缀, 显示名, 触发标签关键词)
     storylines = [
         ("Birth", "出生/开局", ["未出生"]),
@@ -488,12 +491,13 @@ def main():
             "学生", "上学", "大学生", "小学生", "学校", "课堂", "考试",
             "高考", "老师", "学习", "教育", "大学", "毕业", "学历",
             "医学专业", "自学", "博士", "硕士", "学位", "医学生",
-            "法学生", "留学", "考研", "论文", "实习"
+            "法学生", "留学", "考研", "论文", "实习",
+            "昆学部", "身体协调", "记忆力非凡"
         ]),
         ("Love", "恋爱/婚姻", [
             "恋爱", "结婚", "已婚", "单身", "暗恋", "初恋", "情侣", "夫妻",
             "恋人", "亲嘴", "初吻", "求婚", "同居", "分手", "征婚", "相亲",
-            "真爱", "出轨", "离婚", "再婚"
+            "真爱", "出轨", "离婚", "再婚", "肌肤之亲"
         ]),
         ("Health", "健康/疾病", [
             "多病", "癌症", "心脏病", "白血病", "骨折", "残疾",
@@ -501,22 +505,30 @@ def main():
             "尿毒症", "风湿", "精神分裂", "近视眼", "肥胖",
             "口腔排便", "呼吸困难", "糖尿病", "痔疮", "哮喘",
             "过敏", "艾滋", "慢性病", "急性病",
-            "呼吸道疾病", "肺部", "肝"
+            "呼吸道疾病", "肺部", "肝",
+            "老人痴呆", "杂病", "寄生虫",
+            "最爱零食", "胆结石", "高血压", "肾结石",
+            "腹部穿孔", "心理扭曲",
+            "美容机构"
         ]),
         ("Tech", "科技/天网", [
             "天网", "机器人", "人工智能", "仿生人", "网络模块",
-            "计算机", "编程", "黑客", "AI", "程序", "代码"
+            "计算机", "编程", "黑客", "AI", "程序", "代码",
+            "上门修电脑专家", "上门修电脑",
+            "事件视界望远镜", "黑洞照片进度"
         ]),
         ("XiuXian", "修仙/异能", [
             "修仙", "修真", "鬼修", "化神", "筑基", "金丹", "元婴",
             "冥修", "修佛", "修魔", "赛亚人", "龙珠", "卡卡罗特",
             "冰魔法", "会喷火", "隐身", "天神下凡", "长翅膀",
-            "魔法", "哈利波特", "霍格沃茨", "狩魔猎人", "炼金"
+            "魔法", "哈利波特", "霍格沃茨", "狩魔猎人", "炼金",
+            "冥想家", "永灵刀", "获得永灵刀", "狐狸的粥", "道士"
         ]),
         ("Crime", "犯罪/执法", [
             "小偷", "黑帮", "罪犯", "警察", "监狱", "坐牢", "犯罪",
             "杀人", "盗窃", "诈骗", "贪污", "逮捕", "审判", "枪毙",
-            "派出所", "协警", "侦探", "法医"
+            "派出所", "协警", "侦探", "法医",
+            "古惑仔", "交警"
         ]),
         ("Career", "工作/职业", [
             "工作", "职业", "医生", "教师", "工程师", "律师",
@@ -525,22 +537,27 @@ def main():
             "消防员", "飞行员", "宇航员", "农民", "渔夫",
             "公务员", "村长", "市长", "省委书记", "总统",
             "AB站阿婆主", "AB站会员", "up主", "创业", "经商",
-            "企业", "老板", "个体户", "自由职业"
+            "企业", "老板", "个体户", "自由职业",
+            "开办琴校", "慕名而来", "出名的傀儡",
+            "主席好朋友", "独家新闻", "神射手", "神枪手",
+            "好导游", "戴手套"
         ]),
         ("Wealth", "财富/经济", [
             "富二代", "贫穷", "土豪", "贫困", "投资", "股票",
             "RMB玩家", "富有", "彩票", "中奖", "借贷", "高利贷",
-            "破产", "理财", "银行", "千万富翁"
+            "破产", "理财", "银行", "千万富翁", "败家"
         ]),
         ("Music", "音乐/舞蹈", [
             "音乐", "唱歌", "乐器", "舞蹈", "三味弦", "架子鼓",
             "钢琴", "吉他", "MC石头", "轻音部", "宅舞", "尬舞",
             "广场舞", "芭蕾舞", "街舞", "说唱", "DJ", "作曲",
-            "吹口哨", "口哨手", "演唱", "音乐会"
+            "吹口哨", "口哨手", "演唱", "音乐会",
+            "爆裂鼓手", "3D全息演唱会", "歌姬"
         ]),
         ("Art", "美术/设计", [
             "画画", "画图", "设计", "艺术", "摄影", "雕塑",
-            "书法", "文学", "写作", "小说", "诗人", "诗歌"
+            "书法", "文学", "写作", "小说", "诗人", "诗歌",
+            "原创", "抄袭", "脑洞", "脑洞王"
         ]),
         ("Sports", "运动/健身", [
             "运动", "健身", "强壮", "肉改部", "篮球", "足球",
@@ -556,22 +573,33 @@ def main():
             "失忆", "菊花残", "狗日", "被狗",
             "乐观", "悲观", "幽默", "冷漠", "马赛克脸",
             "孤儿", "长翅膀", "交网友",
+            "哲学家", "唯心主义", "主观唯心主义", "客观唯心主义",
+            "胆小", "甜党", "玛丽苏", "真玛丽苏",
+            "钻石智齿", "小马", "黑框眼镜", "表情模块",
+            "吸氧羊", "走路踏步", "出手相助", "三多一小",
+            "记忆", "迷信"
         ]),
         ("Gaming", "游戏/娱乐", [
             "电子海洛因", "游戏", "电竞", "英雄联盟", "王者荣耀",
             "CSGO", "直播", "娱乐", "赌博", "麻将", "扑克",
-            "游戏陪玩", "爽文", "瘾"
+            "游戏陪玩", "爽文", "瘾",
+            "免费玩家", "RMB玩家", "贪婪玩约",
+            "读书世界"
         ]),
         ("Social", "社交/人际", [
             "交网友", "社交", "朋友圈", "人脉", "交友", "好友",
             "邻居", "室友", "社团", "学生会", "某宝", "冲动消费",
-            "粉丝", "观众", "舆论"
+            "粉丝", "观众", "舆论",
+            "现视研", "SOS团", "COSPLAY"
         ]),
         ("Adventure", "冒险/奇遇", [
             "冒险", "奇遇", "探险", "考古", "寻宝", "宝藏",
             "外星", "UFO", "超自然", "灵异", "鬼", "僵尸",
             "末日", "废土", "丧尸", "穿越", "平行世界",
-            "时空", "维度", "异世界"
+            "时空", "维度", "异世界",
+            "furry", "鸟人",
+            "卡拉克", "发现卡拉克",
+            "薇尔希"
         ]),
     ]
 
@@ -581,9 +609,16 @@ def main():
         categorized[key] = []
 
     other_events = []
+    skipped = 0
 
     for evt in all_events:
         req_tags = evt["conditions"].get("required_tags", [])
+
+        # 跳过废弃标签事件
+        if any(tag in SKIP_TAGS for tag in req_tags):
+            skipped += 1
+            continue
+
         matched = False
 
         for key, _, keywords in storylines:
@@ -606,6 +641,7 @@ def main():
         if count > 0:
             print(f"  {name}: {count}")
     print(f"  其他(暂不导入): {len(other_events)}")
+    print(f"  跳过废弃事件: {skipped}")
 
     # 输出目录
     out_dir = os.path.join(BASE, "..", "js", "events", "dbrs")
@@ -620,26 +656,209 @@ def main():
                                os.path.join(out_dir, f"dbrs{key}Events.js"))
 
     # 生成汇总导入文件
-    generate_index_file([k for k, _, _ in storylines if len(categorized[k]) > 0], out_dir)
+    all_keys = [k for k, _, _ in storylines if len(categorized[k]) > 0]
+
+    # 生成年龄组事件文件（无触发标签的事件按年龄分组）
+    no_trigger_events = [e for e in other_events if not e["conditions"].get("required_tags", [])]
+    age_group_keys, has_general = generate_age_group_files(no_trigger_events, out_dir)
+
+    # 重新生成汇总导入文件（包含年龄组文件）
+    generate_index_file(all_keys, out_dir, age_group_keys, has_general)
 
     print("\n完成!")
 
 
-def generate_index_file(keys, out_dir):
-    """生成 dbrs 事件的 index.js，汇总导入所有故事线"""
+def generate_age_group_file(events, age_group_name, tag_name, priority, output_path):
+    """生成一个年龄组或通用事件 JS 文件"""
+    lines = []
+    lines.append("// dbrs 事件文件 - 自动生成")
+    if tag_name == "dbrs通用":
+        lines.append(f"// 来源: 豆比人生 - 全年龄段通用事件（无触发标签）")
+    else:
+        lines.append(f"// 来源: 豆比人生 - {age_group_name}年龄段事件（无触发标签）")
+    lines.append(f"// 事件数: {len(events)}")
+    lines.append("import { registerTags } from '../../data/tagRegistry.js';")
+    lines.append("")
+    lines.append("registerTags({")
+    lines.append(f"    '{tag_name}': {{ color: 'normal' }},")
+    lines.append("});")
+    lines.append("")
+
+    # 统计使用的标签（选项中产出的标签）
+    all_tags = set()
+    for evt in events:
+        for opt in evt.get("options", []):
+            for t in opt.get("add_tags", []):
+                if t:
+                    all_tags.add(t)
+            for t in opt.get("remove_tags", []):
+                if t:
+                    all_tags.add(t)
+
+    if all_tags:
+        lines.append(generate_tag_registrations(all_tags))
+        lines.append("")
+
+    # 生成事件对象
+    var_name = f"dbrs{age_group_name}Events"
+    lines.append(f"export const {var_name} = {{")
+    lines.append(f"    '{tag_name}': {{")
+    lines.append(f"        events: {{")
+
+    for i, evt in enumerate(events):
+        evt_code = convert_event(evt, is_birth=False)
+        # 覆盖优先级
+        evt_code = evt_code.replace("priority: 5,", f"priority: {priority},")
+        if i < len(events) - 1:
+            evt_code += ","
+        lines.append(evt_code)
+
+    lines.append(f"        }}")
+    lines.append(f"    }},")
+    lines.append(f"}};")
+
+    with open(output_path, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines))
+
+    print(f"  已生成: {output_path} ({len(events)} 个事件, 优先级={priority})")
+
+
+def determine_age_group(age_min, age_max):
+    """根据 age_min 确定事件归属的年龄组标签
+    跨多个组的事件归入 age_min 对应的第一个组
+    全年龄事件(age_max>=65535 或跨越3+组)归入 'dbrs通用'
+    """
+    # 年龄组定义（与 constants.js 一致）
+    AGE_GROUPS = [
+        ("Infant", "幼儿", 1, 5),
+        ("Child", "少年", 6, 12),
+        ("Teenager", "青少年", 13, 18),
+        ("YoungAdult", "青年", 19, 30),
+        ("Adult", "中年", 31, 60),
+        ("Elder", "老年", 61, 110),
+    ]
+
+    # 全年龄或异常范围 → 通用
+    if age_max >= 65535:
+        return None  # 通用
+
+    # 计算跨越了几个组
+    spanned_groups = []
+    for key, name, gmin, gmax in AGE_GROUPS:
+        if age_max >= gmin and age_min <= gmax:
+            spanned_groups.append(key)
+
+    # 跨越3+个组 → 通用
+    if len(spanned_groups) >= 3:
+        return None
+
+    # 归入 age_min 对应的组
+    for key, name, gmin, gmax in AGE_GROUPS:
+        if age_min <= gmax and age_min >= gmin:
+            return key
+        if age_min < gmin and age_max >= gmin:
+            return key  # age_min 小于组最小值，但仍在组范围内
+
+    # 如果 age_min <= 0，归入幼儿
+    if age_min <= 0:
+        return "Infant"
+
+    # 超过老年上限 → 通用
+    return None
+
+
+def generate_age_group_files(no_trigger_events, out_dir):
+    """将无触发标签的事件按年龄组分配到不同文件"""
+    AGE_GROUP_DEF = [
+        ("Infant", "幼儿"),
+        ("Child", "少年"),
+        ("Teenager", "青少年"),
+        ("YoungAdult", "青年"),
+        ("Adult", "中年"),
+        ("Elder", "老年"),
+    ]
+
+    # 按年龄组分类
+    age_groups = {key: [] for key, _ in AGE_GROUP_DEF}
+    general_events = []
+
+    for evt in no_trigger_events:
+        age_min = evt["conditions"].get("age_min", 0)
+        age_max = evt["conditions"].get("age_max", 0)
+
+        group_key = determine_age_group(age_min, age_max)
+
+        if group_key is None:
+            general_events.append(evt)
+        else:
+            age_groups[group_key].append(evt)
+
+    print(f"\n年龄组分配:")
+    total = 0
+    for key, name in AGE_GROUP_DEF:
+        count = len(age_groups[key])
+        total += count
+        print(f"  {name}: {count}")
+    print(f"  通用(全年龄): {len(general_events)}")
+    print(f"  合计: {total + len(general_events)}")
+
+    # 生成每个年龄组文件
+    for key, name in AGE_GROUP_DEF:
+        events = age_groups[key]
+        if events:
+            generate_age_group_file(
+                events, key, name, priority=2,
+                output_path=os.path.join(out_dir, f"dbrs{key}Events.js")
+            )
+
+    # 生成通用文件
+    if general_events:
+        generate_age_group_file(
+            general_events, "General", "dbrs通用", priority=1,
+            output_path=os.path.join(out_dir, f"dbrsGeneralEvents.js")
+        )
+
+    return [key for key, _ in AGE_GROUP_DEF if len(age_groups[key]) > 0], len(general_events) > 0
+
+
+def generate_index_file(storyline_keys, out_dir, age_group_keys=None, has_general=False):
+    """生成 dbrs 事件的 index.js，汇总导入所有故事线和年龄组事件"""
+    if age_group_keys is None:
+        age_group_keys = []
+
     lines = []
     lines.append("// dbrs 事件汇总——自动生成")
     lines.append("// 导入所有故事线事件文件")
     lines.append("")
 
     import_names = []
-    for key in keys:
+    for key in storyline_keys:
         var = f"dbrs{key}Events"
         lines.append(f"import {{ {var} }} from './{var}.js';")
         import_names.append(var)
 
     # 平凡人通用事件（由 extract_common.py 生成）
     lines.append("import { dbrsCommonEvents } from './dbrsCommonEvents.js';")
+    import_names.append("dbrsCommonEvents")
+
+    # 年龄组事件文件
+    AGE_GROUP_NAMES = {
+        "Infant": "幼儿",
+        "Child": "少年",
+        "Teenager": "青少年",
+        "YoungAdult": "青年",
+        "Adult": "中年",
+        "Elder": "老年",
+    }
+    for key in age_group_keys:
+        var = f"dbrs{key}Events"
+        lines.append(f"import {{ {var} }} from './{var}.js';")
+        import_names.append(var)
+
+    # 通用事件文件
+    if has_general:
+        lines.append("import { dbrsGeneralEvents } from './dbrsGeneralEvents.js';")
+        import_names.append("dbrsGeneralEvents")
 
     lines.append("")
     lines.append("/**")
@@ -650,14 +869,14 @@ def generate_index_file(keys, out_dir):
 
     for var in import_names:
         lines.append(f"    eventManager.registerDbrsEvents({var});")
-    lines.append("    eventManager.registerDbrsEvents(dbrsCommonEvents);")
 
     lines.append("}")
 
     with open(os.path.join(out_dir, "index.js"), "w", encoding="utf-8") as f:
         f.write("\n".join(lines))
 
-    print(f"  已生成: index.js (汇总 {len(keys)} 个故事线 + dbrsCommonEvents)")
+    count = len(storyline_keys) + 1 + len(age_group_keys) + (1 if has_general else 0)
+    print(f"  已生成: index.js (汇总 {count} 个事件模块)")
 
 
 if __name__ == "__main__":

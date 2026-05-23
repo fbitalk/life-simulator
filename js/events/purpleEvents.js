@@ -1,4 +1,3 @@
-
 // 紫色标签事件 (固定属性/特殊能力)
 export const purpleEvents = {
     "钢铁之躯": {
@@ -22,32 +21,6 @@ export const purpleEvents = {
             }
         }
     },
-    "testttt": {
-        "events": {
-            "texsw": {
-                "title": "新事件",
-                "description": "事件描述",
-                "trigger_conditions": {
-                    "age_range": [
-                        0,
-                        666
-                    ]
-                },
-                "options": [
-                    {
-                        "text": "选项1",
-                        "result": "结果描述",
-                        "effects": {}
-                    }
-                ]
-            }
-        },
-        "is_purple": true,
-        "description": "",
-        "fixed_attributes": {
-            "luck": 100
-        }
-    },
     "命运之子": {
         "events": {},
         "description": "你似乎受到了命运的眷顾。",
@@ -65,5 +38,3 @@ export const purpleEvents = {
         }
     }
 };
-
-

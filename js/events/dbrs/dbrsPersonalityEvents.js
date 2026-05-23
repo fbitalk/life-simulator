@@ -1,6 +1,6 @@
 // dbrs 事件文件 - 自动生成
 // 来源: 豆比人生 - 性格/特质
-// 事件数: 85
+// 事件数: 115
 import { registerTags } from '../../data/tagRegistry.js';
 
 // 本文件涉及的标签注册
@@ -119,6 +119,23 @@ export const dbrsPersonalityEvents = {
         }
         }
     },
+    '三多一小': {
+        events: {
+        'dbrs_259': {
+            title: '三多一小',
+            description: '{user}发现他有三多一小的症状，去医院检查，果然是患上了绝症糖尿病。以后都要过天天吃药的麻烦生活。',
+            priority: 5,
+            trigger_conditions: { age_range: [30, 120], required_tags: ['三多一小'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。',
+            remove_tags: ['三多一小']
+        }
+            ]
+        }
+        }
+    },
     '中二病': {
         events: {
         'dbrs_76': {
@@ -176,6 +193,22 @@ export const dbrsPersonalityEvents = {
             description: '{user}每次下课都会在走廊里跑来跑去，一般都两个姿势，一个是双手后伸，另一个是单手后伸，另一只手前屈挡住脸。',
             priority: 5,
             trigger_conditions: { age_range: [8, 17], required_tags: ['中二病'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。'
+        }
+            ]
+        }
+        }
+    },
+    '主观唯心主义': {
+        events: {
+        'dbrs_431': {
+            title: '小世界',
+            description: '{user}在他的脑海中，有自己的一个小世界。这个世界是黑暗、鼓噪无味、孤独的地狱。{user}一直在这个世界上生存，这个世界就是{user}的全部。',
+            priority: 5,
+            trigger_conditions: { age_range: [5, 120], required_tags: ['主观唯心主义'] },
             options: [
         {
             text: '下一事件',
@@ -273,6 +306,24 @@ export const dbrsPersonalityEvents = {
             text: '下一事件',
             result: '你做出了选择。',
             effects: { money: 4 }
+        }
+            ]
+        }
+        }
+    },
+    '出手相助': {
+        events: {
+        'dbrs_223': {
+            title: '报答',
+            description: '某一天，突然一个豪车开到{user}面前，车上下来一个小朋友，说要报答{user}的救命之恩，给了{user}一个公文包，然后就走了。{user}一打开公文包，里面叠满了一摞摞美刀。',
+            priority: 5,
+            trigger_conditions: { age_range: [18, 45], required_tags: ['出手相助'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。',
+            effects: { money: 6 },
+            remove_tags: ['出手相助']
         }
             ]
         }
@@ -423,6 +474,177 @@ export const dbrsPersonalityEvents = {
         }
         }
     },
+    '吸氧羊': {
+        events: {
+        'dbrs_34': {
+            title: '课堂:画图课',
+            description: '{user} 在画图课画满了吸氧羊，',
+            priority: 5,
+            trigger_conditions: { age_range: [4, 10], required_tags: ['吸氧羊'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。'
+        }
+            ]
+        },
+        'dbrs_64': {
+            title: '课间:红太狼杀人事件',
+            description: '{user}与男同学一起模仿吸氧羊情节，{user}用平底锅打男同学的头。男同学当场昏迷送院不治身亡',
+            priority: 5,
+            trigger_conditions: { age_range: [6, 7], required_tags: ['吸氧羊', '女性'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。',
+            add_tags: ['心理扭曲'],
+            remove_tags: ['高情商']
+        }
+            ]
+        },
+        'dbrs_65': {
+            title: '课间:红太狼杀人事件',
+            description: '{user}与女同学一起模仿吸氧羊情节，女同学用平底锅打{user}的头。{user}当场昏迷送院不治身亡',
+            priority: 5,
+            trigger_conditions: { age_range: [6, 7], required_tags: ['吸氧羊', '男性'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。',
+            add_tags: ['死亡'],
+            death_flag: true,
+            death_reason: '不幸离世'
+        }
+            ]
+        },
+        'dbrs_1261': {
+            title: '烤羊肉',
+            description: '{user}模仿动画片《吸氧羊》中灰大狼“烤羊肉”的情节，将两位同学绑在树上，并点燃了地面上的杂草。烤熟了两位同学，饱吃了一顿。',
+            priority: 5,
+            trigger_conditions: { age_range: [5, 10], required_tags: ['吸氧羊'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。'
+        }
+            ]
+        }
+        }
+    },
+    '哲学家': {
+        events: {
+        'dbrs_1307': {
+            title: '思考：人生',
+            description: '{user}在思考人生，他认为人生的意义是___。',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['哲学家'] },
+            options: [
+        {
+            text: '享受快乐',
+            result: '你做出了选择。'
+        },
+        {
+            text: '影响这个世界',
+            result: '你做出了选择。'
+        },
+        {
+            text: '没有意义',
+            result: '你做出了选择。'
+        }
+            ]
+        },
+        'dbrs_1308': {
+            title: '思考：意识',
+            description: '{user}在思考意识，他认为意识是___。',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['哲学家'] },
+            options: [
+        {
+            text: '客观世界的主观映像',
+            result: '你做出了选择。'
+        },
+        {
+            text: '社会的产物',
+            result: '你做出了选择。'
+        },
+        {
+            text: '人脑对刺激的反应',
+            result: '你做出了选择。'
+        }
+            ]
+        },
+        'dbrs_1309': {
+            title: '思考：宇宙',
+            description: '{user}在思考宇宙，他认为宇宙___。',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['哲学家'] },
+            options: [
+        {
+            text: '是一台超级计算机',
+            result: '你做出了选择。'
+        },
+        {
+            text: '一切都是幻觉',
+            result: '你做出了选择。'
+        },
+        {
+            text: '是游戏',
+            result: '你做出了选择。'
+        },
+        {
+            text: '是時間和空間',
+            result: '你做出了选择。'
+        },
+        {
+            text: '是瑞克飞船上的电池',
+            result: '你做出了选择。'
+        }
+            ]
+        },
+        'dbrs_1310': {
+            title: '思考：爱',
+            description: '{user}在思考爱，他认为爱___。',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['哲学家'] },
+            options: [
+        {
+            text: '是包容',
+            result: '你做出了选择。'
+        },
+        {
+            text: '是本能',
+            result: '你做出了选择。'
+        },
+        {
+            text: '是放手',
+            result: '你做出了选择。'
+        }
+            ]
+        }
+        }
+    },
+    '唯心主义': {
+        events: {
+        'dbrs_430': {
+            title: '思考：世界是什么',
+            description: '{user}用了很长一段时间去思考，世界是什么？{user}得出的结论是___',
+            priority: 5,
+            trigger_conditions: { age_range: [5, 120], required_tags: ['唯心主义'] },
+            options: [
+        {
+            text: '世界是由某种神秘而强大的精神力量控制的',
+            result: '你做出了选择。',
+            add_tags: ['客观唯心主义']
+        },
+        {
+            text: '“世界便是吾心,吾心便是世界。”',
+            result: '你做出了选择。',
+            add_tags: ['主观唯心主义']
+        }
+            ]
+        }
+        }
+    },
     '大头': {
         events: {
         'dbrs_1546': {
@@ -521,6 +743,41 @@ export const dbrsPersonalityEvents = {
             description: '《申国比惨王》告诉{user}，因为他的身世悲惨，所以他已经被内定通过海选，直接进入16强。',
             priority: 10,
             trigger_conditions: { age_range: [1, 120], required_tags: ['孤儿'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。'
+        }
+            ]
+        }
+        }
+    },
+    '客观唯心主义': {
+        events: {
+        'dbrs_433': {
+            title: '众神战争',
+            description: '{user}从别人的话语中，了解到很多宗教。佛教、天主教、基督教、伊斯兰教……{user}对这些东西深信不疑。因为这些宗教错综复杂，互不相容。{user}一直思考，想搞清楚他们的联系，统一宗教。为此{user}付出了一生，都想不通这些复杂的问题。',
+            priority: 5,
+            trigger_conditions: { age_range: [5, 120], required_tags: ['客观唯心主义'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。',
+            add_tags: ['死亡'],
+            death_flag: true,
+            death_reason: '不幸离世'
+        }
+            ]
+        }
+        }
+    },
+    '小马': {
+        events: {
+        'dbrs_942': {
+            title: '小马手办',
+            description: '{user}满屋子都是他最喜欢的小马手办，{user}经常用这些手办脑补小马的舞台剧，乐此不疲。',
+            priority: 5,
+            trigger_conditions: { age_range: [5, 120], required_tags: ['小马'] },
             options: [
         {
             text: '下一事件',
@@ -782,6 +1039,39 @@ export const dbrsPersonalityEvents = {
         }
         }
     },
+    '玛丽苏': {
+        events: {
+        'dbrs_345': {
+            title: '浴缸穿越',
+            description: '{user}看的一本小说中，女主人公在浴室里滑倒掉进浴缸，穿越到了古代当了格格。',
+            priority: 5,
+            trigger_conditions: { age_range: [10, 25], required_tags: ['玛丽苏', '女性'] },
+            options: [
+        {
+            text: '什么垃圾狗血剧情',
+            result: '{user}再也不看玛丽苏文了，最讨厌这种公主得要死，狗血得出汁的剧情的小说了。',
+            remove_tags: ['玛丽苏']
+        },
+        {
+            text: '并不相信穿越',
+            result: '小说是小说，现实是现实。{user}虽然很喜欢穿越剧，但是他知道只是剧情而已，现实中并不会出现。'
+        },
+        {
+            text: '相信穿越，但应该没有这么简单',
+            result: '{user}看的一本小说中，女主摔了一跤，就穿越到了古代。{user}不相信这个，他认为，只有科学才有可能实现穿越。于是{user}投身研究科学。',
+            add_tags: ['小科学家']
+        },
+        {
+            text: '效防',
+            result: '{user}看的一本小说中，女主人公在浴室里滑倒掉进浴缸，穿越到了古代当了格格。{user}也想试一下，于是特意在浴缸涂满沐浴液，故意摔倒，头撞到尖角上，晕迷过去。伤口大出血，血流了几个小时后，{user}真的穿越了，到了地狱。',
+            add_tags: ['死亡'],
+            death_flag: true,
+            death_reason: '不幸离世'
+        }
+            ]
+        }
+        }
+    },
     '玻璃心': {
         events: {
         'dbrs_39': {
@@ -911,6 +1201,23 @@ export const dbrsPersonalityEvents = {
         }
         }
     },
+    '甜党': {
+        events: {
+        'dbrs_815': {
+            title: '甜党',
+            description: '{user}很喜欢甜的东西，',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['甜党'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。',
+            add_tags: ['三多一小']
+        }
+            ]
+        }
+        }
+    },
     '电子海洛因': {
         events: {
         'dbrs_357': {
@@ -941,6 +1248,75 @@ export const dbrsPersonalityEvents = {
             add_tags: ['死亡'],
             death_flag: true,
             death_reason: '{user}实在不能忍受自己有白头发，他心中的自己永远是完美'
+        }
+            ]
+        }
+        }
+    },
+    '真玛丽苏': {
+        events: {
+        'dbrs_399': {
+            title: '罚抄写',
+            description: '{user}的全名是“千梦然丝伤·可薇·茉殇黎·幽幻紫银·泪如韵影倾乐兰慕·{user}”，{user}一直为有个这么有逼格的名字而自豪。直到有一次{user}在学校被老师罚写了一万遍名字。',
+            priority: 10,
+            trigger_conditions: { age_range: [5, 17], required_tags: ['真玛丽苏'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。'
+        }
+            ]
+        },
+        'dbrs_487': {
+            title: '入学',
+            description: '新生入学，{user}非常紧张。向同学们做自我介绍的时候，念自己的名字，太长一口气上不来憋死了',
+            priority: 10,
+            trigger_conditions: { age_range: [7, 8], required_tags: ['真玛丽苏'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。',
+            add_tags: ['死亡'],
+            death_flag: true,
+            death_reason: '新生入学，{user}非常紧张。向同学们做自我介绍的时候，念'
+        }
+            ]
+        },
+        'dbrs_486': {
+            title: '彩色躯体',
+            description: '{user}天生拥有七彩头发，眼珠可以根据心情改变颜色。笑的时候有彩虹哭的时候下雨',
+            priority: 10,
+            trigger_conditions: { age_range: [1, 5], required_tags: ['真玛丽苏'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。'
+        }
+            ]
+        },
+        'dbrs_1290': {
+            title: '谈判专家',
+            description: '{user}走到楼顶，发现一个漂亮的女孩拿着手机坐在围栏上哭成了泪人，看她摇摇晃晃的样子似乎随时都会掉下去。{user}定定神，说：___',
+            priority: 10,
+            trigger_conditions: { age_range: [20, 45], required_tags: ['真玛丽苏'] },
+            options: [
+        {
+            text: '跳楼不如做我女友',
+            result: '{user}在自家楼顶发现有人要跳楼。一个漂亮的女孩拿着手机坐在围栏上哭成了泪人，看她摇摇晃晃的样子似乎随时都会掉下去。{user}定定神，说：跳楼不如做我女友。女孩看了{user}一眼，立马放弃了轻生的念头，一下子投到了{user}的怀里。',
+            add_tags: ['恋爱中']
+        },
+        {
+            text: '跳楼不如做我炮友',
+            result: '{user}在自家楼顶发现有人要跳楼。一个漂亮的女孩拿着手机坐在围栏上哭成了泪人，看她摇摇晃晃的样子似乎随时都会掉下去。{user}定定神，说：跳楼不如做我炮友。女孩看了{user}一眼，立马放弃了轻生的念头，一下子投到了{user}的怀里。'
+        },
+        {
+            text: '今天的风儿好喧嚣啊',
+            result: '{user}在自家楼顶发现有人要跳楼。一个漂亮的女孩拿着手机坐在围栏上哭成了泪人，看她摇摇晃晃的样子似乎随时都会掉下去。{user}定定神，说：“今天的风儿好喧嚣啊。”女孩子似乎被{user}的话感动了，她沉思半刻，说：“这风儿似有略略欲泣。”{user}向女孩伸出手，继续说：“快走吧，在风停止之前。”女孩子回头看着{user}，把手交给了{user}。他们就这样成了情侣……',
+            add_tags: ['恋爱中']
+        },
+        {
+            text: '快跳，我好发朋友圈',
+            result: '{user}在自家楼顶发现有人要跳楼。一个漂亮的女孩拿着手机坐在围栏上哭成了泪人，看她摇摇晃晃的样子似乎随时都会掉下去。{user}定定神，说：“快跳，我好发朋友圈。” 女孩听后从围栏下来了，她拍拍身上的尘土，说：“老娘不跳了。”然后扬长而去，留下失望的{user}。'
         }
             ]
         }
@@ -1120,6 +1496,22 @@ export const dbrsPersonalityEvents = {
         }
         }
     },
+    '胆小': {
+        events: {
+        'dbrs_1312': {
+            title: '使徒来袭！！',
+            description: '随着一声巨响，一个奇丑无比的使徒出现在了研究所附近。研究所立即进入了戒备状态，逗比战士的驾驶员{user}在研究所宿舍的床上，吓得抱着枕头瑟瑟发抖。另外一位女驾驶员见状，无奈地叹了口气，只好自己出动。',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['胆小'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。'
+        }
+            ]
+        }
+        }
+    },
     '自恋': {
         events: {
         'dbrs_242': {
@@ -1228,6 +1620,22 @@ export const dbrsPersonalityEvents = {
         }
         }
     },
+    '表情模块': {
+        events: {
+        'dbrs_969': {
+            title: '做表情',
+            description: '{user}很喜欢表情模块，它让{user}有了一个简陋的表达方法。{user}在下棋之余，最喜欢就是做表情给对手看。然而{user}发现，其他AI都不懂表情。没有人能与{user}表情交流，{user}倍感孤独。',
+            priority: 5,
+            trigger_conditions: { age_range: [5, 10], required_tags: ['表情模块'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。'
+        }
+            ]
+        }
+        }
+    },
     '被狗日': {
         events: {
         'dbrs_210': {
@@ -1265,6 +1673,80 @@ export const dbrsPersonalityEvents = {
         }
         }
     },
+    '记忆': {
+        events: {
+        'dbrs_30': {
+            title: '记忆力非凡',
+            description: '{user}记忆力很好，___',
+            priority: 5,
+            trigger_conditions: { age_range: [4, 120], required_tags: ['记忆'] },
+            options: [
+        {
+            text: '别人说过的话他都能记住',
+            result: '你做出了选择。',
+            add_tags: ['高情商']
+        },
+        {
+            text: '课本过目不忘',
+            result: '你做出了选择。',
+            add_tags: ['学习成绩']
+        },
+        {
+            text: '特别记仇',
+            result: '你做出了选择。',
+            add_tags: ['玻璃心']
+        }
+            ]
+        }
+        }
+    },
+    '走路踏步': {
+        events: {
+        'dbrs_86': {
+            title: '毕业找工作',
+            description: '{user}毕业后，成为了一名___',
+            priority: 5,
+            trigger_conditions: { age_range: [16, 120], required_tags: ['走路踏步'] },
+            options: [
+        {
+            text: '警察',
+            result: '你做出了选择。'
+        },
+        {
+            text: '消防员',
+            result: '你做出了选择。'
+        },
+        {
+            text: '没有喜欢的',
+            result: '{user}待业在家，游手好闲。'
+        },
+        {
+            text: '参军',
+            result: '{user}报名参军，通过了惨无人道的兵检后，加入了军队。'
+        }
+            ]
+        }
+        }
+    },
+    '迷信': {
+        events: {
+        'dbrs_1686': {
+            title: '飞机爆炸',
+            description: '{user}坐飞机旅行，上机时向客机引擎撒币，想给飞机引擎加buff。飞机起飞后在空中爆炸，{user}被炸死了……',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['迷信'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。',
+            add_tags: ['死亡'],
+            death_flag: true,
+            death_reason: '{user}坐飞机旅行，上机时向客机引擎撒币，想给飞机引擎加'
+        }
+            ]
+        }
+        }
+    },
     '逻辑': {
         events: {
         'dbrs_20': {
@@ -1290,6 +1772,22 @@ export const dbrsPersonalityEvents = {
             text: '下一事件',
             result: '你做出了选择。',
             add_tags: ['学习成绩']
+        }
+            ]
+        }
+        }
+    },
+    '钻石智齿': {
+        events: {
+        'dbrs_756': {
+            title: '会发光的笑容',
+            description: '{user}一笑，嘴边就会有很多星星，那是他的智齿在发光！',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['钻石智齿'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。'
         }
             ]
         }
@@ -1520,6 +2018,66 @@ export const dbrsPersonalityEvents = {
             result: '放学了，夕阳照进课室里，给课桌涂上了金黄色。{user}刚准备回家，就被一个女同学叫住。女同学趴在桌子上问：“喂，你有喜欢的人吗？”{user}看了她一眼，淡淡的说：“有啊。”女同学听后，似乎有点失落，继续问道：“谁啊？”“我们班上的，你猜。”女同学把全班其他女生的名字都猜完了，{user}却都摇头。{user}笑笑：“傻瓜，你确定都念完了吗？”女同学听后愣了一会儿，害羞地转过头没再说话。这时，{user}温柔哦地伏在她耳边说道：“你怎么穿着品如的衣服啊？”女同学听后哇的一声大哭，逃出了教室。',
             death_flag: true,
             death_reason: '放学了，夕阳照进课室里，给课桌涂上了金黄色。=NAME=刚准备回家，就被一个女同学叫住。女同学趴在桌子上问：“喂，你有喜欢的人吗？”=NAME=看了她一眼，淡淡的说：“有啊。”女同学听后，似乎有点失落，继续问道：“谁啊？”“我们班上的，你猜。”女同学把全班其他女生的名字都猜完了，=NAME=却都摇头。=NAME=笑笑：“傻瓜，你确定都念完了吗？”女同学听后愣了一会儿，害羞地转过头没再说话。这时，=NAME=温柔哦地伏在她耳边说道：“你怎么穿着品如的衣服啊？”女同学听后哇的一声大哭，逃出了教室。'
+        }
+            ]
+        }
+        }
+    },
+    '黑框眼镜': {
+        events: {
+        'dbrs_1249': {
+            title: '疯狂续命：续命失败',
+            description: '拥有了黑框眼镜后，{user}能吸取人的寿命，{user}在新闻报道上寻找死刑犯。很快就找到一个，他隔着电视尝试吸取寿命，但是却发现不能吸到。大概是因为这个新闻播出的时候，他已经被枪决了。',
+            priority: 5,
+            trigger_conditions: { age_range: [200, 200], required_tags: ['黑框眼镜'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。'
+        }
+            ]
+        },
+        'dbrs_1248': {
+            title: '疯狂续命',
+            description: '拥有了黑框眼镜后，{user}能吸取人的寿命，{user}吸取的目标是___',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['黑框眼镜'] },
+            options: [
+        {
+            text: '死刑罪犯',
+            result: '你做出了选择。'
+        },
+        {
+            text: '贪污官员',
+            result: '你做出了选择。'
+        },
+        {
+            text: '奸商',
+            result: '你做出了选择。'
+        }
+            ]
+        },
+        'dbrs_1250': {
+            title: '疯狂续命：贪官',
+            description: '拥有了框眼镜后，{user}自认终于拥有了惩治贪官的力量。{user}来到地方政府门口蹲点，监视路过的官员，遇到开豪车的，穿名牌的，穿金戴银的，他都用眼睛狠狠地吸取他们的生命。',
+            priority: 5,
+            trigger_conditions: { age_range: [200, 200], required_tags: ['黑框眼镜'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。'
+        }
+            ]
+        },
+        'dbrs_1251': {
+            title: '疯狂续命：奸商',
+            description: '{user}非常痛恨商人，拥有了框眼镜后，{user}对着朋友圈软件的公司老板疯狂地使用眼镜。',
+            priority: 5,
+            trigger_conditions: { age_range: [200, 200], required_tags: ['黑框眼镜'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。'
         }
             ]
         }

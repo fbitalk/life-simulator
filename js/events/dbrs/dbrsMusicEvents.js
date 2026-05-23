@@ -1,6 +1,6 @@
 // dbrs 事件文件 - 自动生成
 // 来源: 豆比人生 - 音乐/舞蹈
-// 事件数: 46
+// 事件数: 47
 import { registerTags } from '../../data/tagRegistry.js';
 
 // 本文件涉及的标签注册
@@ -615,6 +615,23 @@ export const dbrsMusicEvents = {
         {
             text: '去找了一个有名的架子鼓老师',
             result: '你做出了选择。'
+        }
+            ]
+        }
+        }
+    },
+    '爆裂鼓手': {
+        events: {
+        'dbrs_845': {
+            title: '爆裂鼓手',
+            description: '弗莱彻是{user}的架子鼓老师，他是个偏执狂。为了让{user}进步更快，弗莱彻老师每天都会毒打{user}。{user}在这种残暴的虐待式教育下，架子鼓技术越来越强。',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['爆裂鼓手'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。',
+            add_tags: ['多病', '音乐能力']
         }
             ]
         }

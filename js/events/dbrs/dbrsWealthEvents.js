@@ -1,6 +1,6 @@
 // dbrs 事件文件 - 自动生成
 // 来源: 豆比人生 - 财富/经济
-// 事件数: 14
+// 事件数: 15
 import { registerTags } from '../../data/tagRegistry.js';
 
 // 本文件涉及的标签注册
@@ -230,6 +230,19 @@ export const dbrsWealthEvents = {
             add_tags: ['死亡'],
             death_flag: true,
             death_reason: '不幸离世'
+        }
+            ]
+        },
+        'dbrs_1517': {
+            title: '挥霍',
+            description: '{user}在无节操的挥霍自己的家产，并获得快感。',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['败家'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。',
+            effects: { money: -3 }
         }
             ]
         }

@@ -16,7 +16,14 @@ import { dbrsSportsEvents } from './dbrsSportsEvents.js';
 import { dbrsPersonalityEvents } from './dbrsPersonalityEvents.js';
 import { dbrsGamingEvents } from './dbrsGamingEvents.js';
 import { dbrsSocialEvents } from './dbrsSocialEvents.js';
+import { dbrsAdventureEvents } from './dbrsAdventureEvents.js';
 import { dbrsCommonEvents } from './dbrsCommonEvents.js';
+import { dbrsInfantEvents } from './dbrsInfantEvents.js';
+import { dbrsChildEvents } from './dbrsChildEvents.js';
+import { dbrsTeenagerEvents } from './dbrsTeenagerEvents.js';
+import { dbrsYoungAdultEvents } from './dbrsYoungAdultEvents.js';
+import { dbrsAdultEvents } from './dbrsAdultEvents.js';
+import { dbrsGeneralEvents } from './dbrsGeneralEvents.js';
 
 /**
  * 将所有 dbrs 故事线事件注册到 EventManager
@@ -38,5 +45,12 @@ export function registerAllDbrsEvents(eventManager) {
     eventManager.registerDbrsEvents(dbrsPersonalityEvents);
     eventManager.registerDbrsEvents(dbrsGamingEvents);
     eventManager.registerDbrsEvents(dbrsSocialEvents);
+    eventManager.registerDbrsEvents(dbrsAdventureEvents);
     eventManager.registerDbrsEvents(dbrsCommonEvents);
+    eventManager.registerDbrsEvents(dbrsInfantEvents);
+    eventManager.registerDbrsEvents(dbrsChildEvents);
+    eventManager.registerDbrsEvents(dbrsTeenagerEvents);
+    eventManager.registerDbrsEvents(dbrsYoungAdultEvents);
+    eventManager.registerDbrsEvents(dbrsAdultEvents);
+    eventManager.registerDbrsEvents(dbrsGeneralEvents);
 }

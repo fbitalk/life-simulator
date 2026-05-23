@@ -1,6 +1,6 @@
 // dbrs 事件文件 - 自动生成
 // 来源: 豆比人生 - 游戏/娱乐
-// 事件数: 18
+// 事件数: 25
 import { registerTags } from '../../data/tagRegistry.js';
 
 // 本文件涉及的标签注册
@@ -10,6 +10,47 @@ registerTags({
 });
 
 export const dbrsGamingEvents = {
+    '免费玩家': {
+        events: {
+        'dbrs_1411': {
+            title: '贪婪玩约：无限的任务',
+            description: '{user}每天都上线做刷任务练级，刷怪跑腿，刷怪跑腿，刷怪跑腿……无限循环。{user}慢慢看着自己的角色越来越强，成就感油然而生。',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['免费玩家'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。'
+        }
+            ]
+        },
+        'dbrs_1412': {
+            title: '贪婪玩约：攻城大战',
+            description: '{user}今天去攻城，几百人同屏战斗，整个屏幕都是刀光剑影、黑血飞溅和魔法光芒。打到激动的时候，{user}还情不自禁地鬼叫出声。{user}挤在人群中，从混乱中被打倒了，成了攻城大战的炮灰。',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['免费玩家'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。'
+        }
+            ]
+        },
+        'dbrs_1414': {
+            title: '贪婪玩约：失去乐趣',
+            description: '{user}又在野外被高级玩家秒杀了，{user}已经数不清自己被这样杀了多少次了。无论{user}花多少时间去打装备、练级，都会有更强的人民币玩家来秒杀{user}。{user}逐渐对这个残酷的江湖失去了乐趣，{user}挥挥泪，删除了《贪婪玩月》。',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['免费玩家'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。',
+            remove_tags: ['免费玩家']
+        }
+            ]
+        }
+        }
+    },
     '游戏陪玩': {
         events: {
         'dbrs_1440': {
@@ -270,6 +311,63 @@ export const dbrsGamingEvents = {
             text: '下一事件',
             result: '你做出了选择。',
             remove_tags: ['电子海洛因']
+        }
+            ]
+        }
+        }
+    },
+    '读书世界：VIP': {
+        events: {
+        'dbrs_1281': {
+            title: '读书世界：VIP',
+            description: '{user}成为了VIP后，___',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['读书世界：VIP'] },
+            options: [
+        {
+            text: '杀新手',
+            result: '{user}成为了VIP后就守在新手村门口杀新手，乐此不疲。'
+        },
+        {
+            text: '离开游戏',
+            result: '{user}成为了VIP后，随着身体一阵哆嗦。他感觉这个游戏索然无味，于是离开了读书世界。'
+        }
+            ]
+        },
+        'dbrs_1282': {
+            title: '读书世界：VIP',
+            description: '{user}成为了VIP后，能随意在读书世界中穿梭。用上帝视角看着其他玩家用功读书，累计经验升级，这些人看起来多么的渺小。',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['读书世界：VIP'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。'
+        }
+            ]
+        },
+        'dbrs_1283': {
+            title: '读书世界：VIP',
+            description: '{user}没有读过任何书，就去参加了读书世界里的状元考试，{user}用他的VIP特权成为了考试第一名。其他免费玩家即使再努力，也只能屈居第二。',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['读书世界：VIP'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。'
+        }
+            ]
+        },
+        'dbrs_1284': {
+            title: '读书世界：VIP',
+            description: '{user}成为VIP后，在游戏中已经成为老大。随着身体一阵哆嗦，他感觉这个游戏索然无味，于是离开了读书世界。',
+            priority: 5,
+            trigger_conditions: { age_range: [1, 120], required_tags: ['读书世界：VIP'] },
+            options: [
+        {
+            text: '下一事件',
+            result: '你做出了选择。',
+            remove_tags: ['读书世界：VIP']
         }
             ]
         }
